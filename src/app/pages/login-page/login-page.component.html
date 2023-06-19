@@ -1,0 +1,32 @@
+<div class="container-sm">
+  <div class="login border border-primary rounded d-flex justify-content-center mt-10">
+    <form [formGroup]="formLogin" class="p-5">
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">código</label>
+        <input type="text" class="form-control" formControlName="code" name="code" required (click)="clearWindow()" [readonly]="busy">
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">senha</label>
+        <input type="password" class="form-control" formControlName="passwordHash" name="passwordHash" (click)="clearWindow()" [readonly]="busy">
+      </div>
+      <div class="mb-3 form-check d-flex justify-content-center">
+        <label class="form-check-label form-control" name="remember">lembrar de mim</label>
+        <input type="checkbox" class="form-check-input" name="remeber" formControlName="remember" [readonly]="busy">
+      </div>
+
+      <span *ngIf="errorLogin" style="color: red">dados incorretos</span>
+      
+      <div *ngIf="!busy" class="d-flex justify-content-center">
+        <button type="submit" class="btn btn-primary sm" (click)="submitLogin()" [disabled]="busy">
+          Entrar
+        </button>
+      </div>
+      
+      <div *ngIf="busy" class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+          <span class="sr-only"></span>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

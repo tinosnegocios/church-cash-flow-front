@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 
 export abstract class BaseService {
 
-    constructor(private http: HttpClient) { }
+    constructor(protected http: HttpClient) { }
 
-    protected url : string = 'http://localhost:3000/v1';
+    protected url : string = 'https://localhost:7171/api';
 }
