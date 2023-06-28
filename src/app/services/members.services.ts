@@ -16,7 +16,7 @@ export class MembersService extends BaseService {
         super(http);
     }
 
-    public getMembersByChurch(): Observable<Member[]>  {
+    public getMembersByChurch(): Observable<ResultViewModel>  {
         var auth = new AuthService();
         const token = auth.getToken();
 
@@ -25,8 +25,9 @@ export class MembersService extends BaseService {
             .set("Authorization", `Bearer ${JSON.parse(token)}`);
 
         var churchId = (auth.getModelFromToken()).churchId;
-        const membersObservable = this.http.get<any>(`${this.url}/v1/church/${churchId}/members`, { headers: httpHeaders });
+        const membersObservable = this.http.get<ResultViewModel>(`${this.url}/v1/church/${churchId}/members`, { headers: httpHeaders });
         
-        return membersObservable.pipe(map((result: ResultViewModel) => result.data));
+        // return membersObservable.pipe(map((result: ResultViewModel) => result.data));
+        return membersObservable.pipe(map(response => response));
     }
 }

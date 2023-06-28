@@ -17,7 +17,7 @@ export class OutflowService extends BaseService {
         super(http);
     }
 
-    public getOutflow(): Observable<OutFlow[]> {
+    public getOutflow(): Observable<ResultViewModel> {
         var auth = new AuthService();
         const token = auth.getToken();
 
@@ -26,8 +26,9 @@ export class OutflowService extends BaseService {
             .set("Authorization", `Bearer ${JSON.parse(token)}`);
 
         var churchId = (auth.getModelFromToken()).churchId;
-        const outflowObservable = this.http.get<any>(`${this.url}/v1/out-flow/all/${churchId}`, { headers: httpHeaders });
+        const outflowObservable = this.http.get<ResultViewModel>(`${this.url}/v1/out-flow/all/${churchId}`, { headers: httpHeaders });
 
-        return outflowObservable.pipe(map((result: ResultViewModel) => result.data));
+        //return outflowObservable.pipe(map((result: ResultViewModel) => result.data));
+        return outflowObservable.pipe(map(result => result));
     }
 }

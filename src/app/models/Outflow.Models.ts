@@ -1,14 +1,14 @@
 import { EntitieResultApi } from "./Entitie.models";
 
 export class OutFlow extends EntitieResultApi {
-    Day: Date = new Date();
-    Competence: string = "";
-    Description: string = "";
-    Authorized: boolean = true;
-    Amount: number = 0;
-    Interest: number = 0;
-    Discount: number = 0;
-    TotalAmount: number = 0;
-    OutFlow: string = "";
-    Church: string = "";
+    day: Date = new Date();
+    competence: string = "";
+    description: string = "";
+    authorized: boolean = true;
+    amount: number = 0;
+    interest: number = 0;
+    discount: number = 0;
+    totalAmount: number = 0;
+    outFlow: string = "";
+    church: string = "";
 }

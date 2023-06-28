@@ -1,5 +1,9 @@
 <p>Bem vindo(a) {{modelToken.unique_name}}</p>
 
+<select name="dashBoardMonth">
+    <option *ngFor="let entry of loadDashMonth()" [value]="entry[1]"> {{ entry[0] }}</option>
+</select>
+
 <p>{{modelToken.churchName}}</p>
 
 <p>
@@ -7,9 +11,10 @@
 </p>
 
 <p>
-    total de {{members.subscribe.length}} membro(s)
+    total de {{totalMembers}} membro(s)
 </p>
 
 <p>
-    total de R$ {{totalOutflow}} em saidas
+    total de R$ {{totalOutFlow}} em saidas
 </p>
+
