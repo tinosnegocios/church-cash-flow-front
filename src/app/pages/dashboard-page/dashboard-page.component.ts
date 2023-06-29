@@ -24,7 +24,8 @@ export class DashboardPageComponent implements OnInit {
   
   protected totalMembers = 0;
   protected totalOutFlow = 0;
-  public DashMonth! : Record<string, number>;
+  public DashMonth! : [string, string][];
+
 
   constructor(private router: Router, private membersService: MembersService, private outflowService: OutflowService) {
     this.auth = new AuthService();
@@ -76,26 +77,44 @@ export class DashboardPageComponent implements OnInit {
         console.log('errror')
       }
       );
+
+    this.DashMonth =[ ['valor1', 'valor2'],['valor3', 'valor4'] ];
   }
 
-  public loadDashMonth() : [string, number][] {
-        //fill dashboardmonth
-        this.DashMonth = {
-          Jan: 202301,
-          Fev: 202302,
-          Mar: 202303
-        };
+  public loadDashMonth() : [string, string][] {
+        const mesesAbreviados = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
         const dataAtual: Date = new Date();
 
         const mes: number = dataAtual.getMonth() + 1; // +1 porque os meses são indexados de 0 a 11
+        const mesFormatado: string = mes.toString().padStart(2, '0');
+
         const ano: number = dataAtual.getFullYear();
         const anoAnterior = ano -1;
-        
-        const mesFormatado: string = mes.toString().padStart(2, '0');
+
         const mesAno: string = `${ano}${mesFormatado}`;
-        
-        return Object.entries(this.DashMonth);
+        const meuObjeto: Record<string, string> = {};
+
+        for (let index = mes; index >= 0; index--) {
+          var key = `${(mesesAbreviados[index]).toString()}/${ano}`;
+          var value = `${ano}${(index+1).toString().padStart(2, '0')}`
+
+          meuObjeto[key] = value;
+        }
+
+        for (let index = 11; index >= mes; index--) {
+          var key = `${(mesesAbreviados[index])}/${anoAnterior}`;
+          var value = `${anoAnterior}${(index+1).toString().padStart(2, '0')}`
+
+          meuObjeto[key] = value;
+        }
+
+        return Object.entries(meuObjeto);
+  }
+
+
+  protected changeDashMonth(){
+    console.log(`mudou para `);
   }
 
 }

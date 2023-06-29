@@ -1,8 +1,9 @@
 <p>Bem vindo(a) {{modelToken.unique_name}}</p>
 
-<select name="dashBoardMonth">
-    <option *ngFor="let entry of loadDashMonth()" [value]="entry[1]"> {{ entry[0] }}</option>
-</select>
+<!-- <select name="dashBoardMonth" #teams (ngModel)="changeDashMonth(teams.value)">
+    <option *ngFor="let entry of DashMonth" [value]="entry[1]" id="idDashMonth"> {{ entry[0] }}</option>
+</select > -->
+ 
 
 <p>{{modelToken.churchName}}</p>
 
