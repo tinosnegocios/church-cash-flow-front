@@ -6,15 +6,17 @@ import { AppComponent } from './app.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModelToken } from './models/ModelToken.models';
+import { LoadingPageComponent } from './pages/shared/loading-page/loading-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginPageComponent,
     DashboardPageComponent,
+    LoadingPageComponent,
   ],
   imports: [
     BrowserModule,
@@ -22,6 +24,7 @@ import { ModelToken } from './models/ModelToken.models';
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    FormsModule
   ],
   providers: [
     

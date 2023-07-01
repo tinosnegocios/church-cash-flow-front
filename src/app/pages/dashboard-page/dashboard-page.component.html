@@ -1,21 +1,53 @@
-<p>Bem vindo(a) {{modelToken.unique_name}}</p>
+<app-loading-page *ngIf="busy"></app-loading-page>
 
-<!-- <select name="dashBoardMonth" #teams (ngModel)="changeDashMonth(teams.value)">
-    <option *ngFor="let entry of DashMonth" [value]="entry[1]" id="idDashMonth"> {{ entry[0] }}</option>
-</select > -->
- 
 
-<p>{{modelToken.churchName}}</p>
+<div *ngIf="!busy">
+    <p>Bem vindo(a) {{modelToken.unique_name}}</p>
 
-<p>
-    <a href="" (click)="logout()"> sair</a>
-</p>
+    <select name="nameDashBoardMonth" id="idDashBoardMonth" [(ngModel)]="dashMonthSelected" (ngModelChange)="changeDashMonth()">
+        <option *ngFor="let entry of DashMonth" [value]="entry[1]" id="idDashMonth"> 
+            {{ entry[0] }}
+        </option>
+    </select> 
+    
 
-<p>
-    total de {{totalMembers}} membro(s)
-</p>
+    <p>{{modelToken.churchName}}</p>
 
-<p>
-    total de R$ {{totalOutFlow}} em saidas
-</p>
+    <p>
+        <a href="" (click)="logout()"> sair</a>
+    </p>
 
+    <p>
+        total de {{totalMembers}} membro(s)
+    </p>
+
+    <p>
+        total de R$ {{totalOutFlow.toFixed(2)}} em saidas
+        <a href="#">detalhes</a>
+    </p>
+
+    <p>
+        total de R$ {{totalTithes.toFixed(2)}} em Dizimos
+        <a href="#">detalhes</a>
+    </p>
+
+    <p>
+        total de R$ {{totalOffering.toFixed(2)}} em Ofertas
+        <a href="#">detalhes</a>
+    </p>
+
+    <p>
+        total de R$ {{totalFirstFruits.toFixed(2)}} em Primícias
+        <a href="#">detalhes</a>
+    </p>
+
+    <p>
+        total de R$ {{(totalTithes + totalOffering + totalFirstFruits).toFixed(2)}} Entradas
+        <a href="#">detalhes</a>
+    </p>
+
+    <p>
+        total de R$ {{( (totalTithes + totalOffering + totalFirstFruits) - (totalOutFlow) ).toFixed(2)}} Em caixa
+        <a href="#">detalhes</a>
+    </p>
+</div>

@@ -1,26 +1,24 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Injectable } from "@angular/core";
 import { BaseService } from "./base.services";
-import { AuthService } from "./auth.services";
-import { ResultViewModel } from "../models/resultViewModel.models";
-import { Member } from "../models/Member.models";
-import { Observable, map } from "rxjs";
 import { DashBoardService } from "./dashboard.service";
+import { ResultViewModel } from "../models/resultViewModel.models";
+import { AuthService } from "./auth.services";
+import { Injectable } from "@angular/core";
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class MembersService extends BaseService {
+export class FirstFruits extends BaseService {
     dashBoardServices: DashBoardService;
-    private modelName = "church";
+    private modelName = "first-fruits";
 
     constructor(http: HttpClient, dashBoardServices: DashBoardService) {
         super(http);
         this.dashBoardServices = dashBoardServices;
     }
 
-    public getMembersByChurchByMonth(): Promise<ResultViewModel>  {
+    public getFirstFruitsByMonth():  Promise<ResultViewModel> {
         var auth = new AuthService();
         const token = auth.getToken();
 
@@ -30,8 +28,8 @@ export class MembersService extends BaseService {
 
         var churchId = (auth.getModelFromToken()).churchId;
         var yearMonth = this.dashBoardServices.getDashBoardMonth();
-
-        const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/${churchId}/members/${yearMonth}`, { headers: httpHeaders }).toPromise();
+        
+        const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/all/${churchId}/${yearMonth}`, { headers: httpHeaders }).toPromise();
 
         return returnObservable.then(result => {
             if (result) {
@@ -40,6 +38,5 @@ export class MembersService extends BaseService {
               throw new Error('Result is undefined.');
             }
           });
-
     }
 }

@@ -6,18 +6,21 @@ import { ResultViewModel } from "../models/resultViewModel.models";
 import { Observable, map } from "rxjs";
 import { OutFlow } from "../models/Outflow.Models";
 import { Member } from "../models/Member.models";
+import { DashBoardService } from "./dashboard.service";
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class OutflowService extends BaseService {
+    dashBoardServices: DashBoardService;
 
-    constructor(http: HttpClient) {
+    constructor(http: HttpClient, dashBoardServices: DashBoardService) {
         super(http);
+        this.dashBoardServices = dashBoardServices;
     }
 
-    public getOutflow(): Observable<ResultViewModel> {
+    public getOutflowByMonth():  Promise<ResultViewModel> {
         var auth = new AuthService();
         const token = auth.getToken();
 
@@ -26,9 +29,19 @@ export class OutflowService extends BaseService {
             .set("Authorization", `Bearer ${JSON.parse(token)}`);
 
         var churchId = (auth.getModelFromToken()).churchId;
-        const outflowObservable = this.http.get<ResultViewModel>(`${this.url}/v1/out-flow/all/${churchId}`, { headers: httpHeaders });
+        var yearMonth = this.dashBoardServices.getDashBoardMonth();
+        
+        const outflowObservable = this.http.get<ResultViewModel>(`${this.url}/v1/out-flow/${yearMonth}/${churchId}`, { headers: httpHeaders }).toPromise();
 
         //return outflowObservable.pipe(map((result: ResultViewModel) => result.data));
-        return outflowObservable.pipe(map(result => result));
+        //return outflowObservable.pipe(map(result => result));
+
+        return outflowObservable.then(result => {
+            if (result) {
+              return result.data;
+            } else {
+              throw new Error('Result is undefined.');
+            }
+          });
     }
 }
