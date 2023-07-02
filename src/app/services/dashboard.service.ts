@@ -10,7 +10,7 @@ export class DashBoardService {
     getDashBoardMonth() : string {
         var yearMonth = sessionStorage.getItem(this.itemDashMonthName);
         if(yearMonth == null)
-            yearMonth = `${new Date().getFullYear()}${new Date().getMonth() + 1}`;
+            yearMonth = `${new Date().getFullYear()}${new Date().getMonth().toString().padStart(2, '0') + 1}`;
 
         return yearMonth.toString();
     }
