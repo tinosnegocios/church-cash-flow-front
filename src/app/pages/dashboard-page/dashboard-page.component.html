@@ -58,14 +58,16 @@
 
 <!--route-->
 
-<app-loading-page *ngIf="busy"></app-loading-page>
+
 
 
 <div class="content">
 
     <div class="pb-5">
 
-            <div class="row g-4">
+            <app-loading-page *ngIf="busy"></app-loading-page>
+
+            <div class="row g-4" *ngIf="!busy">
 
                 <!--primeiro grid-->
                 <div class="col-12 col-xxl-6">

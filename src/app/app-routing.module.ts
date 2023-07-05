@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
+import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';
 
 const routes: Routes = [
   {
@@ -12,7 +13,13 @@ const routes: Routes = [
     component: LoginPageComponent
    },{
     path: 'dashboard',
-    component: DashboardPageComponent
+    component: HeadFrameComponent,
+    children: [
+      {
+        path: '',
+        component: DashboardPageComponent
+      }
+    ]
    }
 ];
 

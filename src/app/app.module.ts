@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModelToken } from './models/ModelToken.models';
 import { LoadingPageComponent } from './pages/shared/loading-page/loading-page.component';
+import { MenusPageComponent } from './pages/shared/menus-page/menus-page.component';
+import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { LoadingPageComponent } from './pages/shared/loading-page/loading-page.c
     LoginPageComponent,
     DashboardPageComponent,
     LoadingPageComponent,
+    MenusPageComponent,
+    HeadFrameComponent,
   ],
   imports: [
     BrowserModule,
