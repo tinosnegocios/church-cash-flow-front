@@ -65,11 +65,6 @@ export class DashboardPageComponent implements OnInit {
     this.busy = false;
   }
 
-  public logout() {
-    this.auth.logout();
-    this.router.navigate(['/']);
-  }
-
   public async dashBoard() {
     var yearMonth = this.dashBoardService.getDashBoardMonth();
     this.dashBoardService.setDashBoardMonth(yearMonth);

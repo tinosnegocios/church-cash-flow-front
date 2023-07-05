@@ -3,7 +3,7 @@
 
 
 <div *ngIf="!busy">
-    <p>Bem vindo(a) {{modelToken.unique_name}}</p>
+    <p>Bem vindo(a) 1</p>
 
     <select name="nameDashBoardMonth" id="idDashBoardMonth" [(ngModel)]="dashMonthSelected" (ngModelChange)="changeDashMonth()">
         <option *ngFor="let entry of DashMonth" [value]="entry[1]" id="idDashMonth"> 
@@ -58,20 +58,14 @@
 
 <!--route-->
 
-
-
-
 <div class="content">
 
     <div class="pb-5">
 
-            <app-loading-page *ngIf="busy"></app-loading-page>
-
-            <div class="row g-4" *ngIf="!busy">
+            <div class="row g-4">
 
                 <!--primeiro grid-->
                 <div class="col-12 col-xxl-6">
-
                     <div class="row mb-12">
 
                         <!--titulo inicial-->
@@ -135,8 +129,7 @@
                             <p class="text-700 lh-sm mb-0">caixa do período com todas formas de entrada</p>
                         </div>
                     </div>
-                    <div class="echart-total-sales-chart" style="min-height:320px;width:100%"
-                        data-echart-responsive="data-echart-responsive"></div>
+                    <div class="echart-total-sales-chart" style="min-height:320px;width:100%" data-echart-responsive="data-echart-responsive"></div>
                 </div>
 
                 <!--dados em numeros-->
@@ -154,7 +147,11 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center px-4 py-6">
-                                        <h2 class="mb-2">{{totalMembers}}</h2>
+                                        <h2 *ngIf="!busy"> {{totalMembers}} </h2>
+                                        <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
+
                                     </div>
                                     <div class="mt-12">
                                         <div class="d-flex align-items-center mb-2">
@@ -179,10 +176,13 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center px-4 py-6">
-                                        <h2
+                                        <h2 *ngIf="!busy"
                                             [ngClass]="( (totalTithes + totalOffering + totalFirstFruits) - (totalOutFlow)) >= 0 ? 'text-primary' : 'text-danger'">
                                             R$ {{( (totalTithes + totalOffering + totalFirstFruits) -
                                             (totalOutFlow)).toFixed(2)}}</h2>
+                                            <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
+                                                <span class="sr-only"></span>
+                                            </div>
                                     </div>
                                     <div class="mt-12">
                                         <div class="d-flex align-items-center mb-2">
@@ -207,7 +207,10 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center px-4 py-6">
-                                        <h2>R$ {{(totalTithes + totalOffering + totalFirstFruits).toFixed(2)}}</h2>
+                                        <h2 *ngIf="!busy">R$ {{(totalTithes + totalOffering + totalFirstFruits).toFixed(2)}}</h2>
+                                        <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
                                     </div>
                                     <div class="mt-12">
                                         <div class="d-flex align-items-center mb-2">
@@ -232,7 +235,10 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center px-4 py-6">
-                                        <h2>R$ {{totalOutFlow.toFixed(2)}}</h2>
+                                        <h2 *ngIf="!busy">R$ {{totalOutFlow.toFixed(2)}}</h2>
+                                        <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
+                                            <span class="sr-only"></span>
+                                        </div>
                                     </div>
                                     <div class="mt-12">
                                         <div class="d-flex align-items-center mb-2">
@@ -245,7 +251,6 @@
                                 </div>
                             </div>
                         </div>
-
 
                     </div>
                 </div>
