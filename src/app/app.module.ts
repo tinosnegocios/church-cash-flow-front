@@ -12,6 +12,7 @@ import { ModelToken } from './models/ModelToken.models';
 import { LoadingPageComponent } from './pages/shared/loading-page/loading-page.component';
 import { MenusPageComponent } from './pages/shared/menus-page/menus-page.component';
 import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';
+import { RegisterPageComponent } from './pages/register-page/register-page.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.compone
     LoadingPageComponent,
     MenusPageComponent,
     HeadFrameComponent,
+    RegisterPageComponent
   ],
   imports: [
     BrowserModule,
