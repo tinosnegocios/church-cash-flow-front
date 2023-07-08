@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { ModelToken } from 'src/app/models/ModelToken.models';
 import { MeetingKind } from 'src/app/models/meetingKind.models copy';
 import { OfferingKind } from 'src/app/models/offeringKind.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
+import { AuthService } from 'src/app/services/auth.services';
 import { MeetingKindService } from 'src/app/services/meetingKind.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
 
@@ -12,6 +14,10 @@ import { OfferingKindService } from 'src/app/services/offeringKind.services';
 export class treasuryRegisterPageComponent implements OnInit {
 
   protected busy = false;
+  private auth: AuthService
+
+  protected modelToken : ModelToken;
+
   protected offeringKind!: ResultViewModel['data'];
   protected offeringKindToSelect!:  [string, string][]
 
@@ -22,7 +28,8 @@ export class treasuryRegisterPageComponent implements OnInit {
   public meetingKindSelected: string | undefined;
 
   constructor(private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService) {
-        
+    this.auth = new AuthService();
+    this.modelToken = this.auth.getModelFromToken();
   }
 
   async ngOnInit() {
