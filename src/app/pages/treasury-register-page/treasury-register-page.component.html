@@ -102,11 +102,18 @@
                                                     <h5 class="mb-0 text-1000 me-2">Tipo de oferta</h5>
                                                     <a class="fw-bold fs--1" href="#!">Add novo tipo de oferta</a>
                                                 </div>
-                                                <select class="form-select mb-3" aria-label="category">
-                                                    <option value="men-cloth">Cédulas</option>
-                                                    <option value="women-cloth">Pix</option>
-                                                    <option value="kid-cloth">Crédito</option>
+                                                
+                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category">
+
+                                                    <option *ngFor="let entry of offeringKindToSelect" [value]="entry[1]" id="idDashMonth">
+                                                        {{ entry[0] }}
+                                                    </option>
+
                                                 </select>
+
+                                                <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
+                                                    <span class="sr-only"></span>
+                                                </div>
                                             </div>
 
                                         </div>
@@ -117,19 +124,25 @@
                                                     <h5 class="mb-0 text-1000 me-2">Tipo de culto</h5><a
                                                         class="fw-bold fs--1" href="#!">Add novo tipo de culto</a>
                                                 </div>
-                                                <select class="form-select mb-3" aria-label="category">
-                                                    <option value="men-cloth">Culto do poder</option>
-                                                    <option value="women-cloth">Culto da prosperidade</option>
-                                                    <option value="kid-cloth">Culto da centésima ovelha</option>
+
+                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category">
+
+                                                    <option *ngFor="let entry of meetingKindToSelect" [value]="entry[1]" id="idDashMonth">
+                                                        {{ entry[0] }}
+                                                    </option>
+
                                                 </select>
+
+                                                <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
+                                                    <span class="sr-only"></span>
+                                                </div>
                                             </div>
                                         </div>
 
                                         <div class="col-12 col-sm-6 col-xl-12">
                                             <div class="mb-xl-4">
                                                 <h5 class="mb-2 text-1000">Igreja</h5>
-                                                <input class="form-control mb-xl-3" type="text" placeholder="Collection"
-                                                    readonly="readonly" value="são lourenço" />
+                                                <input class="form-control mb-xl-3" type="text" placeholder="Collection" readonly="readonly" value="são lourenço" />
                                             </div>
                                         </div>
 

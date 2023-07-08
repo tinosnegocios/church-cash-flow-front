@@ -33,7 +33,8 @@
                 <ul class="nav collapse parent show" data-bs-parent="#navbarVerticalCollapse" id="home">
                   <li class="collapsed-nav-item-title d-none">Home
                   </li>
-                  <li class="nav-item"><a class="nav-link active" href="index.html" data-bs-toggle=""
+                  <li class="nav-item">
+                    <a class="nav-link active" [routerLink]="['/']" data-bs-toggle=""
                       aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Inicio</span>
                       </div>
@@ -253,7 +254,8 @@
 
 
             <!-- grupo relatorio -->
-            <div class="nav-item-wrapper"><a class="nav-link dropdown-indicator label-1" href="#pricing" role="button"
+            <div class="nav-item-wrapper">
+              <a class="nav-link dropdown-indicator label-1" href="#pricing" role="button"
                 data-bs-toggle="collapse" aria-expanded="false" aria-controls="pricing">
                 <div class="d-flex align-items-center">
                   <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span
