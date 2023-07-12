@@ -39,4 +39,27 @@ export class OfferingService extends BaseService {
             }
           });
     }
+
+    public searchOfferingByCode(code: number):  Promise<ResultViewModel> {
+      var auth = new AuthService();
+      const token = auth.getToken();
+
+      var churchId = (auth.getModelFromToken()).churchId;
+
+      const httpHeaders = new HttpHeaders()
+          .set("Content-Type", "application/json; charset=utf-8")
+          .set("Authorization", `Bearer ${JSON.parse(token)}`);
+      
+      const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/${churchId}/${code}`, { headers: httpHeaders }).toPromise();
+
+      return returnObservable.then(result => {
+          if (result) {
+            console.log('deu');
+            return result;
+          } else {
+            console.log('nao deu');
+            throw new Error('Result is undefined.');
+          }
+        });
+  }
 }

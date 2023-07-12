@@ -4,16 +4,20 @@
 
 
 <div class="content">
-    <form class="mb-9">
+
+    <form class="mb-9" [formGroup]="formTreasury">
+
         <div class="row g-3 flex-between-end mb-5">
+
             <div class="col-auto">
                 <h2 class="mb-2">Inserir nova oferta</h2>
             </div>
+
             <div class="col-auto">
-                <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" type="button">Limpar campos</button>
-                <button class="btn btn-phoenix-primary btn-lg me-1 mb-1" type="button">Voltar</button>
-                <button class="btn btn-primary btn-lg me-1 mb-1" type="submit">Salvar</button>
+                <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" (click)="clearForm()" type="button">Cancelar</button>
+                <button class="btn btn-primary btn-lg me-1 mb-1" [disabled]="formTreasury.invalid" (click)="saveOffering()" type="submit">Salvar</button>
             </div>
+
         </div>
 
         <div class="row g-5">
@@ -21,11 +25,11 @@
             <div class="row g-2">
                 <div class="col-12 col-lg-3">
                     <h4 class="mb-3">Busca por código</h4>
-                    <input class="form-control mb-5" type="text" placeholder="código da oferta" />
+                    <input class="form-control mb-5" formControlName="code" type="text" placeholder="código da oferta" />
                 </div>
                 <div class="col-12 col-lg-3">
                     <h4 class="mb-3">.</h4>
-                    <button class="btn btn-primary mb-2 mb-sm-0" type="submit">Buscar</button>
+                    <button class="btn btn-primary mb-2 mb-sm-0" type="submit" (click)="searchOfferingByCode()">Buscar</button>
                 </div>
             </div>
 
@@ -36,13 +40,15 @@
                     <div class="row g-5">
                         <div class="col-12 col-lg-6">
                             <h4 class="mb-3">Ministrante</h4>
-                            <input class="form-control mb-5" type="text" placeholder="Nome do ministrante da oferta" />
+                            <input class="form-control mb-5" type="text" formControlName="preacherMemberName" placeholder="Nome do ministrante da oferta" 
+                            [ngClass]="{'text-danger': (!formTreasury.controls['preacherMemberName'].valid && !formTreasury.controls['preacherMemberName'].pristine)}"
+                            />
                         </div>
 
                         <div class="col-12 col-lg-6">
                             <h4 class="mb-3">Dia</h4>
                             <input class="form-control datetimepicker flatpickr-input" id="datepicker" type="text"
-                                placeholder="dd/mm/yyyy"
+                                placeholder="dd/mm/yyyy" formControlName="day"
                                 data-options="{&quot;disableMobile&quot;:true,&quot;dateFormat&quot;:&quot;d/m/Y&quot;}"
                                 readonly="readonly">
                         </div>
@@ -50,38 +56,37 @@
 
                     <div class="mb-6">
                         <h4 class="mb-3">Descrição</h4>
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea class="form-control" formControlName="description" id="exampleFormControlTextarea1" rows="3"></textarea>
                     </div>
 
                     <div class="row g-5">
                         <div class="col-12 col-lg-4">
                             <h4 class="mb-3">Numero de adultos</h4>
-                            <input class="form-control mb-5" type="number" placeholder="total de adultos" value="15" />
+                            <input class="form-control mb-5" type="number" formControlName="adultQuantity" placeholder="total de adultos" (change)="sumPeoples()" />
                         </div>
 
                         <div class="col-12 col-lg-4">
                             <h4 class="mb-3">Numero de crianças</h4>
-                            <input class="form-control mb-5" type="number" placeholder="total de crianças" value="5" />
+                            <input class="form-control mb-5" type="number" formControlName="childrenQuantity" placeholder="total de crianças" (change)="sumPeoples()" />
                         </div>
 
                         <div class="col-12 col-lg-4">
                             <h4 class="mb-3">Total no culto</h4>
-                            <input class="form-control mb-5" type="number" value="20" readonly="readonly" />
+                            <input class="form-control mb-5" type="number" value="20" formControlName="totalPeoples" readonly="readonly" />
                         </div>
                     </div>
 
                     <div class="row g-5">
                         <div class="col-12 col-lg-4">
                             <h4 class="mb-3">Total de oferta R$</h4>
-                            <input class="form-control mb-5" type="number" step="0.1" placeholder="0.00" />
+                            <input class="form-control mb-5" type="number" formControlName="totalAmount" step="0.1" placeholder="0.00" />
                         </div>
                     </div>
 
                     <div class="row g-5">
                         <div class="col-12 col-lg-12">
                             <h4 class="mb-3">Resumo</h4>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                                readonly="readonly"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" formControlName="resume" readonly="readonly"></textarea>
                         </div>
                     </div>
 
@@ -104,7 +109,7 @@
                                                     <a class="fw-bold fs--1" href="#!">Add novo tipo de oferta</a>
                                                 </div>
 
-                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category">
+                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category" formControlName="offeringKindId">
 
                                                     <option *ngFor="let entry of offeringKindToSelect"
                                                         [value]="entry[1]" id="idDashMonth">
@@ -127,7 +132,7 @@
                                                         class="fw-bold fs--1" href="#!">Add novo tipo de culto</a>
                                                 </div>
 
-                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category">
+                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category" formControlName="meetingKindId">
 
                                                     <option *ngFor="let entry of meetingKindToSelect" [value]="entry[1]"
                                                         id="idDashMonth">
@@ -146,7 +151,7 @@
                                             <div class="mb-xl-4">
                                                 <h5 class="mb-2 text-1000">Igreja</h5>
                                                 <input class="form-control mb-xl-3" type="text" placeholder="Collection"
-                                                    readonly="readonly" value="são lourenço" />
+                                                    readonly="readonly" value={{modelToken.churchName}} />
                                             </div>
                                         </div>
 
@@ -176,6 +181,7 @@
                                 </div>
                             </div>
 
+                            <!--model input-->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-xl">
                                     <div class="modal-content">
@@ -239,7 +245,6 @@
                     </div>
 
                 </div>
-
 
             </div>
 
