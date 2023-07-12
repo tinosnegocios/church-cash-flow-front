@@ -49,10 +49,10 @@ export class treasuryRegisterPageComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
       ])],
-      adultQuantity: ['0',Validators.compose([
+      adultQuantity: ['',Validators.compose([
         Validators.required,
       ])],
-      childrenQuantity: ['0',Validators.compose([
+      childrenQuantity: ['',Validators.compose([
         Validators.required,
       ])],
       totalPeoples: ['0'],
@@ -178,6 +178,6 @@ export class treasuryRegisterPageComponent implements OnInit {
 
 
   protected sumPeoples() {
-    this.formTreasury.value.controls['totalPeoples'].setValue(90);
+    this.formTreasury.controls['totalPeoples'].setValue(this.formTreasury.value.adultQuantity + this.formTreasury.value.childrenQuantity);
   }
 }
