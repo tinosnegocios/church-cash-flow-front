@@ -180,4 +180,32 @@ export class treasuryRegisterPageComponent implements OnInit {
   protected sumPeoples() {
     this.formTreasury.controls['totalPeoples'].setValue(this.formTreasury.value.adultQuantity + this.formTreasury.value.childrenQuantity);
   }
+
+  protected showResume(){
+    var c = '';
+    var z = '';
+    if(this.formTreasury.controls['offeringKindId'].value > 0) {
+      var i = this.formTreasury.controls['offeringKindId'].value;
+      var ii : number = i - 1;
+      c = this.offeringKindToSelect[ii][0];
+    }
+    
+    if(this.formTreasury.controls['meetingKindId'].value > 0){
+      //console.log(this.formTreasury.controls['meetingKindId'].value)
+      var y = this.formTreasury.controls['meetingKindId'].value;
+      var yy : number = y - 1;
+      z = this.meetingKindToSelect![yy][0];
+    }
+    
+    if(this.formTreasury.valid) {
+      var objOffering: Offering = this.formTreasury.value;
+      var dayConvert = new Date(objOffering.day);
+      var dayStr = `${dayConvert.getDate().toString().padStart(2, '0') }/${dayConvert.getMonth().toString().padStart(2, '0') }/${dayConvert.getFullYear()}`
+
+      var resume = `Culto do dia ${dayStr} com ministração do(a) ${objOffering.preacherMemberName}.
+      total de oferta em R$ ${objOffering.totalAmount} com ${objOffering.adultQuantity} adultos e ${objOffering.childrenQuantity} crianças. ofertas sendo ${c}. ${z}`
+
+      this.formTreasury.controls['resume'].setValue(resume);
+    }
+  }
 }
