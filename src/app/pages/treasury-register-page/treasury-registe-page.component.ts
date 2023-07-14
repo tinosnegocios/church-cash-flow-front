@@ -132,6 +132,7 @@ export class treasuryRegisterPageComponent implements OnInit {
   protected async searchOfferingByCode() {
     this.msgErrosOffering = [];
     this.msgSuccesssOffering = "";
+    this.searchBusy = true;
 
     var code = this.formSearchTreasury.value.code;
 
@@ -139,7 +140,8 @@ export class treasuryRegisterPageComponent implements OnInit {
     this.clearForm();
 
     if (offeringToForm.errors!.length > 0) {
-      console.log("offering not found");
+      this.searchBusy = false;
+      this.msgErrosOffering.push("Offering not found");
       return;
     }
 
@@ -165,6 +167,8 @@ export class treasuryRegisterPageComponent implements OnInit {
     total de oferta em R$ ${objOffering.totalAmount} com ${objOffering.adultQuantity} adultos e ${objOffering.childrenQuantity} crianças. ofertas sendo ${objOffering.offeringKind}. ${objOffering.meetingKind}`
 
     this.formTreasury.controls['resume'].setValue(resume);
+
+    this.searchBusy = false;
   }
 
   protected async clearForm() {
