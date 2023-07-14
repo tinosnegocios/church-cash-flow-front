@@ -22,6 +22,7 @@ export class treasuryRegisterPageComponent implements OnInit {
   protected formSearchTreasury!: FormGroup;
 
   protected busy = false;
+  protected searchBusy = false;
   private auth: AuthService
 
   protected modelToken: ModelToken;
@@ -41,6 +42,10 @@ export class treasuryRegisterPageComponent implements OnInit {
   constructor(private offeringService: OfferingService, private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, private fbuilder: FormBuilder) {
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
+
+    this.formSearchTreasury = this.fbuilder.group({
+      code: ['']
+    });
 
     this.formTreasury = this.fbuilder.group({
       preacherMemberName: ['', Validators.compose([
@@ -70,8 +75,7 @@ export class treasuryRegisterPageComponent implements OnInit {
       meetingKindId: ['', Validators.compose([
         Validators.required,
       ])],
-      resume: [''],
-      code: [''],
+      resume: ['']
     });
   }
 
@@ -129,7 +133,7 @@ export class treasuryRegisterPageComponent implements OnInit {
     this.msgErrosOffering = [];
     this.msgSuccesssOffering = "";
 
-    var code = this.formTreasury.value.code;
+    var code = this.formSearchTreasury.value.code;
 
     var offeringToForm: ResultViewModel = await this.offeringService.searchOfferingByCode(code);
     this.clearForm();
@@ -145,7 +149,7 @@ export class treasuryRegisterPageComponent implements OnInit {
     var dayConvert = new Date(objOffering.day); // `${objOffering.day.getDay}/${objOffering.day.getMonth}/${objOffering.day.getFullYear}`;
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
     
-    this.formTreasury.controls['code'].setValue(code);
+    this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['preacherMemberName'].setValue(objOffering.preacherMemberName);
     //this.formTreasury.controls['day'].setValue(dayStr);
     this.formTreasury.controls['day'].setValue(formatDate(objOffering.day,'yyyy-MM-dd','en'));
@@ -175,6 +179,7 @@ export class treasuryRegisterPageComponent implements OnInit {
   }
 
   protected async saveOffering() {
+    this.searchBusy = true;
     this.msgErrosOffering = [];
     this.msgSuccesssOffering = "";
     if (this.typeSave == "create") {
@@ -182,6 +187,7 @@ export class treasuryRegisterPageComponent implements OnInit {
     } else if (this.typeSave == "update") {
       await this.updateOffering();
     }
+    this.searchBusy = false;
   }
 
   private async createOffering() {
