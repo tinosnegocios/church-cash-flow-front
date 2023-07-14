@@ -9,7 +9,7 @@ import { Injectable } from "@angular/core";
     providedIn: 'root'
 })
 
-export class FirstFruits extends BaseService {
+export class FirstFruitsService extends BaseService {
     dashBoardServices: DashBoardService;
     private modelName = "first-fruits";
 

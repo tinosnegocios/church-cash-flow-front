@@ -6,10 +6,12 @@ import { ModelToken } from 'src/app/models/ModelToken.models';
 import { OutFlow } from 'src/app/models/Outflow.Models';
 
 import { Tithes } from 'src/app/models/Tithes.models';
+import { FirstFruits } from 'src/app/models/firstFruits.model';
+import { Offering } from 'src/app/models/offering.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 import { AuthService } from 'src/app/services/auth.services';
 import { DashBoardService } from 'src/app/services/dashboard.service';
-import { FirstFruits } from 'src/app/services/firstFruits.services';
+import { FirstFruitsService } from 'src/app/services/firstFruits.services';
 import { MembersService } from 'src/app/services/members.services';
 import { OfferingService } from 'src/app/services/offering.services';
 import { OutflowService } from 'src/app/services/outflow.services';
@@ -44,7 +46,7 @@ export class DashboardPageComponent implements OnInit {
 
   constructor(private router: Router, private membersService: MembersService,
     private outflowService: OutflowService, private tithesService: TithesService,
-    private offeringService: OfferingService, private firstFruitsService: FirstFruits,
+    private offeringService: OfferingService, private firstFruitsService: FirstFruitsService,
     private dashBoardService: DashBoardService) {
     this.auth = new AuthService();
 
@@ -112,19 +114,20 @@ export class DashboardPageComponent implements OnInit {
       const dados = await this.offeringService.getOfferingByMonth();
       this.offering = dados;
       this.totalOffering = 0;
-      this.offering.forEach((x: Tithes) => {
+      this.offering.forEach((x: Offering) => {
         this.totalOffering += x.totalAmount;
       });
     } catch (error) {
       console.log('error:', error);
     }
 
+
     //get first-fruits
     try {
       const dados = await this.firstFruitsService.getFirstFruitsByMonth();
       this.firstFruits = dados;
       this.totalFirstFruits = 0;
-      this.firstFruits.forEach((x: Tithes) => {
+      this.firstFruits.forEach((x: FirstFruits) => {
         this.totalFirstFruits += x.totalAmount;
       });
     } catch (error) {

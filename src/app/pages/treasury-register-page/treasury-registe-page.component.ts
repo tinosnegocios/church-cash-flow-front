@@ -11,6 +11,8 @@ import { AuthService } from 'src/app/services/auth.services';
 import { MeetingKindService } from 'src/app/services/meetingKind.services';
 import { OfferingService } from 'src/app/services/offering.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
+import * as XLSX from 'xlsx';
+
 
 @Component({
   selector: 'app-treasury-registe-page',
@@ -208,10 +210,29 @@ export class treasuryRegisterPageComponent implements OnInit {
       this.msgSuccesssOffering = "oferta cadastrada com sucesso"; 
     }
   }
+
   private async updateOffering() {
 
   }
 
+  public saveDataInCSV(event: any): void {
+    const file = event.target.files[0];
+    const fileReader = new FileReader();
+  
+    fileReader.onload = (e: any) => {
+      const arrayBuffer = e.target.result;
+      const data = new Uint8Array(arrayBuffer);
+      const workbook = XLSX.read(data, { type: 'array' });
+      
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      
+      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+      console.log(jsonData);
+    };
+  
+    fileReader.readAsArrayBuffer(file);
+  }
 
   protected sumPeoples() {
     this.formTreasury.controls['totalPeoples'].setValue(this.formTreasury.value.adultQuantity + this.formTreasury.value.childrenQuantity);
