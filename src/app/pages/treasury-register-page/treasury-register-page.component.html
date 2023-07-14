@@ -5,6 +5,27 @@
 
 <div class="content">
 
+    <div *ngFor="let msgError of msgErrosOffering">
+        <div class="alert alert-outline-danger d-flex align-items-center" role="alert">
+            <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
+            <p class="mb-0 flex-1">{{msgError}}</p>
+
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
+    <div *ngIf="msgSuccesssOffering != ''" class="alert alert-outline-success d-flex align-items-center" role="alert">
+        <span class="fas fa-check-circle text-success fs-3 me-3"></span>
+        <p class="mb-0 flex-1">Oferta cadastrada com sucesso!</p>
+
+        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
+    <form class="mb-9" [formGroup]="formSearchTreasury">
+
+    </form>
+
     <form class="mb-9" [formGroup]="formTreasury" (change)="showResume()">
 
         <div class="row g-3 flex-between-end mb-5">
@@ -14,8 +35,10 @@
             </div>
 
             <div class="col-auto">
-                <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" (click)="clearForm()" type="button">Cancelar</button>
-                <button class="btn btn-primary btn-lg me-1 mb-1" [disabled]="formTreasury.invalid" (click)="saveOffering()" type="submit">Salvar</button>
+                <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" (click)="clearForm()"
+                    type="button">Limpar/Cancelar</button>
+                <button class="btn btn-primary btn-lg me-1 mb-1" [disabled]="formTreasury.invalid"
+                    (click)="saveOffering()" type="submit">Salvar</button>
             </div>
 
         </div>
@@ -25,11 +48,13 @@
             <div class="row g-2">
                 <div class="col-12 col-lg-3">
                     <h4 class="mb-3">Busca por código</h4>
-                    <input class="form-control mb-5" formControlName="code" type="text" placeholder="código da oferta" />
+                    <input class="form-control mb-5" formControlName="code" type="text"
+                        placeholder="código da oferta" />
                 </div>
                 <div class="col-12 col-lg-3">
                     <h4 class="mb-3">.</h4>
-                    <button class="btn btn-primary mb-2 mb-sm-0" type="submit" (click)="searchOfferingByCode()">Buscar</button>
+                    <button class="btn btn-primary mb-2 mb-sm-0" type="submit"
+                        (click)="searchOfferingByCode()">Buscar</button>
                 </div>
             </div>
 
@@ -40,53 +65,56 @@
                     <div class="row g-5">
                         <div class="col-12 col-lg-6">
                             <h4 class="mb-3">Ministrante</h4>
-                            <input class="form-control mb-5" type="text" formControlName="preacherMemberName" placeholder="Nome do ministrante da oferta" 
-                            [ngClass]="{'text-danger': (!formTreasury.controls['preacherMemberName'].valid && !formTreasury.controls['preacherMemberName'].pristine)}"
-                            />
+                            <input class="form-control mb-5" type="text" formControlName="preacherMemberName"
+                                placeholder="Nome do ministrante da oferta"
+                                [ngClass]="{'text-danger': (!formTreasury.controls['preacherMemberName'].valid && !formTreasury.controls['preacherMemberName'].pristine)}" />
                         </div>
 
                         <div class="col-12 col-lg-6">
                             <h4 class="mb-3">Dia</h4>
-                            <input class="form-control datetimepicker flatpickr-input" id="datepicker" type="text"
-                                placeholder="dd/mm/yyyy" formControlName="day"
-                                data-options="{&quot;disableMobile&quot;:true,&quot;dateFormat&quot;:&quot;d/m/Y&quot;}"
-                                readonly="readonly">
+                            <input class="form-control" type="date" placeholder="dd/mm/yyyy" formControlName="day">
                         </div>
                     </div>
 
                     <div class="mb-6">
                         <h4 class="mb-3">Descrição</h4>
-                        <textarea class="form-control" formControlName="description" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <textarea class="form-control" formControlName="description" id="exampleFormControlTextarea1"
+                            rows="3"></textarea>
                     </div>
 
                     <div class="row g-5">
                         <div class="col-12 col-lg-4">
                             <h4 class="mb-3">Numero de adultos</h4>
-                            <input class="form-control mb-5" type="number" formControlName="adultQuantity" placeholder="total de adultos" (change)="sumPeoples()" />
+                            <input class="form-control mb-5" type="number" formControlName="adultQuantity"
+                                placeholder="total de adultos" (change)="sumPeoples()" />
                         </div>
 
                         <div class="col-12 col-lg-4">
                             <h4 class="mb-3">Numero de crianças</h4>
-                            <input class="form-control mb-5" type="number" formControlName="childrenQuantity" placeholder="total de crianças" (change)="sumPeoples()" />
+                            <input class="form-control mb-5" type="number" formControlName="childrenQuantity"
+                                placeholder="total de crianças" (change)="sumPeoples()" />
                         </div>
 
                         <div class="col-12 col-lg-4">
                             <h4 class="mb-3">Total no culto</h4>
-                            <input class="form-control mb-5" type="number" value="20" formControlName="totalPeoples" readonly="readonly" />
+                            <input class="form-control mb-5" type="number" value="20" formControlName="totalPeoples"
+                                readonly="readonly" />
                         </div>
                     </div>
 
                     <div class="row g-5">
                         <div class="col-12 col-lg-4">
                             <h4 class="mb-3">Total de oferta R$</h4>
-                            <input class="form-control mb-5" type="number" formControlName="totalAmount" step="0.1" placeholder="0.00" />
+                            <input class="form-control mb-5" type="number" formControlName="totalAmount" step="0.1"
+                                placeholder="0.00" />
                         </div>
                     </div>
 
                     <div class="row g-5">
                         <div class="col-12 col-lg-12">
                             <h4 class="mb-3">Resumo</h4>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" formControlName="resume" readonly="readonly"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+                                formControlName="resume" readonly="readonly"></textarea>
                         </div>
                     </div>
 
@@ -109,7 +137,8 @@
                                                     <a class="fw-bold fs--1" href="#!">Add novo tipo de oferta</a>
                                                 </div>
 
-                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category" formControlName="offeringKindId">
+                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category"
+                                                    formControlName="offeringKindId">
 
                                                     <option *ngFor="let entry of offeringKindToSelect"
                                                         [value]="entry[1]" id="idDashMonth">
@@ -132,7 +161,8 @@
                                                         class="fw-bold fs--1" href="#!">Add novo tipo de culto</a>
                                                 </div>
 
-                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category" formControlName="meetingKindId">
+                                                <select *ngIf="!busy" class="form-select mb-3" aria-label="category"
+                                                    formControlName="meetingKindId">
 
                                                     <option *ngFor="let entry of meetingKindToSelect" [value]="entry[1]"
                                                         id="idDashMonth">
@@ -186,8 +216,10 @@
                                 <div class="modal-dialog modal-xl">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">O arquivo deve seguir o layout abaixo para importado corretamente</h5>
-                                            <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close">
+                                            <h5 class="modal-title" id="exampleModalLabel">O arquivo deve seguir o
+                                                layout abaixo para importado corretamente</h5>
+                                            <button class="btn p-1" type="button" data-bs-dismiss="modal"
+                                                aria-label="Close">
                                                 <span class="fas fa-times fs--1"></span>
                                             </button>
                                         </div>
@@ -210,7 +242,8 @@
                                                     <tr>
                                                         <td>Dcº Maria das Graças</td>
                                                         <td>08/07/2023</td>
-                                                        <td>Oferta com ministração da irmã Maria. Culto de louvor e adoração</td>
+                                                        <td>Oferta com ministração da irmã Maria. Culto de louvor e
+                                                            adoração</td>
                                                         <td>25</td>
                                                         <td>15</td>
                                                         <td>1777.77</td>
@@ -220,7 +253,8 @@
                                                     <tr>
                                                         <td>Dcº Maria das Graças</td>
                                                         <td>08/12/2023</td>
-                                                        <td>Oferta com ministração da irmã Maria. Culto de louvor e adoração</td>
+                                                        <td>Oferta com ministração da irmã Maria. Culto de louvor e
+                                                            adoração</td>
                                                         <td>25</td>
                                                         <td>15</td>
                                                         <td>777.77</td>
