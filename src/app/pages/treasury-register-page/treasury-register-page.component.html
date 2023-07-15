@@ -22,25 +22,38 @@
                 </div>
             </div>
 
+            <!--msg erro and loading spinner-->
             <div class="col-12 col-lg-6">
 
                 <div *ngIf="searchBusy" class="spinner-grow" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
 
-                <div class="row g-2">
-                    <div *ngIf="msgSuccesssOffering != ''" class="alert alert-outline-success d-flex align-items-center" role="alert">
-                        <span class="fas fa-check-circle text-success fs-3 me-3"></span>
-                        <p class="mb-0 flex-1">Oferta cadastrada com sucesso!</p>
+                <div *ngFor="let msgSuccess of msgSuccesssOffering">
+                    <div class="row g-2">
+                        <div class="alert alert-outline-success d-flex align-items-center" role="alert">
+                            <span class="fas fa-check-circle text-success fs-3 me-3"></span>
+                            <p class="mb-0 flex-1">{{msgSuccess}}</p>
 
-                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                     </div>
                 </div>
+
                 <div *ngFor="let msgError of msgErrosOffering">
                     <div class="alert alert-outline-danger d-flex align-items-center" role="alert">
                         <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
                         <p class="mb-0 flex-1">{{msgError}}</p>
-            
+
+                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div *ngIf="msgImportOffering != ''" class="alert alert-outline-danger d-flex align-items-center"
+                        role="alert">
+                        <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
+                        <p class="mb-0 flex-1">Arquivo de importação inválido!</p>
+
                         <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </div>
@@ -210,10 +223,13 @@
                                             <div class="mb-xl-4">
                                                 <h5 class="mb-2 text-1000">selecione ou arraste
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                        <span class="badge ms-2 badge badge-phoenix badge-phoenix-info ">atente-se ao layout</span>
+                                                        <span
+                                                            class="badge ms-2 badge badge-phoenix badge-phoenix-info ">atente-se
+                                                            ao layout</span>
                                                     </a>
                                                 </h5>
-                                                <input class="form-control mb-xl-3" type="file"  (change)="saveDataInCSV($event)" accept=".xls, .xlsx, .csv"/>
+                                                <input class="form-control mb-xl-3" type="file"
+                                                    (change)="saveDataInCSV($event)" accept=".xls, .xlsx, .csv" />
                                             </div>
                                         </div>
                                     </div>

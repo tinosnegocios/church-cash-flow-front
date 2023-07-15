@@ -39,7 +39,8 @@ export class treasuryRegisterPageComponent implements OnInit {
   public meetingKindSelected: string | undefined;
 
   public msgErrosOffering: string[] = [];
-  public msgSuccesssOffering: string = "";
+  public msgSuccesssOffering: string[] = [];
+  public msgImportOffering: string = "";
 
   constructor(private offeringService: OfferingService, private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, private fbuilder: FormBuilder) {
     this.auth = new AuthService();
@@ -83,7 +84,8 @@ export class treasuryRegisterPageComponent implements OnInit {
 
   async ngOnInit() {
     this.msgErrosOffering = [];
-    this.msgSuccesssOffering = "";
+    this.msgSuccesssOffering = [];
+    this.msgImportOffering = "";
 
     this.busy = true;
     await this.dashBoard();
@@ -133,7 +135,8 @@ export class treasuryRegisterPageComponent implements OnInit {
 
   protected async searchOfferingByCode() {
     this.msgErrosOffering = [];
-    this.msgSuccesssOffering = "";
+    this.msgSuccesssOffering = [];
+    this.msgImportOffering = "";
     this.searchBusy = true;
 
     var code = this.formSearchTreasury.value.code;
@@ -152,11 +155,11 @@ export class treasuryRegisterPageComponent implements OnInit {
 
     var dayConvert = new Date(objOffering.day); // `${objOffering.day.getDay}/${objOffering.day.getMonth}/${objOffering.day.getFullYear}`;
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
-    
+
     this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['preacherMemberName'].setValue(objOffering.preacherMemberName);
     //this.formTreasury.controls['day'].setValue(dayStr);
-    this.formTreasury.controls['day'].setValue(formatDate(objOffering.day,'yyyy-MM-dd','en'));
+    this.formTreasury.controls['day'].setValue(formatDate(objOffering.day, 'yyyy-MM-dd', 'en'));
     this.formTreasury.controls['description'].setValue(objOffering.description);
     this.formTreasury.controls['adultQuantity'].setValue(objOffering.adultQuantity);
     this.formTreasury.controls['totalPeoples'].setValue((objOffering.adultQuantity + objOffering.childrenQuantity));
@@ -175,7 +178,8 @@ export class treasuryRegisterPageComponent implements OnInit {
 
   protected async clearForm() {
     this.msgErrosOffering = [];
-    this.msgSuccesssOffering = "";
+    this.msgSuccesssOffering = [];
+    this.msgImportOffering = "";
 
     this.formTreasury.reset();
     Object.keys(this.formTreasury.controls).forEach(key => {
@@ -187,18 +191,20 @@ export class treasuryRegisterPageComponent implements OnInit {
   protected async saveOffering() {
     this.searchBusy = true;
     this.msgErrosOffering = [];
-    this.msgSuccesssOffering = "";
+    this.msgSuccesssOffering = [];
+    this.msgImportOffering = "";
+
     if (this.typeSave == "create") {
-      await this.createOffering()
+      await this.createOffering(this.formTreasury.value)
     } else if (this.typeSave == "update") {
-      await this.updateOffering();
+      await this.updateOffering(this.formTreasury.value);
     }
     this.searchBusy = false;
   }
 
-  private async createOffering() {
-    var offering: Offering = this.formTreasury.value;
-    
+  private async createOffering(offering: Offering) {
+    //var offering: Offering = this.formTreasury.value;
+
     var result = await this.offeringService.createOffering(offering);
     var msEr: string[];
     if (result!.errors != null && result!.errors.length > 0) {
@@ -207,32 +213,88 @@ export class treasuryRegisterPageComponent implements OnInit {
         console.log(this.msgErrosOffering);
       })
     } else {
-      this.msgSuccesssOffering = "oferta cadastrada com sucesso"; 
+      this.msgSuccesssOffering.push("oferta cadastrada com sucesso");
     }
   }
 
-  private async updateOffering() {
+  private async updateOffering(offering: Offering) {
 
   }
 
   public saveDataInCSV(event: any): void {
+    this.msgErrosOffering = [];
+    this.msgSuccesssOffering = [];
+    this.msgImportOffering = "";
+
+    var extensoes = ['csv', 'xls', 'xlsx'];
+
     const file = event.target.files[0];
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (!fileExtension || !extensoes.includes(fileExtension)) {
+      this.msgImportOffering = "Arquivo inválido";
+      return;
+    }
+
     const fileReader = new FileReader();
-  
     fileReader.onload = (e: any) => {
+
       const arrayBuffer = e.target.result;
       const data = new Uint8Array(arrayBuffer);
       const workbook = XLSX.read(data, { type: 'array' });
-      
+
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
-      
+
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
       console.log(jsonData);
+      this.loadOfferingByExcel(jsonData);
     };
-  
+
     fileReader.readAsArrayBuffer(file);
   }
+  private loadOfferingByExcel(arrayOffering: Array<any>) {
+    var cont = 0;
+    var offering: Offering = new Offering();
+    arrayOffering.forEach(x => {
+      if (cont > 0) {
+
+        var anonymous = {
+          preacherMemberName: x[0],
+          day: x[1],
+          description: x[2],
+          adultQuantity: x[3],
+          childrenQuantity: x[4],
+          totalAmount: x[5],
+          offeringKindId: x[6],
+          meetingKindId: x[7],
+        };
+
+        offering.active = true;
+        offering.preacherMemberName = anonymous.preacherMemberName;
+        offering.day = anonymous.day;
+        offering.description = anonymous.description;
+        offering.adultQuantity = anonymous.adultQuantity;
+        offering.childrenQuantity = anonymous.childrenQuantity;
+        offering.totalAmount = anonymous.totalAmount;
+        offering.offeringKindId = anonymous.offeringKindId
+        offering.meetingKindId = anonymous.meetingKindId;
+
+        console.log(offering);
+        this.createOffering(offering);
+      }
+
+      cont = cont + 1;
+    })
+  }
+
+
+
+
+
+
+
+
 
   protected sumPeoples() {
     this.formTreasury.controls['totalPeoples'].setValue(this.formTreasury.value.adultQuantity + this.formTreasury.value.childrenQuantity);
