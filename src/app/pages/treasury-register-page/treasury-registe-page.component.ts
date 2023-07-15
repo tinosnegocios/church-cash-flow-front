@@ -42,6 +42,9 @@ export class treasuryRegisterPageComponent implements OnInit {
   public msgSuccesssOffering: string[] = [];
   public msgImportOffering: string = "";
 
+  public selectedFileExcel: File | undefined;
+  private fileReader: FileReader | undefined;
+
   constructor(private offeringService: OfferingService, private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, private fbuilder: FormBuilder) {
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
@@ -185,7 +188,13 @@ export class treasuryRegisterPageComponent implements OnInit {
     Object.keys(this.formTreasury.controls).forEach(key => {
       this.formTreasury.controls[key].setValue("");
     });
+    Object.keys(this.formSearchTreasury.controls).forEach(key => {
+      this.formTreasury.controls[key].setValue("");
+    });
+
     this.typeSave = "create";
+
+    
   }
 
   protected async saveOffering() {
@@ -221,7 +230,8 @@ export class treasuryRegisterPageComponent implements OnInit {
 
   }
 
-  public saveDataInCSV(event: any): void {
+
+  public setExcel(event: any): void {
     this.msgErrosOffering = [];
     this.msgSuccesssOffering = [];
     this.msgImportOffering = "";
@@ -236,8 +246,16 @@ export class treasuryRegisterPageComponent implements OnInit {
       return;
     }
 
-    const fileReader = new FileReader();
-    fileReader.onload = (e: any) => {
+    this.selectedFileExcel = event.target.files[0];
+    this.fileReader = new FileReader();
+  }
+  public saveDataInCSV(): void {
+    this.msgErrosOffering = [];
+    this.msgSuccesssOffering = [];
+    this.msgImportOffering = "";
+
+    this.fileReader!.readAsArrayBuffer(this.selectedFileExcel!);
+    this.fileReader!.onload = (e: any) => {
 
       const arrayBuffer = e.target.result;
       const data = new Uint8Array(arrayBuffer);
@@ -247,11 +265,10 @@ export class treasuryRegisterPageComponent implements OnInit {
       const worksheet = workbook.Sheets[sheetName];
 
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      console.log(jsonData);
       this.loadOfferingByExcel(jsonData);
     };
 
-    fileReader.readAsArrayBuffer(file);
+    
   }
   private loadOfferingByExcel(arrayOffering: Array<any>) {
     var cont = 0;
@@ -280,7 +297,6 @@ export class treasuryRegisterPageComponent implements OnInit {
         offering.offeringKindId = anonymous.offeringKindId
         offering.meetingKindId = anonymous.meetingKindId;
 
-        console.log(offering);
         this.createOffering(offering);
       }
 

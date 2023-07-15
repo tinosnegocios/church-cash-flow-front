@@ -228,8 +228,16 @@
                                                             ao layout</span>
                                                     </a>
                                                 </h5>
-                                                <input class="form-control mb-xl-3" type="file"
-                                                    (change)="saveDataInCSV($event)" accept=".xls, .xlsx, .csv" />
+
+                                                <div class="row g-5">
+                                                    <div class="col-12 col-lg-9">
+                                                        <input class="form-control mb-xl-3" id="inputFileToImport" type="file" (change)="setExcel($event)" accept=".xls, .xlsx, .csv" />
+                                                    </div>
+                                                    <div class="col-12 col-lg-3">
+                                                        <button class="btn btn-outline-info me-1 mb-1" (click)="saveDataInCSV()" type="button">Importar</button>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
