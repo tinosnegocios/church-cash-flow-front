@@ -13,6 +13,7 @@ import { LoadingPageComponent } from './pages/shared/loading-page/loading-page.c
 import { MenusPageComponent } from './pages/shared/menus-page/menus-page.component';
 import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';
 import { treasuryRegisterPageComponent } from './pages/treasury-register-page/treasury-registe-page.component';
+import { TreasuryOfferingRelatoryPageComponent } from './pages/treasury-offering-relatory-page/treasury-offering-relatory-page.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { treasuryRegisterPageComponent } from './pages/treasury-register-page/tr
     LoadingPageComponent,
     MenusPageComponent,
     HeadFrameComponent,
-    treasuryRegisterPageComponent
+    treasuryRegisterPageComponent,
+    TreasuryOfferingRelatoryPageComponent
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
 import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';
 import { treasuryRegisterPageComponent } from './pages/treasury-register-page/treasury-registe-page.component';
+import { TreasuryOfferingRelatoryPageComponent } from './pages/treasury-offering-relatory-page/treasury-offering-relatory-page.component';
 
 const routes: Routes = [
   {
@@ -22,15 +23,24 @@ const routes: Routes = [
       }
     ]
    },{
-    path: 'register',
+    path: 'offering-register',
     component: HeadFrameComponent,
     children: [
       {
         path: '',
         component: treasuryRegisterPageComponent
+      },
+    ]
+   },{
+    path: 'offering-report',
+    component: HeadFrameComponent,
+    children: [
+      {
+        path: '',
+        component: TreasuryOfferingRelatoryPageComponent
       }
     ]
-   }
+   }   
 ];
 
 @NgModule({
