@@ -2,6 +2,7 @@ import { DatePipe, formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import { OfferingHandler } from 'src/app/handlers/offeringHandler';
 import { ModelToken } from 'src/app/models/ModelToken.models';
 import { MeetingKind } from 'src/app/models/meetingKind.models copy';
 import { Offering } from 'src/app/models/offering.models';
@@ -11,6 +12,7 @@ import { AuthService } from 'src/app/services/auth.services';
 import { MeetingKindService } from 'src/app/services/meetingKind.services';
 import { OfferingService } from 'src/app/services/offering.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
+import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 import * as XLSX from 'xlsx';
 
 
@@ -45,7 +47,7 @@ export class treasuryRegisterPageComponent implements OnInit {
   public selectedFileExcel: File | undefined;
   private fileReader: FileReader | undefined;
 
-  constructor(private offeringService: OfferingService, private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, private fbuilder: FormBuilder) {
+  constructor(private offeringHandler: OfferingHandler, private offeringService: OfferingService, private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, private fbuilder: FormBuilder) {
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
 
@@ -86,9 +88,7 @@ export class treasuryRegisterPageComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.msgErrosOffering = [];
-    this.msgSuccesssOffering = [];
-    this.msgImportOffering = "";
+    this.clearForm();
 
     this.busy = true;
     await this.dashBoard();
@@ -137,14 +137,11 @@ export class treasuryRegisterPageComponent implements OnInit {
   }
 
   protected async searchOfferingByCode() {
-    this.msgErrosOffering = [];
-    this.msgSuccesssOffering = [];
-    this.msgImportOffering = "";
     this.searchBusy = true;
 
     var code = this.formSearchTreasury.value.code;
 
-    var offeringToForm: ResultViewModel = await this.offeringService.searchOfferingByCode(code);
+    var offeringToForm: ResultViewModel = await this.offeringHandler.getById(code);
     this.clearForm();
 
     if (offeringToForm.errors!.length > 0) {
@@ -156,152 +153,121 @@ export class treasuryRegisterPageComponent implements OnInit {
     this.typeSave = "update";
     var objOffering: Offering = offeringToForm.data;
 
-    var dayConvert = new Date(objOffering.day); // `${objOffering.day.getDay}/${objOffering.day.getMonth}/${objOffering.day.getFullYear}`;
+    this.fillFormWithOffering(objOffering, code);
+
+    this.searchBusy = false;
+  }
+
+  private fillFormWithOffering(offering: Offering, code: number){
+    var dayConvert = new Date(offering.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
 
     this.formSearchTreasury.controls['code'].setValue(code);
-    this.formTreasury.controls['preacherMemberName'].setValue(objOffering.preacherMemberName);
-    //this.formTreasury.controls['day'].setValue(dayStr);
-    this.formTreasury.controls['day'].setValue(formatDate(objOffering.day, 'yyyy-MM-dd', 'en'));
-    this.formTreasury.controls['description'].setValue(objOffering.description);
-    this.formTreasury.controls['adultQuantity'].setValue(objOffering.adultQuantity);
-    this.formTreasury.controls['totalPeoples'].setValue((objOffering.adultQuantity + objOffering.childrenQuantity));
-    this.formTreasury.controls['childrenQuantity'].setValue(objOffering.childrenQuantity);
-    this.formTreasury.controls['totalAmount'].setValue(objOffering.totalAmount);
-    this.formTreasury.controls['offeringKindId'].setValue(objOffering.offeringKindId);
-    this.formTreasury.controls['meetingKindId'].setValue(objOffering.meetingKindId);
+    this.formTreasury.controls['preacherMemberName'].setValue(offering.preacherMemberName);
+    this.formTreasury.controls['day'].setValue(formatDate(offering.day, 'yyyy-MM-dd', 'en'));
+    this.formTreasury.controls['description'].setValue(offering.description);
+    this.formTreasury.controls['adultQuantity'].setValue(offering.adultQuantity);
+    this.formTreasury.controls['totalPeoples'].setValue((offering.adultQuantity + offering.childrenQuantity));
+    this.formTreasury.controls['childrenQuantity'].setValue(offering.childrenQuantity);
+    this.formTreasury.controls['totalAmount'].setValue(offering.totalAmount);
+    this.formTreasury.controls['offeringKindId'].setValue(offering.offeringKindId);
+    this.formTreasury.controls['meetingKindId'].setValue(offering.meetingKindId);
 
-    var resume = `Culto do dia ${dayStr} com ministração do(a) ${objOffering.preacherMemberName}.
-    total de oferta em R$ ${objOffering.totalAmount} com ${objOffering.adultQuantity} adultos e ${objOffering.childrenQuantity} crianças. ofertas sendo ${objOffering.offeringKind}. ${objOffering.meetingKind}`
+    var resume = `Culto do dia ${dayStr} com ministração do(a) ${offering.preacherMemberName}.
+    total de oferta em R$ ${offering.totalAmount} com ${offering.adultQuantity} adultos e ${offering.childrenQuantity} crianças. ofertas sendo ${offering.offeringKind}. ${offering.meetingKind}`
 
     this.formTreasury.controls['resume'].setValue(resume);
-
-    this.searchBusy = false;
   }
 
   protected async clearForm() {
     this.msgErrosOffering = [];
     this.msgSuccesssOffering = [];
     this.msgImportOffering = "";
+    this.offeringHandler.clear();
 
     this.formTreasury.reset();
-    Object.keys(this.formTreasury.controls).forEach(key => {
-      this.formTreasury.controls[key].setValue("");
-    });
-    Object.keys(this.formSearchTreasury.controls).forEach(key => {
-      this.formTreasury.controls[key].setValue("");
-    });
+    this.formSearchTreasury.reset();
 
     this.typeSave = "create";
-
-    
   }
 
   protected async saveOffering() {
     this.searchBusy = true;
-    this.msgErrosOffering = [];
-    this.msgSuccesssOffering = [];
-    this.msgImportOffering = "";
-
+    
     if (this.typeSave == "create") {
       await this.createOffering(this.formTreasury.value)
     } else if (this.typeSave == "update") {
-      await this.updateOffering(this.formTreasury.value);
+      await this.updateOffering(this.formTreasury.value, this.formSearchTreasury.value.code);
     }
+    
     this.searchBusy = false;
   }
 
   private async createOffering(offering: Offering) {
-    //var offering: Offering = this.formTreasury.value;
-
-    var result = await this.offeringService.createOffering(offering);
-    var msEr: string[];
-    if (result!.errors != null && result!.errors.length > 0) {
-      result!.errors.forEach(x => {
-        this.msgErrosOffering.push(x)
-        console.log(this.msgErrosOffering);
+    this.clearForm();
+    var create = await this.offeringHandler.create(offering)
+      .then((result) => {
       })
-    } else {
-      this.msgSuccesssOffering.push("oferta cadastrada com sucesso");
-    }
+      .catch((error) => {
+        this.msgErrosOffering.push("Ocorreu um erro ao cadastrar a oferta. Tente novamente");
+      });
+
+    this.msgErrosOffering = this.offeringHandler.getMsgErro();
+    this.msgSuccesssOffering = this.offeringHandler.getMsgSuccess();
   }
 
-  private async updateOffering(offering: Offering) {
+  private async updateOffering(offering: Offering, offeringId: string) {
+    this.offeringHandler.update(offering, offeringId)
+    .then((result) => {
+    })
+    .catch((error) => {
+      this.msgErrosOffering.push("Ocorreu um erro ao atualizar a oferta. Tente novamente");
+    });
 
+  this.msgErrosOffering = this.offeringHandler.getMsgErro();
+  this.msgSuccesssOffering = this.offeringHandler.getMsgSuccess();
   }
-
 
   public setExcel(event: any): void {
-    this.msgErrosOffering = [];
-    this.msgSuccesssOffering = [];
-    this.msgImportOffering = "";
-
-    var extensoes = ['csv', 'xls', 'xlsx'];
-
-    const file = event.target.files[0];
-    const fileExtension = file.name.split('.').pop().toLowerCase();
-
-    if (!fileExtension || !extensoes.includes(fileExtension)) {
-      this.msgImportOffering = "Arquivo inválido";
-      return;
-    }
+    this.clearForm();
 
     this.selectedFileExcel = event.target.files[0];
-    this.fileReader = new FileReader();
   }
-  public saveDataInCSV(): void {
-    this.msgErrosOffering = [];
-    this.msgSuccesssOffering = [];
-    this.msgImportOffering = "";
 
-    this.fileReader!.readAsArrayBuffer(this.selectedFileExcel!);
-    this.fileReader!.onload = (e: any) => {
+  public readExcel(): void {
+    this.clearForm();
 
-      const arrayBuffer = e.target.result;
-      const data = new Uint8Array(arrayBuffer);
-      const workbook = XLSX.read(data, { type: 'array' });
+    var excelMethods = new ExcelMethods();
+    excelMethods.readExcel(this.selectedFileExcel!)
+      .then((jsonData) => {
+        this.createOfferingByExcel(jsonData);
+      })
+      .catch((error) => {
+        this.msgErrosOffering = error;
+      });
 
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
 
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-      this.loadOfferingByExcel(jsonData);
-    };
-
-    
   }
-  private loadOfferingByExcel(arrayOffering: Array<any>) {
+
+  private createOfferingByExcel(arrayOffering: Array<any>) {
     var cont = 0;
     var offering: Offering = new Offering();
     arrayOffering.forEach(x => {
       if (cont > 0) {
-
-        var anonymous = {
-          preacherMemberName: x[0],
-          day: x[1],
-          description: x[2],
-          adultQuantity: x[3],
-          childrenQuantity: x[4],
-          totalAmount: x[5],
-          offeringKindId: x[6],
-          meetingKindId: x[7],
-        };
-
         offering.active = true;
-        offering.preacherMemberName = anonymous.preacherMemberName;
-        offering.day = anonymous.day;
-        offering.description = anonymous.description;
-        offering.adultQuantity = anonymous.adultQuantity;
-        offering.childrenQuantity = anonymous.childrenQuantity;
-        offering.totalAmount = anonymous.totalAmount;
-        offering.offeringKindId = anonymous.offeringKindId
-        offering.meetingKindId = anonymous.meetingKindId;
-
+        offering.preacherMemberName = x[0];
+        offering.day = x[1];
+        offering.description = x[2];
+        offering.adultQuantity = x[3];
+        offering.childrenQuantity = x[4];
+        offering.totalAmount = x[5];
+        offering.offeringKindId = x[6];
+        offering.meetingKindId = x[7];
         this.createOffering(offering);
       }
 
       cont = cont + 1;
-    })
+    });
   }
 
 
@@ -326,7 +292,6 @@ export class treasuryRegisterPageComponent implements OnInit {
     }
 
     if (this.formTreasury.controls['meetingKindId'].value > 0) {
-      //console.log(this.formTreasury.controls['meetingKindId'].value)
       var y = this.formTreasury.controls['meetingKindId'].value;
       var yy: number = y - 1;
       z = this.meetingKindToSelect![yy][0];

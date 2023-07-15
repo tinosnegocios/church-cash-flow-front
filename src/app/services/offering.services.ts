@@ -78,26 +78,44 @@ export class OfferingService extends BaseService {
     var result: ResultViewModel;
     var msgErro : string[];
 
-    // const returnObservable = this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, offering, { headers: httpHeaders }).subscribe(
-    //   {
-    //     next: (response) => {
-    //       console.log(response);
-    //       result = response;
-    //     },
-    //     error: (erro) => {
-    //       console.log(erro)
-    //       msgErro = erro.error.erros;
-    //     }
-    //   }
-    // )
-
     const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
       this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, offering, { headers: httpHeaders })
         .pipe(
           catchError((error: any): Observable<ResultViewModel> => {
-            //console.log(error.error);
-            //msgErro = error.message;
-            //console.error('There was an error!', error);
+            msgErro = error.error.erros;
+            return of<ResultViewModel>(error.error);
+          })
+        )
+        .subscribe(
+          (data: ResultViewModel) => {
+            resolve(data);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
+    
+    return returnPromise;
+  }
+
+  updateOffering(offering: Offering, offeringId: string) : Promise<ResultViewModel | null> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    var msgErro : string[];
+    var churchId = (auth.getModelFromToken()).churchId;
+
+    offering.churchId = churchId;
+
+    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
+      this.http.put<ResultViewModel>(`${this.url}/v1/${this.modelName}/${offeringId}`, offering, { headers: httpHeaders })
+        .pipe(
+          catchError((error: any): Observable<ResultViewModel> => {
             msgErro = error.error.erros;
             return of<ResultViewModel>(error.error);
           })
