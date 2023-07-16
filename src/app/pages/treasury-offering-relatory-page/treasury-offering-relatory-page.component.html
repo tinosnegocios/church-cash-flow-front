@@ -17,26 +17,36 @@
     </ul>
 
     <div id="products">
-      <div class="mb-4">
-        <div class="row g-3">
+      <div class="mb-5">
+        <div class="row g-5">
 
           <div class="col-auto">
             <div class="search-box">
               <form class="position-relative" [formGroup]="formLimit" data-bs-toggle="search" data-bs-display="static" >
-                <select class="form-select form-select-sm mt-2" formControlName="limitNumber" (change)="dashBoard()">
-                  <option>10</option>
-                  <option>20</option>
-                  <option>50</option>
-                  <option>70</option>
-                  <option>200</option>
-                  <option>500</option>
-                  <option>1000</option>
-                  <option>2000</option>
-                  <option>5000</option>
-                </select>
+
+                <div class="row">
+
+                  <div class="col-12 col-lg-4">
+                    <select class="form-select form-select-sm mt-2" formControlName="limitNumber" (change)="dashBoard()">
+                      <option>10</option>
+                      <option>20</option>
+                      <option>50</option>
+                      <option>70</option>
+                      <option>200</option>
+                      <option>500</option>
+                      <option>1000</option>
+                      <option>2000</option>
+                      <option>5000</option>
+                    </select>
+                  </div>
+                  
+                </div>
+
               </form>
+
             </div>
           </div>
+
 
           <div class="col-auto scrollbar overflow-hidden-y flex-grow-1">
 
@@ -54,6 +64,7 @@
               </button>
             </a>
           </div>
+
         </div>
       </div>
 
