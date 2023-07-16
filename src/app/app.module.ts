@@ -14,6 +14,7 @@ import { MenusPageComponent } from './pages/shared/menus-page/menus-page.compone
 import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';
 import { treasuryRegisterPageComponent } from './pages/treasury-register-page/treasury-registe-page.component';
 import { TreasuryOfferingRelatoryPageComponent } from './pages/treasury-offering-relatory-page/treasury-offering-relatory-page.component';
+import { TreasuryOfferingItemPageComponent } from './pages/treasury-offering-item-page/treasury-offering-item-page.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { TreasuryOfferingRelatoryPageComponent } from './pages/treasury-offering
     MenusPageComponent,
     HeadFrameComponent,
     treasuryRegisterPageComponent,
-    TreasuryOfferingRelatoryPageComponent
+    TreasuryOfferingRelatoryPageComponent,
+    TreasuryOfferingItemPageComponent
   ],
   imports: [
     BrowserModule,

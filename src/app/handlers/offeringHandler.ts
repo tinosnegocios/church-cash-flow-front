@@ -51,8 +51,13 @@ export class OfferingHandler {
     }
 
     public async getById(id: number) : Promise<ResultViewModel>{
-        var offering: ResultViewModel = await this.service.searchOfferingByCode(id);
-        return offering;
+        var result: ResultViewModel = await this.service.searchOfferingByCode(id);
+        return result;
+    }
+
+    public async getAllOffering(limit: number): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getAllOffering(limit);
+        return result;
     }
 
 

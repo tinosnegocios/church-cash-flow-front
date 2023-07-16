@@ -1,28 +1,39 @@
 <div class="content">
 
-  <div class="mb-9">
+  <div class="mb-9" *ngIf="busy">
+    <app-loading-page></app-loading-page>
+  </div>
+
+  <div class="mb-9" *ngIf="!busy">
     <div class="row g-3 mb-4">
       <div class="col-auto">
-        <h2 class="mb-0">Ofertas</h2>
+        <h2 class="mb-0">Ofertas <a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt fs-3"></span></a> </h2>
       </div>
     </div>
 
     <ul class="nav nav-links mb-3 mb-lg-2 mx-n3">
-      <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">All <span
-            class="text-700 fw-semi-bold">(68817)</span></a></li>
+      <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">total<span
+            class="text-700 fw-semi-bold">({{offerings$.length}})</span></a></li>
     </ul>
 
-    <div id="products"
-      data-list='{"valueNames":["product","price","category","tags","vendor","time"],"page":10,"pagination":true}'>
+    <div id="products">
       <div class="mb-4">
         <div class="row g-3">
 
           <div class="col-auto">
             <div class="search-box">
-              <form class="position-relative" data-bs-toggle="search" data-bs-display="static">
-                <input class="form-control search-input search" type="search" placeholder="Search products"
-                  aria-label="Search" />
-                <span class="fas fa-search search-box-icon"></span>
+              <form class="position-relative" [formGroup]="formLimit" data-bs-toggle="search" data-bs-display="static" >
+                <select class="form-select form-select-sm mt-2" formControlName="limitNumber" (change)="dashBoard()">
+                  <option>10</option>
+                  <option>20</option>
+                  <option>50</option>
+                  <option>70</option>
+                  <option>200</option>
+                  <option>500</option>
+                  <option>1000</option>
+                  <option>2000</option>
+                  <option>5000</option>
+                </select>
               </form>
             </div>
           </div>
@@ -36,84 +47,89 @@
               excel</button>
             <button class="btn btn-outline-info me-1 mb-1"><span class="far fa-file-pdf fs-1 me-2"></span>Exportar
               pdf</button>
-            <button class="btn btn-primary" id="addBtn"><span class="fas fa-plus fs-1 me-2"></span>Criar novo</button>
+            <a [routerLink]="['/offering-register']">
+              <button class="btn btn-primary" id="addBtn">
+                <span class="fas fa-plus fs-1 me-2"></span>
+                Criar novo
+              </button>
+            </a>
           </div>
         </div>
       </div>
+
       <div class="mx-n4 px-4 mx-lg-n6 px-lg-6 bg-white border-top border-bottom border-200 position-relative top-1">
         <div class="table-responsive scrollbar mx-n1 px-1">
-          
-          <table class="table fs--1 mb-0">
+
+        </div>
+      </div>
+
+      <div id="tableExample3" data-list='{"valueNames":["name","email","age"],"page":5,"pagination":true}'>
+
+        <div class="table-responsive">
+
+          <table class="table table-hover table-striped table-sm fs--1 mb-0">
+
             <thead>
               <tr>
-                <th class="white-space-nowrap fs--1 align-middle ps-0" style="max-width:20px; width:18px;">
-                  <div class="form-check mb-0 fs-0">
-                    <input class="form-check-input" id="checkbox-bulk-products-select" type="checkbox"
-                      data-bulk-select='{"body":"products-table-body"}' />
-                  </div>
-                </th>
-                <th class="sort white-space-nowrap align-middle fs--2" scope="col" style="width:70px;"></th>
-                <th class="sort white-space-nowrap align-middle ps-4" scope="col" style="width:350px;"
-                  data-sort="product">PRODUCT NAME</th>
-                <th class="sort align-middle text-end ps-4" scope="col" data-sort="price" style="width:150px;">PRICE
-                </th>
-                <th class="sort align-middle ps-4" scope="col" data-sort="category" style="width:150px;">CATEGORY</th>
-                <th class="sort align-middle ps-3" scope="col" data-sort="tags" style="width:250px;">TAGS</th>
-                <th class="sort align-middle fs-0 text-center ps-4" scope="col" style="width:125px;"></th>
-                <th class="sort align-middle ps-4" scope="col" data-sort="vendor" style="width:200px;">VENDOR</th>
-                <th class="sort align-middle ps-4" scope="col" data-sort="time" style="width:50px;">PUBLISHED ON</th>
-                <th class="sort text-end align-middle pe-0 ps-4" scope="col"></th>
+                <th style="width:50px;">Cód</th>
+                <th scope="col" style="width:350px;" data-sort="product">Descrição</th>
+                <th scope="col" data-sort="time" style="width:100px;">R$ Total</th>
+                <th scope="col" data-sort="price" style="width:150px;">Dia</th>
+                <th scope="col" data-sort="category" style="width:200px;">Ministrante</th>
+                <th scope="col" data-sort="tags" style="width:100px;">Nª adultos</th>
+                <th scope="col" data-sort="tags" style="width:100px;">Nª crianças</th>
+                <th scope="col" style="width:125px;">Culto</th>
+                <th scope="col" data-sort="vendor" style="width:100px;">Oferta</th>
+                <th scope="col" style="width:100px;">ação</th>
               </tr>
             </thead>
 
             <tbody class="list" id="products-table-body">
-
-              <tr class="position-static">
-                <td class="fs--1 align-middle">
-                  <div class="form-check mb-0 fs-0">
-                    <input class="form-check-input" type="checkbox"
-                      data-bulk-select-row='{"product":"Fitbit Sense Advanced Smartwatch with Tools for Heart Health, Stress Management & Skin Temperature Trends, Carbon/Graphite, One Size (S & L Bands...","productImage":"/products/1.png","price":"$39","category":"Plants","tags":["Health","Exercise","Discipline","Lifestyle","Fitness"],"star":false,"vendor":"Blue Olive Plant sellers. Inc","publishedOn":"Nov 12, 10:45 PM"}' />
-                  </div>
+              <tr class="position-static" *ngFor="let offering of offerings$">
+                <td>{{offering.id}}</td>
+                <td class="">
+                  {{offering.description}}
                 </td>
-
-                <td class="align-middle white-space-nowrap py-0">
-                  <div class="border rounded-2"><img src="../../../assets/img//products/1.png" alt="" width="53" />
-                  </div>
+                <td class="">
+                  {{offering.totalAmount}}
                 </td>
-
-                <td class="product align-middle ps-4"><a class="fw-semi-bold line-clamp-3 mb-0" href="#!">Fitbit Sense
-                    Advanced Smartwatch with Tools for Heart Health, Stress Management &amp; Skin Temperature Trends,
-                    Carbon/Graphite, One Size (S &amp; ...</a></td>
-
-                <td class="price align-middle white-space-nowrap text-end fw-bold text-700 ps-4">$39</td>
-
-                <td class="category align-middle white-space-nowrap text-600 fs--1 ps-4 fw-semi-bold">Plants</td>
-                <td class="tags align-middle review pb-2 ps-3" style="min-width:225px;"><a class="text-decoration-none"
-                    href="#!"><span class="badge badge-tag me-2 mb-2">Health</span></a><a class="text-decoration-none"
-                    href="#!"><span class="badge badge-tag me-2 mb-2">Exercise</span></a><a class="text-decoration-none"
-                    href="#!"><span class="badge badge-tag me-2 mb-2">Discipline</span></a><a
-                    class="text-decoration-none" href="#!"><span
-                      class="badge badge-tag me-2 mb-2">Lifestyle</span></a><a class="text-decoration-none"
-                    href="#!"><span class="badge badge-tag me-2 mb-2">Fitness</span></a>
+                <td class="">
+                  {{offering.day}}
                 </td>
-                <td class="align-middle review fs-0 text-center ps-4">
-                  <div class="d-toggle-container">
-                    <div class="d-block-hover"><span class="fas fa-star text-warning"></span></div>
-                    <div class="d-none-hover"><span class="far fa-star text-warning"></span></div>
-                  </div>
+                <td class="">
+                  {{offering.preacherMemberName}}
                 </td>
-                <td class="vendor align-middle text-start fw-semi-bold ps-4"><a href="#!">Blue Olive Plant sellers.
-                    Inc</a></td>
-                <td class="time align-middle white-space-nowrap text-600 ps-4">Nov 12, 10:45 PM</td>
-                <td class="align-middle white-space-nowrap text-end pe-0 ps-4 btn-reveal-trigger">
+                <td class="">
+                  {{offering.adultQuantity}}
+                </td>
+                <td class="">
+                  {{offering.childrenQuantity}}
+                </td>
+                <td class="">
+                  {{offering.meetingKind}}
+                </td>
+                <td class="">
+                  {{offering.offeringKind}}
+                </td>
+                <td class="">
                   <div class="font-sans-serif btn-reveal-trigger position-static">
                     <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs--2"
                       type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true"
-                      aria-expanded="false" data-bs-reference="parent"><span
-                        class="fas fa-ellipsis-h fs--2"></span></button>
-                    <div class="dropdown-menu dropdown-menu-end py-2"><a class="dropdown-item" href="#!">View</a><a
-                        class="dropdown-item" href="#!">Export</a>
-                      <div class="dropdown-divider"></div><a class="dropdown-item text-danger" href="#!">Remove</a>
+                      aria-expanded="false" data-bs-reference="parent">
+                      <svg class="svg-inline--fa fa-ellipsis fs--2" aria-hidden="true" focusable="false"
+                        data-prefix="fas" data-icon="ellipsis" role="img" xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 448 512" data-fa-i2svg="">
+                        <path fill="currentColor"
+                          d="M120 256C120 286.9 94.93 312 64 312C33.07 312 8 286.9 8 256C8 225.1 33.07 200 64 200C94.93 200 120 225.1 120 256zM280 256C280 286.9 254.9 312 224 312C193.1 312 168 286.9 168 256C168 225.1 193.1 200 224 200C254.9 200 280 225.1 280 256zM328 256C328 225.1 353.1 200 384 200C414.9 200 440 225.1 440 256C440 286.9 414.9 312 384 312C353.1 312 328 286.9 328 256z">
+                        </path>
+                      </svg>
+                    </button>
+
+                    <div class="dropdown-menu dropdown-menu-end py-2">
+                      <a class="dropdown-item" href="#!">Editar</a>
+                      <div class="dropdown-divider">
+                      </div>
+                      <a class="dropdown-item text-danger" href="#!">Excluir</a>
                     </div>
                   </div>
                 </td>
@@ -122,15 +138,9 @@
           </table>
 
         </div>
-        <div class="row align-items-center justify-content-between py-2 pe-0 fs--1">
-          <div class="col-auto d-flex">
-            <p class="mb-0 d-none d-sm-block me-3 fw-semi-bold text-900" data-list-info="data-list-info"></p><a
-              class="fw-semi-bold" href="#!" data-list-view="*">View all<span class="fas fa-angle-right ms-1"
-                data-fa-transform="down-1"></span></a><a class="fw-semi-bold d-none" href="#!"
-              data-list-view="less">View Less<span class="fas fa-angle-right ms-1"
-                data-fa-transform="down-1"></span></a>
-          </div>
-          <div class="col-auto d-flex">
+        <div class="d-flex justify-content-between mt-3"><span class="d-none d-sm-inline-block"
+            data-list-info="data-list-info"></span>
+          <div class="d-flex">
             <button class="page-link" data-list-pagination="prev"><span class="fas fa-chevron-left"></span></button>
             <ul class="mb-0 pagination"></ul>
             <button class="page-link pe-0" data-list-pagination="next"><span
