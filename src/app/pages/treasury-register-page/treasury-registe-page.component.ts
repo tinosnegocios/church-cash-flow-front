@@ -88,14 +88,13 @@ export class treasuryRegisterPageComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.clearForm();
-
-    this.busy = true;
     await this.dashBoard();
-    this.busy = false;
   }
 
   public async dashBoard() {
+    this.busy = true;
+    this.clearForm();
+    
     //get offering-kind
     try {
       const dados = await this.offeringKindService.getOfferingKind();
@@ -133,7 +132,7 @@ export class treasuryRegisterPageComponent implements OnInit {
     } catch (error) {
       console.log('error to get offering-kind:', error);
     }
-
+    this.busy = false;
   }
 
   protected async searchOfferingByCode() {
