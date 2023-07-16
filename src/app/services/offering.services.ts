@@ -99,7 +99,7 @@ export class OfferingService extends BaseService {
     return returnPromise;
   }
 
-  updateOffering(offering: Offering, offeringId: string) : Promise<ResultViewModel | null> {
+  public updateOffering(offering: Offering, offeringId: string) : Promise<ResultViewModel | null> {
     var auth = new AuthService();
     const token = auth.getToken();
 
@@ -132,4 +132,27 @@ export class OfferingService extends BaseService {
     
     return returnPromise;
   }
+
+  public async getAllOffering(limit: number): Promise<ResultViewModel> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    var churchId = (auth.getModelFromToken()).churchId;
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/limit/${churchId}/${limit}`, { headers: httpHeaders }).toPromise();
+
+    return returnObservable.then(result => {
+      if (result) {
+        return result;
+      } else {
+        console.log('nao deu');
+        throw new Error('Result is undefined.');
+      }
+    });
+  }
+
 }
