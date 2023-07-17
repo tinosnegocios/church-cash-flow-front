@@ -55,8 +55,13 @@ export class OfferingHandler {
         return result;
     }
 
-    public async getAllOffering(limit: number): Promise<ResultViewModel> {
-        var result: ResultViewModel = await this.service.getAllOffering(limit);
+    public async getOfferingLimit(limit: number): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getOfferingLimit(limit);
+        return result;
+    }
+
+    public async getOfferingByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getOfferingByPeiod(initialDate, finalDate);
         return result;
     }
 

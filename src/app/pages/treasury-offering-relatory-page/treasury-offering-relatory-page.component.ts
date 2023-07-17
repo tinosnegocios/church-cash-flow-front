@@ -3,7 +3,8 @@ import { OfferingHandler } from 'src/app/handlers/offeringHandler';
 import { Offering } from 'src/app/models/offering.models';
 import { Router } from '@angular/router';
 import { DashBoardService } from 'src/app/services/dashboard.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { formatDate } from '@angular/common';
 
 @Component({
   selector: 'app-treasury-offering-relatory-page',
@@ -11,7 +12,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class TreasuryOfferingRelatoryPageComponent implements OnInit {
   protected busy = false;
-
+  protected msgErro = "";
   protected offerings$!: Offering[];
   public DashMonth!:  [string, string][];
   public dashMonthSelected: string | undefined;
@@ -20,19 +21,35 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
 
   constructor(private handler: OfferingHandler, private router: Router, private dashBoardService: DashBoardService, private fbuilder: FormBuilder) {
     this.formLimit = this.fbuilder.group({
-      limitNumber: ['50']
+      initialDate: ['', Validators.compose([
+        Validators.required,
+      ])],
+      finalDate: ['', Validators.compose([
+        Validators.required,
+      ])]
     });
-
   }
 
   async ngOnInit() {
+      var today = new Date();
+      var todayMinus = new Date(today);
+      var d = today.getDate();
+      todayMinus.setDate(today.getDate() - today.getDate() + 1);
+      
+      this.formLimit.controls['initialDate'].setValue(formatDate(todayMinus, 'yyyy-MM-dd', 'en'));
+      this.formLimit.controls['finalDate'].setValue(formatDate(today, 'yyyy-MM-dd', 'en'));
+    
     await this.dashBoard();
   }
 
   protected async dashBoard(){
-    this.busy = true;
-    var limit = this.formLimit.value.limitNumber;
-    var result = await this.handler.getAllOffering(limit);
+    this.busy = true;   
+
+    var initialDate = this.formLimit.value.initialDate;
+    var finalDate = this.formLimit.value.finalDate; 
+    
+    var result = await this.handler.getOfferingByPeriod(initialDate, finalDate);
+
     if(result.errors != null && result.errors.length > 0){
       this.offerings$ = [];
     }else{
@@ -50,6 +67,15 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
 
   public reload() {
     this.router.navigate([this.router.url]);
+  }
+
+  protected submit(){
+    if(this.formLimit.invalid) {
+      this.msgErro = "Preenche todos os campos de pesquisa";
+      return;
+    }
+
+    this.dashBoard();
   }
 
   public loadDashMonth() {

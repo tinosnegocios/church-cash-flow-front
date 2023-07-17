@@ -11,61 +11,82 @@
       </div>
     </div>
 
+    <div class="row g-3 mb-4">
+      <div *ngIf="msgErro != ''">
+        <div class="alert alert-outline-danger d-flex align-items-center" role="alert">
+            <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
+            <p class="mb-0 flex-1">{{msgErro}}</p>
+
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+    </div>
+
+
     <ul class="nav nav-links mb-3 mb-lg-2 mx-n3">
       <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">total<span
             class="text-700 fw-semi-bold">({{offerings$.length}})</span></a></li>
     </ul>
 
     <div id="products">
-      <div class="mb-5">
-        <div class="row g-5">
 
-          <div class="col-auto">
-            <div class="search-box">
-              <form class="position-relative" [formGroup]="formLimit" data-bs-toggle="search" data-bs-display="static" >
+      <div class="row g-5">
 
-                <div class="row">
+        <div class="col-12 col-lg-6">
+          <form class="position-relative" [formGroup]="formLimit" data-bs-toggle="search" data-bs-display="static">
 
-                  <div class="col-12 col-lg-4">
-                    <select class="form-select form-select-sm mt-2" formControlName="limitNumber" (change)="dashBoard()">
-                      <option>10</option>
-                      <option>20</option>
-                      <option>50</option>
-                      <option>70</option>
-                      <option>200</option>
-                      <option>500</option>
-                      <option>1000</option>
-                      <option>2000</option>
-                      <option>5000</option>
-                    </select>
-                  </div>
-                  
-                </div>
+            <div class="row">
 
-              </form>
+              <!--<div class="col-12 col-lg-3">
+                <h4 class="">Itens</h4>
+                <select class="form-select" formControlName="limitNumber">
+                  <option>10</option>
+                  <option>20</option>
+                  <option>50</option>
+                  <option>70</option>
+                  <option>200</option>
+                  <option>500</option>
+                  <option>1000</option>
+                  <option>2000</option>
+                  <option>5000</option>
+                </select>
+              </div> -->
+
+              <div class="col-12 col-lg-3">
+                <h4 class="">Data inicial</h4>
+                <input class="form-control" type="date" formControlName="initialDate">
+              </div>
+              
+              <div class="col-12 col-lg-3">
+                <h4 class="">Data final</h4>
+                <input class="form-control" type="date" formControlName="finalDate">
+              </div>
+
+              <div class="col-12 col-lg-2">
+                <h4 class="">.</h4>
+                <button class="btn btn-outline-info" type="button" (click)="dashBoard()">Buscar</button>
+              </div>
 
             </div>
-          </div>
 
+          </form>
+        </div>
 
-          <div class="col-auto scrollbar overflow-hidden-y flex-grow-1">
-
-          </div>
-
-          <div class="col-auto">
-            <button class="btn btn-outline-info me-1 mb-1"><span class="far fa-file-excel fs-1 me-2"></span>Exportar
-              excel</button>
-            <button class="btn btn-outline-info me-1 mb-1"><span class="far fa-file-pdf fs-1 me-2"></span>Exportar
-              pdf</button>
-            <a [routerLink]="['/offering-register']">
-              <button class="btn btn-primary" id="addBtn">
-                <span class="fas fa-plus fs-1 me-2"></span>
-                Criar novo
-              </button>
-            </a>
-          </div>
+        <div class="col-12 col-lg-3">
 
         </div>
+
+        <div class="col-12 col-lg-3">
+          
+            <button class="btn btn-outline-info me-1 mb-1"><span class="far fa-file-excel fs-1 me-2"></span>Exportar excel</button>
+            <button class="btn btn-outline-info me-1 mb-1"><span class="far fa-file-pdf fs-1 me-2"></span>Exportar pdf</button>
+            <a [routerLink]="['/offering-register']">
+              <button class="btn btn-primary" id="addBtn"><span class="fas fa-plus fs-1"></span>Criar novo</button>
+            </a>
+          
+        </div>
+
+
       </div>
 
       <div class="mx-n4 px-4 mx-lg-n6 px-lg-6 bg-white border-top border-bottom border-200 position-relative top-1">
