@@ -10,19 +10,15 @@
       <div class="col-auto">
         <h2 class="mb-0">Ofertas <a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt fs-3"></span></a> </h2>
       </div>
-    </div>
-
-    <div class="row g-3 mb-4">
-
+      
       <div *ngFor="let msgSuccess of msgSuccesssOffering">
-        <div class="row g-2">
+        
           <div class="alert alert-outline-success d-flex align-items-center" role="alert">
             <span class="fas fa-check-circle text-success fs-3 me-3"></span>
             <p class="mb-0 flex-1">{{msgSuccess}}</p>
 
             <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
           </div>
-        </div>
       </div>
 
       <div *ngFor="let msgError of msgErrosOffering">
@@ -34,7 +30,9 @@
         </div>
       </div>
 
+    </div>
 
+    <div class="row g-3 mb-4">
 
       <ul class="nav nav-links mb-3 mb-lg-2 mx-n3">
         <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">total<span
@@ -91,7 +89,7 @@
 
           <div class="col-12 col-lg-3">
 
-            <button class="btn btn-outline-info me-1 mb-1"><span class="far fa-file-excel fs-1 me-2"></span>Exportar
+            <button class="btn btn-outline-info me-1 mb-1" (click)="exportarExcel()"><span class="far fa-file-excel fs-1 me-2"></span>Exportar
               excel</button>
             <button class="btn btn-outline-info me-1 mb-1"><span class="far fa-file-pdf fs-1 me-2"></span>Exportar
               pdf</button>
@@ -114,7 +112,7 @@
 
           <div class="table-responsive">
 
-            <table class="table table-hover table-striped table-sm fs--1 mb-0">
+            <table class="table table-hover table-striped table-sm fs--1 mb-0" id="excel-table">
 
               <thead>
                 <tr>

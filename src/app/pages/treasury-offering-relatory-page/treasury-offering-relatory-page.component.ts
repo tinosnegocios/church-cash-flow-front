@@ -5,12 +5,15 @@ import { Router } from '@angular/router';
 import { DashBoardService } from 'src/app/services/dashboard.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
+import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
 @Component({
   selector: 'app-treasury-offering-relatory-page',
   templateUrl: './treasury-offering-relatory-page.component.html'
 })
 export class TreasuryOfferingRelatoryPageComponent implements OnInit {
+  private excelMethod: ExcelMethods;
+
   protected idHandle: number = 0;
   protected descriptionHandle: string = "";
 
@@ -33,6 +36,8 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
         Validators.required,
       ])]
     });
+
+    this.excelMethod = new ExcelMethods();
   }
 
   async ngOnInit() {
@@ -151,8 +156,16 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
     this.descriptionHandle = "";
   }
 
-  protected edit(eventId: number): void{
-    console.log('editando' + eventId);
+  protected exportarExcel(){
+    try{
+      let element = document.getElementById('excel-table'); 
+      var fileName = `relatorio-de-oferta`;
+      this.excelMethod.exportExcel(element, fileName);
+
+      this.msgSuccesssOffering.push("arquivo excel exportado. confira sua pasta de download");
+    }catch{
+      this.msgErrosOffering.push("Ocorreu um erro ao gerar o arquivo. tente novamente");
+    }
   }
 
 }
