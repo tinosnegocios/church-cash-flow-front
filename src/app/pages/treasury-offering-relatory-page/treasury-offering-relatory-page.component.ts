@@ -151,4 +151,8 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
     this.descriptionHandle = "";
   }
 
+  protected edit(eventId: number): void{
+    console.log('editando' + eventId);
+  }
+
 }

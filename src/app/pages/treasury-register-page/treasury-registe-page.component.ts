@@ -1,7 +1,7 @@
-import { DatePipe, formatDate } from '@angular/common';
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import * as moment from 'moment';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { OfferingHandler } from 'src/app/handlers/offeringHandler';
 import { ModelToken } from 'src/app/models/ModelToken.models';
 import { MeetingKind } from 'src/app/models/meetingKind.models copy';
@@ -13,8 +13,6 @@ import { MeetingKindService } from 'src/app/services/meetingKind.services';
 import { OfferingService } from 'src/app/services/offering.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
-import * as XLSX from 'xlsx';
-
 
 @Component({
   selector: 'app-treasury-registe-page',
@@ -46,8 +44,12 @@ export class treasuryRegisterPageComponent implements OnInit {
 
   public selectedFileExcel: File | undefined;
   private fileReader: FileReader | undefined;
+  private codeSearch: number = 0;
 
-  constructor(private offeringHandler: OfferingHandler, private offeringService: OfferingService, private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, private fbuilder: FormBuilder) {
+  constructor(private offeringHandler: OfferingHandler, private offeringService: OfferingService, 
+    private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, 
+    private fbuilder: FormBuilder, private route: ActivatedRoute) {
+
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
 
@@ -88,13 +90,18 @@ export class treasuryRegisterPageComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.route.queryParams
+    .subscribe(params => {
+      this.codeSearch = params['id'];
+    });
+
     await this.dashBoard();
   }
 
   public async dashBoard() {
     this.busy = true;
     this.clearForm();
-    
+
     //get offering-kind
     try {
       const dados = await this.offeringKindService.getOfferingKind();
@@ -133,12 +140,18 @@ export class treasuryRegisterPageComponent implements OnInit {
       console.log('error to get offering-kind:', error);
     }
     this.busy = false;
+
+    if(this.codeSearch > 0){
+      this.typeSave = "update"
+      this.searchOfferingByCode(this.codeSearch);
+    }
   }
 
-  protected async searchOfferingByCode() {
+  protected async searchOfferingByCode(code: number = 0) {
     this.searchBusy = true;
 
-    var code = this.formSearchTreasury.value.code;
+    if(code <= 0)
+      code = this.formSearchTreasury.value.code;
 
     var offeringToForm: ResultViewModel = await this.offeringHandler.getById(code);
     this.clearForm();
