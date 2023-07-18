@@ -11,13 +11,18 @@ import { formatDate } from '@angular/common';
   templateUrl: './treasury-offering-relatory-page.component.html'
 })
 export class TreasuryOfferingRelatoryPageComponent implements OnInit {
-  protected busy = false;
-  protected msgErro = "";
-  protected offerings$!: Offering[];
-  public DashMonth!:  [string, string][];
-  public dashMonthSelected: string | undefined;
+  protected idHandle: number = 0;
+  protected descriptionHandle: string = "";
 
   protected formLimit!: FormGroup;
+  protected busy = false;
+  protected offerings$!: Offering[];
+  protected msgErrosOffering: string[] = [];
+  protected msgSuccesssOffering: string[] = [];
+
+  public DashMonth!:  [string, string][];
+  public dashMonthSelected: string | undefined;
+  
 
   constructor(private handler: OfferingHandler, private router: Router, private dashBoardService: DashBoardService, private fbuilder: FormBuilder) {
     this.formLimit = this.fbuilder.group({
@@ -45,6 +50,8 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
   protected async dashBoard(){
     this.busy = true;   
 
+    this.clear();
+
     var initialDate = this.formLimit.value.initialDate;
     var finalDate = this.formLimit.value.finalDate; 
     
@@ -71,7 +78,7 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
 
   protected submit(){
     if(this.formLimit.invalid) {
-      this.msgErro = "Preenche todos os campos de pesquisa";
+      this.msgErrosOffering.push("Preenche todos os campos de pesquisa");
       return;
     }
 
@@ -108,6 +115,7 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
 
     this.DashMonth = Object.entries(meuObjeto);
   }
+
   protected async changeDashMonth() {
     this.busy = true;
     this.dashBoardService.setDashBoardMonth(this.dashMonthSelected!.toString());
@@ -116,5 +124,31 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
     this.busy = false;
   }
 
+  public setIdToDelete(eventId: any, eventDescription: string){
+    this.idHandle = eventId
+    this.descriptionHandle = eventDescription;
+  }
+
+  public deleteOffering(){
+    if(this.idHandle > 0){
+      var result = this.handler.delete(this.idHandle)
+      .then((result) => {
+        //console.log(result);
+        this.dashBoard();
+        this.msgErrosOffering = this.handler.getMsgErro();
+        this.msgSuccesssOffering = this.handler.getMsgSuccess();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+    
+  }
+
+  protected clear(): void{
+    this.msgErrosOffering = [];
+    this.msgSuccesssOffering = [];
+    this.descriptionHandle = "";
+  }
 
 }

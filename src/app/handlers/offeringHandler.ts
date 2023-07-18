@@ -8,6 +8,20 @@ import { ResultViewModel } from "../models/resultViewModel.models";
 })
 
 export class OfferingHandler {
+    
+    public async delete(id: number) {
+      var result = await  this.service.delete(id);
+
+      if (result!.errors != null && result!.errors.length > 0) {
+        result!.errors.forEach(x => {
+            this.setMsgErro(x);
+        })
+        return false;
+        } else {
+            this.setMsgSuccess("oferta excluída com sucesso");
+            return true;
+        }
+    }
 
     private service: OfferingService;
     private msgSuccess: string[] = [];

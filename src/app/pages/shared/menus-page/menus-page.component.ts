@@ -24,7 +24,6 @@ export class MenusPageComponent implements OnInit {
     
   }
 
-
   public logout() {
     this.auth.logout();
     this.router.navigate(['/']);
