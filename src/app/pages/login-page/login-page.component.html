@@ -1,4 +1,4 @@
-<div class="container-sm">
+<!--<div class="container-sm">
   <div class="login border border-primary rounded d-flex justify-content-center mt-10">
     <form [formGroup]="formLogin" class="p-5">
       <div class="mb-3">
@@ -29,4 +29,68 @@
       </div>
     </form>
   </div>
-</div>
+</div> -->
+
+
+
+
+
+
+<main class="main" id="top">
+  <div class="container">
+    <div class="row flex-center min-vh-100 py-5">
+      <div class="col-sm-10 col-md-8 col-lg-5 col-xl-5 col-xxl-3"><a
+          class="d-flex flex-center text-decoration-none mb-4" href="../../../index.html">
+          <div class="d-flex align-items-center fw-bolder fs-5 d-inline-block"><img
+              src="../../../assets/img/icons/logo.png" alt="phoenix" width="58" />
+          </div>
+        </a>
+
+        <form [formGroup]="formLogin" class="p-5">
+          <div class="text-center mb-7">
+            <h3 class="text-1000">Entrar</h3>
+            <p class="text-700">Acesso a conta Church-Manager</p>
+          </div>
+
+          <div class="mb-3 text-start">
+            <label class="form-label" for="email">código</label>
+            <div class="form-icon-container">
+              <input class="form-control form-icon-input" id="code" type="text" placeholder="ABC123"
+                formControlName="code" name="code" required (click)="clearWindow()" [readonly]="busy" /><span
+                class="fas fa-user text-900 fs--1 form-icon"></span>
+            </div>
+          </div>
+          <div class="mb-3 text-start">
+            <label class="form-label" for="password">senha</label>
+            <div class="form-icon-container">
+              <input class="form-control form-icon-input" id="password" type="password" placeholder="Password"
+                formControlName="passwordHash" name="passwordHash" (click)="clearWindow()" [readonly]="busy" /><span
+                class="fas fa-key text-900 fs--1 form-icon"></span>
+            </div>
+          </div>
+          <div class="row flex-between-center mb-7">
+            <div class="col-auto">
+              <div class="form-check mb-0">
+                <input class="form-check-input" id="basic-checkbox" type="checkbox" checked="checked" name="remeber"
+                  formControlName="remember" [readonly]="busy" />
+                <label class="form-check-label mb-0" for="basic-checkbox">permanecer conectado</label>
+              </div>
+            </div>
+            <div class="col-auto"><a class="fs--1 fw-semi-bold"
+                href="../../../pages/authentication/simple/forgot-password.html">esqueci a senha</a></div>
+          </div>
+          <button class="btn btn-primary w-100 mb-3" (click)="submitLogin()" [disabled]="busy">Entrar</button>
+
+          <div class="text-center mb-7">
+            <span *ngIf="errorLogin" style="color: red">dados incorretos</span>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</main>
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
