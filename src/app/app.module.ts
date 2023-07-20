@@ -12,9 +12,10 @@ import { ModelToken } from './models/ModelToken.models';
 import { LoadingPageComponent } from './pages/shared/loading-page/loading-page.component';
 import { MenusPageComponent } from './pages/shared/menus-page/menus-page.component';
 import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';
-import { treasuryRegisterPageComponent } from './pages/treasury-register-page/treasury-registe-page.component';
-import { TreasuryOfferingRelatoryPageComponent } from './pages/treasury-offering-relatory-page/treasury-offering-relatory-page.component';
-import { TreasuryOfferingItemPageComponent } from './pages/treasury-offering-item-page/treasury-offering-item-page.component';
+import { offeringRegisterPageComponent } from './pages/treasury/offering/offering-register-page/offering-registe-page.component';
+import { TreasuryOfferingRelatoryPageComponent } from './pages/treasury/offering/treasury-offering-relatory-page/treasury-offering-relatory-page.component';
+import { TreasuryOfferingItemPageComponent } from './pages/treasury/offering/treasury-offering-item-page/treasury-offering-item-page.component';
+import { TithesRegisterPageComponent } from './pages/treasury/tithes/tithes-register-page/tithes-register-page.component';
 
 @NgModule({
   declarations: [
@@ -24,9 +25,10 @@ import { TreasuryOfferingItemPageComponent } from './pages/treasury-offering-ite
     LoadingPageComponent,
     MenusPageComponent,
     HeadFrameComponent,
-    treasuryRegisterPageComponent,
+    offeringRegisterPageComponent,
     TreasuryOfferingRelatoryPageComponent,
-    TreasuryOfferingItemPageComponent
+    TreasuryOfferingItemPageComponent,
+    TithesRegisterPageComponent
   ],
   imports: [
     BrowserModule,

@@ -16,9 +16,9 @@ import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
 @Component({
   selector: 'app-treasury-registe-page',
-  templateUrl: './treasury-register-page.component.html'
+  templateUrl: './offering-register-page.component.html'
 })
-export class treasuryRegisterPageComponent implements OnInit {
+export class offeringRegisterPageComponent implements OnInit {
   protected typeSave = "create";
   protected formTreasury!: FormGroup;
   protected formSearchTreasury!: FormGroup;
@@ -102,10 +102,22 @@ export class treasuryRegisterPageComponent implements OnInit {
     this.busy = true;
     this.clearForm();
 
-    //get offering-kind
+    this.loadOfferingKind();
+
+    this.loadMeetingKind();
+
+    this.busy = false;
+
+    if(this.codeSearch > 0){
+      this.typeSave = "update"
+      this.searchOfferingByCode(this.codeSearch);
+    }
+  }
+
+  protected async loadOfferingKind(){
     try {
       const dados = await this.offeringKindService.getOfferingKind();
-      this.offeringKind = dados;
+      this.offeringKind = dados.data;
       const meuObjeto: Record<string, string> = {};
 
       this.offeringKind.forEach((x: OfferingKind) => {
@@ -120,8 +132,9 @@ export class treasuryRegisterPageComponent implements OnInit {
     } catch (error) {
       console.log('error to get offering-kind:', error);
     }
+  }
 
-    //get meeting-kind
+  protected async loadMeetingKind(){
     try {
       const dados = await this.meetingKindService.getMeetingKind();
       this.meetingKind = dados;
@@ -138,12 +151,6 @@ export class treasuryRegisterPageComponent implements OnInit {
 
     } catch (error) {
       console.log('error to get offering-kind:', error);
-    }
-    this.busy = false;
-
-    if(this.codeSearch > 0){
-      this.typeSave = "update"
-      this.searchOfferingByCode(this.codeSearch);
     }
   }
 

@@ -59,8 +59,14 @@ export class AuthService {
         if(token == null || token.length == 0) {
             return "";
         }else{
-            
-            return token;
+            const modelToken : ModelToken = jwtDecode(token);  
+            const epochTimeNow = Math.floor(Date.now() / 1000);
+
+            if((modelToken.exp - epochTimeNow) > 0){
+                return token;
+            }else{
+                return "";
+            }
         }
     }
 

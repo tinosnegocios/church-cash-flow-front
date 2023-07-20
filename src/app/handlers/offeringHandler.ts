@@ -2,12 +2,13 @@ import { Injectable } from "@angular/core";
 import { Offering } from "../models/offering.models";
 import { OfferingService } from "../services/offering.services";
 import { ResultViewModel } from "../models/resultViewModel.models";
+import { BaseHandler } from "./baseHandler";
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class OfferingHandler {
+export class OfferingHandler extends BaseHandler {
     
     public async delete(id: number) {
       var result = await  this.service.delete(id);
@@ -24,10 +25,9 @@ export class OfferingHandler {
     }
 
     private service: OfferingService;
-    private msgSuccess: string[] = [];
-    private msgError: string[] = [];
 
     constructor(offeringService: OfferingService) {
+        super();
         this.service = offeringService;
     }
 
@@ -78,29 +78,4 @@ export class OfferingHandler {
         var result: ResultViewModel = await this.service.getOfferingByPeiod(initialDate, finalDate);
         return result;
     }
-
-
-
-
-
-
-
-
-    private setMsgErro(msg: string): void {
-        this.msgError.push(msg);
-    }
-    public getMsgErro(): string[] {
-        return this.msgError;
-    }
-    private setMsgSuccess(msg: string): void {
-        this.msgSuccess.push(msg);
-    }
-    public getMsgSuccess(): string[] {
-        return this.msgSuccess;
-    }
-    public clear() {
-        this.msgError = [];
-        this.msgSuccess = [];
-    }
-
 }

@@ -1,11 +1,13 @@
-export class Member {
-    public name?: string;
-    public acronym?: string;
-    public addressId: number = 0;
-    public firstTreasurerId: number = 0;
-    public secondTreasurerId: number = 0;
-    public firstSecretaryId: number = 0;
-    public secondSecretaryId: number = 0;
-    public firstPastorId: number = 0;
-    public secondPastorId: number = 0;
+import { EntitieResultApi } from "./Entitie.models";
+
+export class Member extends EntitieResultApi{
+    code: string = "";
+    name: string = "";
+    photo: string = "";
+    dateBirth: string = "";
+    dateBaptism: string = "";
+    church: string = "";
+    post: string = "";
+    memberPosts: string[] = [];
+    id: number = 0;
 }
