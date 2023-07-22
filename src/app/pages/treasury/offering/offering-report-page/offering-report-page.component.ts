@@ -8,10 +8,10 @@ import { formatDate } from '@angular/common';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
 @Component({
-  selector: 'app-treasury-offering-relatory-page',
-  templateUrl: './treasury-offering-relatory-page.component.html'
+  selector: 'app-offering-report-page',
+  templateUrl: './offering-report-page.component.html'
 })
-export class TreasuryOfferingRelatoryPageComponent implements OnInit {
+export class OfferingReportPageComponent implements OnInit {
   private excelMethod: ExcelMethods;
 
   protected idHandle: number = 0;
