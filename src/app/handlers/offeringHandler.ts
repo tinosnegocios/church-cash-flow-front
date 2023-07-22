@@ -65,7 +65,7 @@ export class OfferingHandler extends BaseHandler {
     }
 
     public async getById(id: number) : Promise<ResultViewModel>{
-        var result: ResultViewModel = await this.service.searchOfferingByCode(id);
+        var result: ResultViewModel = await this.service.searchOfferingById(id);
         return result;
     }
 

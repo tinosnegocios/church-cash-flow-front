@@ -42,7 +42,7 @@ export class OfferingService extends BaseService {
     });
   }
 
-  public searchOfferingByCode(code: number): Promise<ResultViewModel> {
+  public searchOfferingById(code: number): Promise<ResultViewModel> {
     var auth = new AuthService();
     const token = auth.getToken();
 

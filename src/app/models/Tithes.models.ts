@@ -6,8 +6,11 @@ export class Tithes extends EntitieResultApi {
     description: string = "";
     competence: string = "";
     church: string = "";
+    churchId: number = 0;
     member: string = "";
+    memberId: number = 0;
     offeringKind: string = "";
+    offeringKindId: number = 0;
     id: number = 0;
     active: boolean = true;
 }

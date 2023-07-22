@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -57,7 +58,7 @@ export class TithesRegisterPageComponent implements OnInit {
     });
 
     this.formTreasury = this.fbuilder.group({
-      member: ['', Validators.compose([
+      memberId: ['', Validators.compose([
         Validators.required, ,
       ])],
       day: ['', Validators.compose([
@@ -71,6 +72,9 @@ export class TithesRegisterPageComponent implements OnInit {
         Validators.required,
       ])],
       offeringKindId: ['', Validators.compose([
+        Validators.required,
+      ])],
+      competence: ['', Validators.compose([
         Validators.required,
       ])],
       resume: ['']
@@ -148,13 +152,14 @@ export class TithesRegisterPageComponent implements OnInit {
 
   protected async searchByCode(code: number = 0) {
     this.searchBusy = true;
-
+    
     if (code <= 0)
       code = this.formSearchTreasury.value.code;
 
     var modelToForm: ResultViewModel = await this.handler.getById(code);
-    this.clearForm();
 
+    this.clearForm();
+    
     if (modelToForm.errors!.length > 0) {
       this.searchBusy = false;
       this.msgErros.push("Offering not found");
@@ -164,30 +169,26 @@ export class TithesRegisterPageComponent implements OnInit {
     this.typeSave = "update";
     var objTithes: Tithes = modelToForm.data;
 
-    this.fillFormWithOffering(objTithes, code);
+    this.fillFormWithModel(objTithes, code);
 
     this.searchBusy = false;
   }
 
-  private fillFormWithOffering(offering: Tithes, code: number) {
-    var dayConvert = new Date(offering.day);
+  private fillFormWithModel(model: Tithes, code: number) {
+    var dayConvert = new Date(model.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
 
-    // this.formSearchTreasury.controls['code'].setValue(code);
-    // this.formTreasury.controls['preacherMemberName'].setValue(offering.preacherMemberName);
-    // this.formTreasury.controls['day'].setValue(formatDate(offering.day, 'yyyy-MM-dd', 'en'));
-    // this.formTreasury.controls['description'].setValue(offering.description);
-    // this.formTreasury.controls['adultQuantity'].setValue(offering.adultQuantity);
-    // this.formTreasury.controls['totalPeoples'].setValue((offering.adultQuantity + offering.childrenQuantity));
-    // this.formTreasury.controls['childrenQuantity'].setValue(offering.childrenQuantity);
-    // this.formTreasury.controls['totalAmount'].setValue(offering.totalAmount);
-    // this.formTreasury.controls['offeringKindId'].setValue(offering.offeringKindId);
-    // this.formTreasury.controls['meetingKindId'].setValue(offering.meetingKindId);
+    this.formSearchTreasury.controls['code'].setValue(code);
+    this.formTreasury.controls['memberId'].setValue(model.memberId);
+    this.formTreasury.controls['day'].setValue(formatDate(model.day, 'yyyy-MM-dd', 'en'));
+    this.formTreasury.controls['competence'].setValue(model.competence.replace('/','-'));
+    this.formTreasury.controls['description'].setValue(model.description);
+    this.formTreasury.controls['totalAmount'].setValue(model.totalAmount);
+    this.formTreasury.controls['offeringKindId'].setValue(model.offeringKindId);
+    
+    var resume = `Dízimo do(a) ${model.member} com competencia de ${model.competence} realizado dia ${dayStr} em forma de ${model.offeringKind}`;
 
-    // var resume = `Culto do dia ${dayStr} com ministração do(a) ${offering.preacherMemberName}.
-    // total de oferta em R$ ${offering.totalAmount} com ${offering.adultQuantity} adultos e ${offering.childrenQuantity} crianças. ofertas sendo ${offering.offeringKind}. ${offering.meetingKind}`
-
-    // this.formTreasury.controls['resume'].setValue(resume);
+    this.formTreasury.controls['resume'].setValue(resume);
   }
 
   protected async clearForm() {
@@ -204,31 +205,36 @@ export class TithesRegisterPageComponent implements OnInit {
 
   protected async save() {
     this.searchBusy = true;
-
+    
     if (this.typeSave == "create") {
-      await this.createOffering(this.formTreasury.value)
+      if(this.formTreasury.invalid)
+        return;
+        
+      await this.create(this.formTreasury.value)
+
     } else if (this.typeSave == "update") {
-      await this.updateOffering(this.formTreasury.value, this.formSearchTreasury.value.code);
+      await this.update(this.formTreasury.value, this.formSearchTreasury.value.code);
     }
 
     this.searchBusy = false;
   }
 
-  private async createOffering(model: Tithes) {
+  private async create(model: Tithes) {
     this.clearForm();
     var create = await this.handler.create(model)
       .then((result) => {
+        console.log(result);
       })
       .catch((error) => {
-        this.msgErros.push("Ocorreu um erro ao cadastrar a oferta. Tente novamente");
+        this.msgErros.push("Ocorreu um erro no cadastro. Tente novamente");
       });
 
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
   }
 
-  private async updateOffering(offering: Tithes, offeringId: string) {
-    this.handler.update(offering, offeringId)
+  private async update(model: Tithes, modelId: string) {
+    this.handler.update(model, modelId)
       .then((result) => {
       })
       .catch((error) => {
@@ -256,8 +262,6 @@ export class TithesRegisterPageComponent implements OnInit {
       .catch((error) => {
         this.msgErros = error;
       });
-
-
   }
 
   private createOfferingByExcel(arrayOffering: Array<any>) {
@@ -274,7 +278,7 @@ export class TithesRegisterPageComponent implements OnInit {
         offering.totalAmount = x[5];
         //offering.offeringKindId = x[6];
         //offering.meetingKindId = x[7];
-        this.createOffering(offering);
+        this.create(offering);
       }
 
       cont = cont + 1;
@@ -284,18 +288,20 @@ export class TithesRegisterPageComponent implements OnInit {
 
 
   protected showResume() {
-    var c = '';
-    var z = '';
+    console.log('resumindo')
+    var oferta: string = '';
+    var membro: string;
+
     if (this.formTreasury.controls['offeringKindId'].value > 0) {
-      var i = this.formTreasury.controls['offeringKindId'].value;
-      var ii: number = i - 1;
-      c = this.offeringKindToSelect[ii][0];
+      var value: string = this.formTreasury.controls['offeringKindId'].value.toString();
+      var offeringSelect = this.offeringKindToSelect.find(key => key[1] === value);
+      oferta = offeringSelect![0];
     }
 
-    if (this.formTreasury.controls['member'].value > 0) {
-      var y = this.formTreasury.controls['meetingKindId'].value;
-      var yy: number = y - 1;
-      z = this.membersToSelect![yy][0];
+    if (this.formTreasury.controls['memberId'].value > 0) {
+      var value: string = this.formTreasury.controls['memberId'].value.toString();
+      var memberSelect = this.membersToSelect.find(key => key[1] === value);
+      membro = memberSelect![0];
     }
 
     if (this.formTreasury.valid) {
@@ -303,8 +309,7 @@ export class TithesRegisterPageComponent implements OnInit {
       var dayConvert = new Date(model.day);
       var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
 
-      var resume = `Culto do dia ${dayStr} com ministração do(a) ${model}.
-      total de oferta em R$ ${model.totalAmount} com ${model} adultos e ${model} crianças. ofertas sendo ${c}. ${z}`
+      var resume = `Dízimo do(a) ${membro!} com competencia de ${model.competence} realizado dia ${dayStr} em forma de ${oferta}`;
 
       this.formTreasury.controls['resume'].setValue(resume);
     }

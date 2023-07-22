@@ -63,7 +63,7 @@
         </div>
     </form>
 
-    <form class="mb-3" [formGroup]="formTreasury">
+    <form class="mb-3" [formGroup]="formTreasury" (change)="showResume()">
 
         <div class="row g-3 flex-between-end mb-5">
 
@@ -87,21 +87,29 @@
                 <div class="col-12 col-xl-8">
 
                     <div class="row g-5">
-                        <div class="col-12 col-lg-4">
-                            <h4 class="mb-3">Membro<a href="#" (click)="loadMembers()"><span class="fas fa-undo-alt "></span></a></h4>
+                        <div class="mb-6 col-4">
+                            <h4 class="mb-3">Membro<a href="#" (click)="loadMembers()"><span
+                                        class="fas fa-undo-alt "></span></a></h4>
 
-                            <select  class="form-select" formControlName="member">    
-                                <option value=""></option>                            
+                            <select class="form-select" formControlName="memberId">
+                                <option value=""></option>
                                 <option *ngFor="let entry of membersToSelect" [value]="entry[1]" id="idDashMonth">
                                     {{ entry[0] }}
                                 </option>
                             </select>
-
                         </div>
+                    </div>
 
+
+                    <div class="row g-5">
                         <div class="col-12 col-lg-4">
                             <h4 class="mb-3">Dia</h4>
                             <input class="form-control" type="date" placeholder="dd/mm/yyyy" formControlName="day">
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <h4 class="mb-3">competencia do dizimo</h4>
+                            <input class="form-control" type="month" placeholder="mm/yyyy" formControlName="competence">
                         </div>
 
                         <div class="col-12 col-lg-4">
@@ -110,15 +118,15 @@
                                 placeholder="0.00" />
                         </div>
 
-
                     </div>
 
-                    <div class="mb-6">
-                        <h4 class="mb-3">Descrição</h4>
-                        <textarea class="form-control" formControlName="description" id="exampleFormControlTextarea1"
-                            rows="3"></textarea>
+                    <div class="row g-5">
+                        <div class="mb-6">
+                            <h4 class="mb-3">Descrição</h4>
+                            <textarea class="form-control" formControlName="description"
+                                id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
                     </div>
-
 
                     <div class="row g-5">
                         <div class="col-12 col-lg-12">
@@ -145,7 +153,9 @@
                                             <div class="mb-4">
                                                 <div class="d-flex flex-wrap mb-2">
                                                     <h5 class="mb-0 text-1000 me-2">Tipo de oferta
-                                                        <a href="#" (click)="loadOfferingKind()"><span class="fas fa-undo-alt "></span></a></h5>
+                                                        <a href="#" (click)="loadOfferingKind()"><span
+                                                                class="fas fa-undo-alt "></span></a>
+                                                    </h5>
                                                     <a class="fw-bold fs--1" href="#!">Add novo tipo de oferta</a>
                                                 </div>
 
@@ -165,7 +175,6 @@
                                             </div>
 
                                         </div>
-
 
                                         <div class="col-12 col-sm-6 col-xl-12">
                                             <div class="mb-xl-4">

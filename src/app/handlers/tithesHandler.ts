@@ -19,14 +19,14 @@ export class TithesHandler extends BaseHandler{
 
     public async create(handler: Tithes): Promise<Boolean> {
         var result = await this.service.createTithes(handler);
-
+        
         if (result!.errors != null && result!.errors.length > 0) {
             result!.errors.forEach(x => {
                 this.setMsgErro(x);
             })
             return false;
         } else {
-            this.setMsgSuccess("oferta salva com sucesso");
+            this.setMsgSuccess("dizimo salvo com sucesso");
             return true;
         }
     }
@@ -41,18 +41,18 @@ export class TithesHandler extends BaseHandler{
           })
           return false;
           } else {
-              this.setMsgSuccess("oferta excluída com sucesso");
+              this.setMsgSuccess("dizimo excluído com sucesso");
               return true;
           }
       }
 
-    public async update(handler: Tithes, handlerId: string): Promise<Boolean> {
-        if(!handler || handlerId == ""){
+    public async update(model: Tithes, modelId: string): Promise<Boolean> {
+        if(!model || modelId == ""){
             this.setMsgErro("data invalid!")
             return false;
         }
 
-        var result = await this.service.updateOffering(handler, handlerId);
+        var result = await this.service.update(model, modelId);
 
         if (result!.errors != null && result!.errors.length > 0) {
             result!.errors.forEach(x => {
@@ -60,13 +60,13 @@ export class TithesHandler extends BaseHandler{
             })
             return false;
         } else {
-            this.setMsgSuccess("oferta salva com sucesso");
+            this.setMsgSuccess("dizimo salvo com sucesso");
             return true;
         }
     }
 
     public async getById(id: number) : Promise<ResultViewModel>{
-        var result: ResultViewModel = await this.service.searchByCode(id);
+        var result: ResultViewModel = await this.service.searchById(id);
         return result;
     }
 

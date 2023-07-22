@@ -156,7 +156,7 @@ export class offeringRegisterPageComponent implements OnInit {
 
   protected async searchOfferingByCode(code: number = 0) {
     this.searchBusy = true;
-
+    
     if(code <= 0)
       code = this.formSearchTreasury.value.code;
 

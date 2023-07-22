@@ -5,23 +5,54 @@ import { ResultViewModel } from "../models/resultViewModel.models";
 import { AuthService } from "./auth.services";
 import { Injectable } from "@angular/core";
 import { Tithes } from "../models/Tithes.models";
+import { Observable, catchError, of } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class TithesService extends BaseService {
+  private modelName = "tithes";
+
   getByPeiod(initialDate: string, finalDate: string): ResultViewModel | PromiseLike<ResultViewModel> {
       throw new Error("Method not implemented.");
   }
   getLimit(limit: number): ResultViewModel | PromiseLike<ResultViewModel> {
       throw new Error("Method not implemented.");
   }
-  searchByCode(id: number): ResultViewModel | PromiseLike<ResultViewModel> {
-      throw new Error("Method not implemented.");
-  }
-  updateOffering(handler: Tithes, handlerId: string) : Promise<ResultViewModel | null> {
-      throw new Error("Method not implemented.");
+
+  update(model: Tithes, modelId: string) : Promise<ResultViewModel | null> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    var msgErro : string[];
+    var churchId = (auth.getModelFromToken()).churchId;
+
+    model.churchId = churchId;
+
+    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
+      this.http.put<ResultViewModel>(`${this.url}/v1/${this.modelName}/${modelId}`, model, { headers: httpHeaders })
+        .pipe(
+          catchError((error: any): Observable<ResultViewModel> => {
+            msgErro = error.error.erros;
+            return of<ResultViewModel>(error.error);
+          })
+        )
+        .subscribe(
+          (data: ResultViewModel) => {
+            resolve(data);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
+    
+    return returnPromise;
   }
   delete(id: number) : Promise<ResultViewModel | null> {
       throw new Error("Method not implemented.");
@@ -35,8 +66,39 @@ export class TithesService extends BaseService {
     this.dashBoardServices = dashBoardServices;
   }
 
-  public async createTithes(handler: Tithes): Promise<ResultViewModel | null>  {
-    return null;
+  public async createTithes(model: Tithes): Promise<ResultViewModel | null>  {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    var churchId = (auth.getModelFromToken()).churchId;
+    model.churchId = churchId;
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    var result: ResultViewModel;
+    var msgErro : string[];
+
+    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
+      this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, model, { headers: httpHeaders })
+        .pipe(
+          catchError((error: any): Observable<ResultViewModel> => {
+            msgErro = error.error.erros;
+            return of<ResultViewModel>(error.error);
+          })
+        )
+        .subscribe(
+          (data: ResultViewModel) => {
+            resolve(data);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
+    
+    return returnPromise;
   }
 
   public getTithesByMonth(): Promise<ResultViewModel> {
@@ -59,6 +121,28 @@ export class TithesService extends BaseService {
       if (result) {
         return result.data;
       } else {
+        throw new Error('Result is undefined.');
+      }
+    });
+  }
+
+  searchById(id: number): ResultViewModel | PromiseLike<ResultViewModel> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    var churchId = (auth.getModelFromToken()).churchId;
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/${churchId}/${id}`, { headers: httpHeaders }).toPromise();
+
+    return returnObservable.then(result => {
+      if (result) {
+        return result;
+      } else {
+        console.log('nao deu');
         throw new Error('Result is undefined.');
       }
     });
