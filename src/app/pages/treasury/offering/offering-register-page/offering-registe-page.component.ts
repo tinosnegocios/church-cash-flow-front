@@ -302,18 +302,18 @@ export class offeringRegisterPageComponent implements OnInit {
   }
 
   protected showResume() {
-    var c = '';
-    var z = '';
+    var oferta = '';
+    var culto = '';
     if (this.formTreasury.controls['offeringKindId'].value > 0) {
-      var i = this.formTreasury.controls['offeringKindId'].value;
-      var ii: number = i - 1;
-      c = this.offeringKindToSelect[ii][0];
+      var value: string = this.formTreasury.controls['offeringKindId'].value.toString();
+      var offeringSelect = this.offeringKindToSelect.find(key => key[1] === value);
+      oferta = offeringSelect![0];
     }
 
     if (this.formTreasury.controls['meetingKindId'].value > 0) {
-      var y = this.formTreasury.controls['meetingKindId'].value;
-      var yy: number = y - 1;
-      z = this.meetingKindToSelect![yy][0];
+      var value: string = this.formTreasury.controls['meetingKindId'].value.toString();
+      var meetingSelect = this.meetingKindToSelect.find(key => key[1] === value); 
+      culto = meetingSelect![0];
     }
 
     if (this.formTreasury.valid) {
@@ -322,7 +322,7 @@ export class offeringRegisterPageComponent implements OnInit {
       var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
 
       var resume = `Culto do dia ${dayStr} com ministração do(a) ${objOffering.preacherMemberName}.
-      total de oferta em R$ ${objOffering.totalAmount} com ${objOffering.adultQuantity} adultos e ${objOffering.childrenQuantity} crianças. ofertas sendo ${c}. ${z}`
+      total de oferta em R$ ${objOffering.totalAmount} com ${objOffering.adultQuantity} adultos e ${objOffering.childrenQuantity} crianças. ofertas sendo ${oferta}. ${culto}`
 
       this.formTreasury.controls['resume'].setValue(resume);
     }
