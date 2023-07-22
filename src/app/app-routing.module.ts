@@ -6,6 +6,7 @@ import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.compone
 import { offeringRegisterPageComponent } from './pages/treasury/offering/offering-register-page/offering-registe-page.component';
 import { TreasuryOfferingRelatoryPageComponent } from './pages/treasury/offering/treasury-offering-relatory-page/treasury-offering-relatory-page.component';
 import { TithesRegisterPageComponent } from './pages/treasury/tithes/tithes-register-page/tithes-register-page.component';
+import { TithesReportPageComponent } from './pages/treasury/tithes/tithes-report-page/tithes-report-page.component';
 
 const routes: Routes = [
   {
@@ -37,6 +38,12 @@ const routes: Routes = [
     component: HeadFrameComponent,
     children: [
       { path: '', component: TithesRegisterPageComponent }
+    ]
+   },{
+    path: 'tithes-report',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: TithesReportPageComponent }
     ]
    } 
 ];

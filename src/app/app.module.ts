@@ -16,6 +16,7 @@ import { offeringRegisterPageComponent } from './pages/treasury/offering/offerin
 import { TreasuryOfferingRelatoryPageComponent } from './pages/treasury/offering/treasury-offering-relatory-page/treasury-offering-relatory-page.component';
 import { TreasuryOfferingItemPageComponent } from './pages/treasury/offering/treasury-offering-item-page/treasury-offering-item-page.component';
 import { TithesRegisterPageComponent } from './pages/treasury/tithes/tithes-register-page/tithes-register-page.component';
+import { TithesReportPageComponent } from './pages/treasury/tithes/tithes-report-page/tithes-report-page.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { TithesRegisterPageComponent } from './pages/treasury/tithes/tithes-regi
     offeringRegisterPageComponent,
     TreasuryOfferingRelatoryPageComponent,
     TreasuryOfferingItemPageComponent,
-    TithesRegisterPageComponent
+    TithesRegisterPageComponent,
+    TithesReportPageComponent
   ],
   imports: [
     BrowserModule,
