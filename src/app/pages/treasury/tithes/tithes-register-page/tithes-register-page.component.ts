@@ -221,9 +221,10 @@ export class TithesRegisterPageComponent implements OnInit {
 
   private async create(model: Tithes) {
     this.clearForm();
+
     var create = await this.handler.create(model)
       .then((result) => {
-        console.log(result);
+        //console.log(result);
       })
       .catch((error) => {
         this.msgErros.push("Ocorreu um erro no cadastro. Tente novamente");
@@ -257,28 +258,27 @@ export class TithesRegisterPageComponent implements OnInit {
     var excelMethods = new ExcelMethods();
     excelMethods.readExcel(this.selectedFileExcel!)
       .then((jsonData) => {
-        this.createOfferingByExcel(jsonData);
+        this.createModelByExcel(jsonData);
       })
       .catch((error) => {
         this.msgErros = error;
       });
   }
 
-  private createOfferingByExcel(arrayOffering: Array<any>) {
+  private createModelByExcel(arrayModel: Array<any>) {
     var cont = 0;
-    var offering: Tithes = new Tithes();
-    arrayOffering.forEach(x => {
+    var model: Tithes = new Tithes();
+    arrayModel.forEach(x => {
       if (cont > 0) {
-        offering.active = true;
-        //offering.preacherMemberName = x[0];
-        offering.day = x[1];
-        offering.description = x[2];
-        //offering.adultQuantity = x[3];
-        //offering.childrenQuantity = x[4];
-        offering.totalAmount = x[5];
-        //offering.offeringKindId = x[6];
-        //offering.meetingKindId = x[7];
-        this.create(offering);
+        model.active = true;
+        model.memberId = x[0];
+        model.day = x[1];
+        model.competence = x[2];
+        model.totalAmount = x[3];
+        model.description = x[4];
+        model.offeringKindId = x[5];
+        
+        this.create(model);
       }
 
       cont = cont + 1;
@@ -288,7 +288,6 @@ export class TithesRegisterPageComponent implements OnInit {
 
 
   protected showResume() {
-    console.log('resumindo')
     var oferta: string = '';
     var membro: string;
 
