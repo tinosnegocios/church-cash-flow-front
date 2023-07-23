@@ -73,7 +73,7 @@ export class OfferingReportPageComponent implements OnInit {
         x.day = dayStr;
       });
     }
-    this.loadDashMonth()
+    
     this.busy = false;
   }
 
@@ -88,37 +88,6 @@ export class OfferingReportPageComponent implements OnInit {
     }
 
     this.dashBoard();
-  }
-
-  public loadDashMonth() {
-    const mesesAbreviados = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-
-    const dataAtual: Date = new Date();
-
-    const mes: number = dataAtual.getMonth(); // +1 porque os meses são indexados de 0 a 11
-    const mesFormatado: string = mes.toString().padStart(2, '0');
-
-    const ano: number = dataAtual.getFullYear();
-    const anoAnterior = ano - 1;
-
-    const mesAno: string = `${ano}${mesFormatado}`;
-    const meuObjeto: Record<string, string> = {};
-
-    for (let index = mes; index >= 0; index--) {
-      var key = `${(mesesAbreviados[index]).toString()}/${ano}`;
-      var value = `${ano}${(index + 1).toString().padStart(2, '0')}`
-
-      meuObjeto[key] = value;
-    }
-
-    for (let index = 11; index >= mes; index--) {
-      var key = `${(mesesAbreviados[index])}/${anoAnterior}`;
-      var value = `${anoAnterior}${(index + 1).toString().padStart(2, '0')}`
-
-      meuObjeto[key] = value;
-    }
-
-    this.DashMonth = Object.entries(meuObjeto);
   }
 
   protected async changeDashMonth() {

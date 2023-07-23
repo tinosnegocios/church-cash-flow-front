@@ -1,1 +1,194 @@
-<p>tithes-report-page works!</p>
+<div class="content">
+
+    <div class="mb-9" *ngIf="busy">
+      <app-loading-page></app-loading-page>
+    </div>
+  
+    <div class="mb-9" *ngIf="!busy">
+  
+      <div class="row g-3 mb-4">
+        <div class="col-auto">
+          <h2 class="mb-0">Ofertas <a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt fs-3"></span></a> </h2>
+        </div>
+        
+        <div *ngFor="let msgSuccess of msgSuccesssOffering">
+          
+            <div class="alert alert-outline-success d-flex align-items-center" role="alert">
+              <span class="fas fa-check-circle text-success fs-3 me-3"></span>
+              <p class="mb-0 flex-1">{{msgSuccess}}</p>
+  
+              <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+  
+        <div *ngFor="let msgError of msgErrosOffering">
+          <div class="alert alert-outline-danger d-flex align-items-center" role="alert">
+            <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
+            <p class="mb-0 flex-1">{{msgError}}</p>
+  
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div>
+  
+      </div>
+  
+      <div class="row g-3 mb-4">
+  
+        <ul class="nav nav-links mb-3 mb-lg-2 mx-n3">
+          <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">total<span
+                class="text-700 fw-semi-bold">({{tithes$.length}})</span></a></li>
+        </ul>
+  
+        <div id="products">
+  
+          <div class="row g-5">
+  
+            <div class="col-12 col-lg-6">
+              <form class="position-relative" [formGroup]="formLimit" data-bs-toggle="search" data-bs-display="static">
+  
+                <div class="row">
+  
+                  <div class="col-12 col-lg-3">
+                    <h4 class="">Data inicial</h4>
+                    <input class="form-control" type="date" formControlName="initialDate">
+                  </div>
+  
+                  <div class="col-12 col-lg-3">
+                    <h4 class="">Data final</h4>
+                    <input class="form-control" type="date" formControlName="finalDate">
+                  </div>
+  
+                  <div class="col-12 col-lg-2">
+                    <h4 class="">.</h4>
+                    <button class="btn btn-outline-info" type="button" (click)="dashBoard()">Buscar</button>
+                  </div>
+  
+                </div>
+  
+              </form>
+            </div>
+  
+            <div class="col-12 col-lg-3">
+  
+            </div>
+  
+            <div class="col-12 col-lg-3">
+  
+              <button class="btn btn-outline-info me-1 mb-1" (click)="exportarExcel()"><span class="far fa-file-excel fs-1 me-2"></span>Exportar
+                excel</button>
+              <button class="btn btn-outline-info me-1 mb-1 disabled"><span class="far fa-file-pdf fs-1 me-2"></span>Exportar
+                pdf</button>
+              <a [routerLink]="['/offering-register']">
+                <button class="btn btn-primary" id="addBtn"><span class="fas fa-plus fs-1"></span>Criar novo</button>
+              </a>
+  
+            </div>
+  
+  
+          </div>
+  
+          <div class="mx-n4 px-4 mx-lg-n6 px-lg-6 bg-white border-top border-bottom border-200 position-relative top-1">
+            <div class="table-responsive scrollbar mx-n1 px-1">
+  
+            </div>
+          </div>
+  
+          <div id="tableExample3" data-list='{"valueNames":["name","email","age"],"page":5,"pagination":true}'>
+  
+            <div class="table-responsive">
+  
+              <table class="table table-hover table-striped table-sm fs--1 mb-0" id="excel-table">
+  
+                <thead>
+                  <tr>
+                    <th style="width:50px;">Cód</th>
+                    <th scope="col" style="width:350px;" data-sort="product">Membro</th>
+                    <th scope="col" data-sort="time" style="width:100px;">R$ Total</th>
+                    <th scope="col" data-sort="price" style="width:150px;">Dia</th>
+                    <th scope="col" data-sort="category" style="width:200px;">Compentência</th>
+                    <th scope="col" data-sort="tags" style="width:100px;">Descriçao</th>
+                    <th scope="col" data-sort="vendor" style="width:100px;">Oferta</th>
+                    <th scope="col" style="width:100px;">ação</th>
+                  </tr>
+                </thead>
+  
+                <tbody class="list" id="products-table-body">
+                  <tr class="position-static" *ngFor="let tithe of tithes$">
+                    <td>{{tithe.id}}</td>
+                    <td class="">
+                      {{tithe.member}}
+                    </td>
+                    <td class="">
+                      {{tithe.totalAmount}}
+                    </td>
+                    <td class="">
+                      {{tithe.day}}
+                    </td>
+                    <td class="">
+                      {{tithe.competence}}
+                    </td>
+                    <td class="">
+                      {{tithe.description}}
+                    </td>
+                    <td class="">
+                      {{tithe.offeringKind}}
+                    </td>
+                    <td class="">
+                      <div class="font-sans-serif btn-reveal-trigger position-static">
+                        <button class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal fs--2"
+                          type="button" data-bs-toggle="dropdown" data-boundary="window" aria-haspopup="true"
+                          aria-expanded="false" data-bs-reference="parent">
+                          <svg class="svg-inline--fa fa-ellipsis fs--2" aria-hidden="true" focusable="false"
+                            data-prefix="fas" data-icon="ellipsis" role="img" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 448 512" data-fa-i2svg="">
+                            <path fill="currentColor"
+                              d="M120 256C120 286.9 94.93 312 64 312C33.07 312 8 286.9 8 256C8 225.1 33.07 200 64 200C94.93 200 120 225.1 120 256zM280 256C280 286.9 254.9 312 224 312C193.1 312 168 286.9 168 256C168 225.1 193.1 200 224 200C254.9 200 280 225.1 280 256zM328 256C328 225.1 353.1 200 384 200C414.9 200 440 225.1 440 256C440 286.9 414.9 312 384 312C353.1 312 328 286.9 328 256z">
+                            </path>
+                          </svg>
+                        </button>
+  
+                        <div class="dropdown-menu dropdown-menu-end py-2">
+                          <a class="dropdown-item" [routerLink]="['/tithes-register']" [queryParams]="{id:tithe.id}">Editar</a>
+                          <div class="dropdown-divider">
+                          </div>
+                          <a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                            (click)="setIdToDelete(tithe.id, tithe.member)" href="#!">Excluir</a>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+  
+            </div>
+  
+          </div>
+  
+        </div>
+  
+      </div>
+  
+      <div class="modal fade" id="staticBackdrop" tabindex="-1" data-bs-backdrop="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-danger">
+              <h5 class="modal-title text-white" id="staticBackdropLabel">Exclusão de oferta</h5>
+              <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span
+                  class="fas fa-times fs--1 text-white"></span></button>
+            </div>
+            <div class="modal-body">
+              <p class="text-700 lh-lg mb-0">Deseja realmente deletar a oferta selecionada?
+              </p>
+              <p class="text-700 lh-lg mb-0">{{descriptionHandle}}-{{idHandle}}
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteOffering()"
+                type="button">Deletar</button>
+              <button class="btn btn-outline-primary" type="button" (click)="clear()" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>

@@ -70,12 +70,12 @@ export class TithesHandler extends BaseHandler{
         return result;
     }
 
-    public async getOfferingLimit(limit: number): Promise<ResultViewModel> {
+    public async getLimit(limit: number): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.getLimit(limit);
         return result;
     }
 
-    public async getOfferingByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
+    public async getByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.getByPeiod(initialDate, finalDate);
         return result;
     }

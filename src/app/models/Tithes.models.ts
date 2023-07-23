@@ -2,7 +2,7 @@ import { EntitieResultApi } from "./Entitie.models";
 
 export class Tithes extends EntitieResultApi {
     totalAmount: number = 0;
-    day: Date = new Date();
+    day: string = '';
     description: string = "";
     competence: string = "";
     church: string = "";

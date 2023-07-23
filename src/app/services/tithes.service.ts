@@ -14,9 +14,28 @@ import { Observable, catchError, of } from "rxjs";
 export class TithesService extends BaseService {
   private modelName = "tithes";
 
-  getByPeiod(initialDate: string, finalDate: string): ResultViewModel | PromiseLike<ResultViewModel> {
-      throw new Error("Method not implemented.");
+  getByPeiod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    var churchId = (auth.getModelFromToken()).churchId;
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/period/${churchId}/?initialDate=${initialDate}&finalDate=${finalDate}`, { headers: httpHeaders }).toPromise();
+
+    return returnObservable.then(result => {
+      if (result) {
+        return result;
+      } else {
+        console.log('nao deu');
+        throw new Error('Result is undefined.');
+      }
+    });
   }
+
   getLimit(limit: number): ResultViewModel | PromiseLike<ResultViewModel> {
       throw new Error("Method not implemented.");
   }
@@ -54,8 +73,37 @@ export class TithesService extends BaseService {
     
     return returnPromise;
   }
-  delete(id: number) : Promise<ResultViewModel | null> {
-      throw new Error("Method not implemented.");
+
+  public delete(id: number) : Promise<ResultViewModel | null> {
+      var auth = new AuthService();
+    const token = auth.getToken();
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    var result: ResultViewModel;
+    var msgErro : string[];
+
+    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
+      this.http.delete<ResultViewModel>(`${this.url}/v1/${this.modelName}/${id}`, { headers: httpHeaders })
+        .pipe(
+          catchError((error: any): Observable<ResultViewModel> => {
+            msgErro = error.error.erros;
+            return of<ResultViewModel>(error.error);
+          })
+        )
+        .subscribe(
+          (data: ResultViewModel) => {
+            resolve(data);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
+    
+    return returnPromise;
   }
 
 
