@@ -224,7 +224,6 @@ export class TithesRegisterPageComponent implements OnInit {
 
     var create = await this.handler.create(model)
       .then((result) => {
-        //console.log(result);
       })
       .catch((error) => {
         this.msgErros.push("Ocorreu um erro no cadastro. Tente novamente");
