@@ -48,21 +48,6 @@
 
               <div class="row">
 
-                <!--<div class="col-12 col-lg-3">
-                <h4 class="">Itens</h4>
-                <select class="form-select" formControlName="limitNumber">
-                  <option>10</option>
-                  <option>20</option>
-                  <option>50</option>
-                  <option>70</option>
-                  <option>200</option>
-                  <option>500</option>
-                  <option>1000</option>
-                  <option>2000</option>
-                  <option>5000</option>
-                </select>
-              </div> -->
-
                 <div class="col-12 col-lg-3">
                   <h4 class="">Data inicial</h4>
                   <input class="form-control" type="date" formControlName="initialDate">
@@ -89,13 +74,8 @@
 
           <div class="col-12 col-lg-3">
 
-            <button class="btn btn-outline-info me-1 mb-1" (click)="exportarExcel()"><span class="far fa-file-excel fs-1 me-2"></span>Exportar
-              excel</button>
-            <button class="btn btn-outline-info me-1 mb-1 disabled"><span class="far fa-file-pdf fs-1 me-2"></span>Exportar
-              pdf</button>
-            <a [routerLink]="['/offering-register']">
-              <button class="btn btn-primary" id="addBtn"><span class="fas fa-plus fs-1"></span>Criar novo</button>
-            </a>
+            <button class="btn btn-outline-info me-1 mb-1" (click)="exportarExcel()"><span class="far fa-file-excel fs-1 me-2"></span>Exportar excel</button>
+            <a [routerLink]="['/offering-register']"> <button class="btn btn-primary me-1 mb-1" id="addBtn"><span class="fas fa-plus fs-1"></span>Criar novo</button> </a>
 
           </div>
 
@@ -136,7 +116,7 @@
                     {{offering.description}}
                   </td>
                   <td class="">
-                    {{offering.totalAmount}}
+                    {{offering.totalAmount  | currency:'BRL'}}
                   </td>
                   <td class="">
                     {{offering.day}}
