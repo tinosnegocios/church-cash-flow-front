@@ -66,17 +66,12 @@ export class TithesHandler extends BaseHandler{
     }
 
     public async getById(id: number) : Promise<ResultViewModel>{
-        var result: ResultViewModel = await this.service.searchById(id);
-        return result;
-    }
-
-    public async getLimit(limit: number): Promise<ResultViewModel> {
-        var result: ResultViewModel = await this.service.getLimit(limit);
+        var result: ResultViewModel = await this.service.searchByIdByChurch(id);
         return result;
     }
 
     public async getByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
-        var result: ResultViewModel = await this.service.getByPeiod(initialDate, finalDate);
+        var result: ResultViewModel = await this.service.getByPeriod(initialDate, finalDate);
         return result;
     }
 }

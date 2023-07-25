@@ -13,11 +13,11 @@ import { DashBoardService } from "./dashboard.service";
 
 export class MembersService extends BaseService {
     dashBoardServices: DashBoardService;
-    private modelName = "church";
-
+    
     constructor(http: HttpClient, dashBoardServices: DashBoardService) {
         super(http);
         this.dashBoardServices = dashBoardServices;
+        this.modelName = "church";
     }
 
     public getMembersByChurchByMonth(): Promise<ResultViewModel>  {

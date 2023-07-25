@@ -9,10 +9,9 @@ import { Injectable } from "@angular/core";
 })
 
 export class ChurchService extends BaseService {
-  private modelName = "church";
-
   constructor(http: HttpClient) {
     super(http);
+    this.modelName = "church";
   }
 
   public async getMembers(): Promise<ResultViewModel> {

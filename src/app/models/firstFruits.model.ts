@@ -6,6 +6,7 @@ export class FirstFruits extends EntitieResultApi {
     description: string = "";
     competence: string = "";
     church: string = "";
+    churchId: number = 0;
     member: string = "";
     offeringKind: string = "";
     id: number = 0;

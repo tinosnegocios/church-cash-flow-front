@@ -12,9 +12,97 @@ import { Observable, catchError, of } from "rxjs";
 })
 
 export class TithesService extends BaseService {
-  private modelName = "tithes";
+  dashBoardServices: DashBoardService;
 
-  getByPeiod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
+  constructor(http: HttpClient, dashBoardServices: DashBoardService) {
+    super(http);
+    this.dashBoardServices = dashBoardServices;
+    this.modelName = "tithes";
+  }
+
+  public async createTithes(model: Tithes): Promise<ResultViewModel | null>  {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    var churchId = (auth.getModelFromToken()).churchId;
+    model.churchId = churchId;
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    var result: ResultViewModel;
+    var msgErro : string[];
+
+    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
+      this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, model, { headers: httpHeaders })
+        .pipe(
+          catchError((error: any): Observable<ResultViewModel> => {
+            msgErro = error.error.erros;
+            return of<ResultViewModel>(error.error);
+          })
+        )
+        .subscribe(
+          (data: ResultViewModel) => {
+            resolve(data);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
+    
+    return returnPromise;
+  }
+
+  public getTithesByMonth(): Promise<ResultViewModel> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    var churchId = (auth.getModelFromToken()).churchId;
+    var yearMonth = this.dashBoardServices.getDashBoardMonth();
+
+    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/tithes/all/${churchId}/${yearMonth}`, { headers: httpHeaders }).toPromise();
+
+    //return outflowObservable.pipe(map((result: ResultViewModel) => result.data));
+    //return outflowObservable.pipe(map(result => result));
+
+    return returnObservable.then(result => {
+      if (result) {
+        return result.data;
+      } else {
+        throw new Error('Result is undefined.');
+      }
+    });
+  }
+
+  searchByIdByChurch(id: number): ResultViewModel | PromiseLike<ResultViewModel> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    var churchId = (auth.getModelFromToken()).churchId;
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/${churchId}/${id}`, { headers: httpHeaders }).toPromise();
+
+    return returnObservable.then(result => {
+      if (result) {
+        return result;
+      } else {
+        console.log('nao deu');
+        throw new Error('Result is undefined.');
+      }
+    });
+  }
+
+  getByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
     var auth = new AuthService();
     const token = auth.getToken();
 
@@ -34,10 +122,6 @@ export class TithesService extends BaseService {
         throw new Error('Result is undefined.');
       }
     });
-  }
-
-  getLimit(limit: number): ResultViewModel | PromiseLike<ResultViewModel> {
-      throw new Error("Method not implemented.");
   }
 
   update(model: Tithes, modelId: string) : Promise<ResultViewModel | null> {
@@ -106,93 +190,4 @@ export class TithesService extends BaseService {
     return returnPromise;
   }
 
-
-  dashBoardServices: DashBoardService;
-
-  constructor(http: HttpClient, dashBoardServices: DashBoardService) {
-    super(http);
-    this.dashBoardServices = dashBoardServices;
-  }
-
-  public async createTithes(model: Tithes): Promise<ResultViewModel | null>  {
-    var auth = new AuthService();
-    const token = auth.getToken();
-
-    var churchId = (auth.getModelFromToken()).churchId;
-    model.churchId = churchId;
-
-    const httpHeaders = new HttpHeaders()
-      .set("Content-Type", "application/json; charset=utf-8")
-      .set("Authorization", `Bearer ${JSON.parse(token)}`);
-
-    var result: ResultViewModel;
-    var msgErro : string[];
-
-    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
-      this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, model, { headers: httpHeaders })
-        .pipe(
-          catchError((error: any): Observable<ResultViewModel> => {
-            msgErro = error.error.erros;
-            return of<ResultViewModel>(error.error);
-          })
-        )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
-          },
-          (error: any) => {
-            reject(error);
-          }
-        );
-    });
-    
-    return returnPromise;
-  }
-
-  public getTithesByMonth(): Promise<ResultViewModel> {
-    var auth = new AuthService();
-    const token = auth.getToken();
-
-    const httpHeaders = new HttpHeaders()
-      .set("Content-Type", "application/json; charset=utf-8")
-      .set("Authorization", `Bearer ${JSON.parse(token)}`);
-
-    var churchId = (auth.getModelFromToken()).churchId;
-    var yearMonth = this.dashBoardServices.getDashBoardMonth();
-
-    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/tithes/all/${churchId}/${yearMonth}`, { headers: httpHeaders }).toPromise();
-
-    //return outflowObservable.pipe(map((result: ResultViewModel) => result.data));
-    //return outflowObservable.pipe(map(result => result));
-
-    return returnObservable.then(result => {
-      if (result) {
-        return result.data;
-      } else {
-        throw new Error('Result is undefined.');
-      }
-    });
-  }
-
-  searchById(id: number): ResultViewModel | PromiseLike<ResultViewModel> {
-    var auth = new AuthService();
-    const token = auth.getToken();
-
-    var churchId = (auth.getModelFromToken()).churchId;
-
-    const httpHeaders = new HttpHeaders()
-      .set("Content-Type", "application/json; charset=utf-8")
-      .set("Authorization", `Bearer ${JSON.parse(token)}`);
-
-    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/${churchId}/${id}`, { headers: httpHeaders }).toPromise();
-
-    return returnObservable.then(result => {
-      if (result) {
-        return result;
-      } else {
-        console.log('nao deu');
-        throw new Error('Result is undefined.');
-      }
-    });
-  }
 }

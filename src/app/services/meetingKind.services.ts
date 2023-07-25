@@ -11,11 +11,11 @@ import { Injectable } from "@angular/core";
 
 export class MeetingKindService extends BaseService {
     dashBoardServices: DashBoardService;
-    private modelName = "meeting-kind";
 
     constructor(http: HttpClient, dashBoardServices: DashBoardService) {
         super(http);
         this.dashBoardServices = dashBoardServices;
+        this.modelName = "meeting-kind";
     }
 
     public getMeetingKind():  Promise<ResultViewModel> {
