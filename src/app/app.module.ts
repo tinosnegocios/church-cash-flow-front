@@ -14,9 +14,10 @@ import { MenusPageComponent } from './pages/shared/menus-page/menus-page.compone
 import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';
 import { offeringRegisterPageComponent } from './pages/treasury/offering/offering-register-page/offering-registe-page.component';
 import { OfferingReportPageComponent } from './pages/treasury/offering/offering-report-page/offering-report-page.component';
-import { OfferingReportItemPageComponent } from './pages/treasury/offering/offering-report-item-page/offering-report-item-page.component';
 import { TithesRegisterPageComponent } from './pages/treasury/tithes/tithes-register-page/tithes-register-page.component';
 import { TithesReportPageComponent } from './pages/treasury/tithes/tithes-report-page/tithes-report-page.component';
+import { FirstFruitsRegisterPageComponent } from './pages/treasury/firstFruits/first-fruits-register-page/first-fruits-register-page.component';
+
 
 @NgModule({
   declarations: [
@@ -28,9 +29,9 @@ import { TithesReportPageComponent } from './pages/treasury/tithes/tithes-report
     HeadFrameComponent,
     offeringRegisterPageComponent,
     OfferingReportPageComponent,
-    OfferingReportItemPageComponent,
     TithesRegisterPageComponent,
-    TithesReportPageComponent
+    TithesReportPageComponent,
+    FirstFruitsRegisterPageComponent,
   ],
   imports: [
     BrowserModule,
