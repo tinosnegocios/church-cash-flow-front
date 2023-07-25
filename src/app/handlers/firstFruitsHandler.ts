@@ -3,21 +3,23 @@ import { TithesService } from "../services/tithes.service";
 import { ResultViewModel } from "../models/resultViewModel.models";
 import { Tithes } from "../models/Tithes.models";
 import { BaseHandler } from "./baseHandler";
+import { FirstFruitsService } from "../services/firstFruits.services";
+import { FirstFruits } from "../models/firstFruits.model";
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class TithesHandler extends BaseHandler{
+export class FirstFruitsHandler extends BaseHandler{
 
-    private service: TithesService;
+    private service: FirstFruitsService;
 
-    constructor(handlerService: TithesService) {
+    constructor(handlerService: FirstFruitsService) {
         super();
         this.service = handlerService;
     }
 
-    public async create(handler: Tithes): Promise<Boolean> {
+    public async create(handler: FirstFruits): Promise<Boolean> {
         var result = await this.service.create(handler);
         
         if (result!.errors != null && result!.errors.length > 0) {
@@ -26,7 +28,7 @@ export class TithesHandler extends BaseHandler{
             })
             return false;
         } else {
-            this.setMsgSuccess("dizimo salvo com sucesso");
+            this.setMsgSuccess("primícia salvo com sucesso");
             return true;
         }
     }
@@ -41,12 +43,12 @@ export class TithesHandler extends BaseHandler{
           })
           return false;
           } else {
-              this.setMsgSuccess("dizimo excluído com sucesso");
+              this.setMsgSuccess("primícia excluído com sucesso");
               return true;
           }
       }
 
-    public async update(model: Tithes, modelId: string): Promise<Boolean> {
+    public async update(model: FirstFruits, modelId: string): Promise<Boolean> {
         if(!model || modelId == ""){
             this.setMsgErro("data invalid!")
             return false;
@@ -60,7 +62,7 @@ export class TithesHandler extends BaseHandler{
             })
             return false;
         } else {
-            this.setMsgSuccess("dizimo salvo com sucesso");
+            this.setMsgSuccess("primícia salvo com sucesso");
             return true;
         }
     }

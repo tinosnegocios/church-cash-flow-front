@@ -20,41 +20,6 @@ export class TithesService extends BaseService {
     this.modelName = "tithes";
   }
 
-  public async createTithes(model: Tithes): Promise<ResultViewModel | null>  {
-    var auth = new AuthService();
-    const token = auth.getToken();
-
-    var churchId = (auth.getModelFromToken()).churchId;
-    model.churchId = churchId;
-
-    const httpHeaders = new HttpHeaders()
-      .set("Content-Type", "application/json; charset=utf-8")
-      .set("Authorization", `Bearer ${JSON.parse(token)}`);
-
-    var result: ResultViewModel;
-    var msgErro : string[];
-
-    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
-      this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, model, { headers: httpHeaders })
-        .pipe(
-          catchError((error: any): Observable<ResultViewModel> => {
-            msgErro = error.error.erros;
-            return of<ResultViewModel>(error.error);
-          })
-        )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
-          },
-          (error: any) => {
-            reject(error);
-          }
-        );
-    });
-    
-    return returnPromise;
-  }
-
   public getTithesByMonth(): Promise<ResultViewModel> {
     var auth = new AuthService();
     const token = auth.getToken();

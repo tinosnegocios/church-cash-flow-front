@@ -78,4 +78,6 @@ export class OfferingHandler extends BaseHandler {
         var result: ResultViewModel = await this.service.getOfferingByPeiod(initialDate, finalDate);
         return result;
     }
+
+  
 }

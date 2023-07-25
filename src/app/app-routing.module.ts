@@ -7,6 +7,8 @@ import { offeringRegisterPageComponent } from './pages/treasury/offering/offerin
 import { OfferingReportPageComponent } from './pages/treasury/offering/offering-report-page/offering-report-page.component';
 import { TithesRegisterPageComponent } from './pages/treasury/tithes/tithes-register-page/tithes-register-page.component';
 import { TithesReportPageComponent } from './pages/treasury/tithes/tithes-report-page/tithes-report-page.component';
+import { FirstFruitsRegisterPageComponent } from './pages/treasury/firstFruits/first-fruits-register-page/first-fruits-register-page.component';
+import { FirstFruitsReportPageComponent } from './pages/treasury/firstFruits/first-fruits-report-page/first-fruits-report-page.component';
 
 const routes: Routes = [
   {
@@ -45,7 +47,19 @@ const routes: Routes = [
     children: [
       { path: '', component: TithesReportPageComponent }
     ]
-   } 
+   },{
+    path: 'first-fruits-register',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: FirstFruitsRegisterPageComponent }
+    ]
+   },{
+    path: 'first-fruits-report',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: FirstFruitsReportPageComponent }
+    ]
+   }
 ];
 
 @NgModule({

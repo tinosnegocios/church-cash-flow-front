@@ -108,5 +108,8 @@ export class OfferingService extends BaseService {
     });
   }
 
+  getOffering(): ResultViewModel | PromiseLike<ResultViewModel> {
+    throw new Error("Method not implemented.");
+  }
 
 }

@@ -5,8 +5,7 @@ import { AuthService } from 'src/app/services/auth.services';
 
 @Component({
   selector: 'app-menus-page',
-  templateUrl: './menus-page.component.html',
-  styleUrls: ['./menus-page.component.css']
+  templateUrl: './menus-page.component.html'
 })
 export class MenusPageComponent implements OnInit {
   private auth: AuthService;
