@@ -1,5 +1,7 @@
 export class EntitieResultApi { 
     dateRequest : Date = new Date;
-    public errors?: string[] | null = [];
+    id: number = 0;
     isValid : boolean = true;
+    notifications: string[] = [];
+    active: boolean = true;
 }

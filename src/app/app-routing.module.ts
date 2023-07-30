@@ -9,6 +9,7 @@ import { TithesRegisterPageComponent } from './pages/treasury/tithes/tithes-regi
 import { TithesReportPageComponent } from './pages/treasury/tithes/tithes-report-page/tithes-report-page.component';
 import { FirstFruitsRegisterPageComponent } from './pages/treasury/firstFruits/first-fruits-register-page/first-fruits-register-page.component';
 import { FirstFruitsReportPageComponent } from './pages/treasury/firstFruits/first-fruits-report-page/first-fruits-report-page.component';
+import { MemberRegisterPageComponent } from './pages/secretary/member/member-register-page/member-register-page.component';
 
 const routes: Routes = [
   {
@@ -58,6 +59,12 @@ const routes: Routes = [
     component: HeadFrameComponent,
     children: [
       { path: '', component: FirstFruitsReportPageComponent }
+    ]
+   },{
+    path: 'member-register',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: MemberRegisterPageComponent }
     ]
    }
 ];

@@ -11,6 +11,4 @@ export class Tithes extends EntitieResultApi {
     memberId: number = 0;
     offeringKind: string = "";
     offeringKindId: number = 0;
-    id: number = 0;
-    active: boolean = true;
 }

@@ -5,7 +5,6 @@ import { AuthService } from "./auth.services";
 import { ResultViewModel } from "../models/resultViewModel.models";
 import { Observable, map } from "rxjs";
 import { OutFlow } from "../models/Outflow.Models";
-import { Member } from "../models/Member.models";
 import { DashBoardService } from "./dashboard.service";
 
 @Injectable({

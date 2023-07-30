@@ -211,6 +211,9 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
       await this.create(this.formTreasury.value)
 
     } else if (this.typeSave == "update") {
+      if(this.formTreasury.invalid)
+        return;
+        
       await this.update(this.formTreasury.value, this.formSearchTreasury.value.code);
     }
 
@@ -236,7 +239,7 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
       .then((result) => {
       })
       .catch((error) => {
-        this.msgErros.push("Ocorreu um erro ao atualizar a oferta. Tente novamente");
+        this.msgErros.push("Ocorreu um erro no cadastro. Tente novamente");
       });
 
     this.msgErros = this.handler.getMsgErro();

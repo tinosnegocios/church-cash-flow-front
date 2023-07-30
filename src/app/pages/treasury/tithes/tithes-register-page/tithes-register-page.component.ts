@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { TithesHandler } from 'src/app/handlers/tithesHandler';
-import { Member } from 'src/app/models/Member.models';
 import { ModelToken } from 'src/app/models/ModelToken.models';
 import { Tithes } from 'src/app/models/Tithes.models';
 import { MeetingKind } from 'src/app/models/meetingKind.models copy';

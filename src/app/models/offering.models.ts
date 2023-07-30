@@ -11,8 +11,6 @@ export class Offering extends EntitieResultApi {
     meetingKind: string = '';
     offeringKind: string = '';
     church: string = '';
-    id: number = 0;
-    active: boolean = false;
     offeringKindId: number = 0;
     meetingKindId: number = 0;
     churchId: number = 0;
