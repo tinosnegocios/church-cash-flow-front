@@ -2,23 +2,22 @@ import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { FirstFruitsHandler } from 'src/app/handlers/firstFruitsHandler';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
-import { TithesHandler } from 'src/app/handlers/tithesHandler';
+import { OfferingHandler } from 'src/app/handlers/offeringHandler';
 import { ModelToken } from 'src/app/models/ModelToken.models';
-import { Tithes } from 'src/app/models/Tithes.models';
-import { MeetingKind } from 'src/app/models/meetingKind.models copy';
+import { FirstFruits } from 'src/app/models/firstFruits.model';
 import { OfferingKind } from 'src/app/models/offeringKind.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 import { AuthService } from 'src/app/services/auth.services';
-import { MeetingKindService } from 'src/app/services/meetingKind.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
 @Component({
-  selector: 'app-tithes-register-page',
-  templateUrl: './tithes-register-page.component.html'
+  selector: 'app-first-fruits-register-page',
+  templateUrl: './first-fruits-register-page.component.html'
 })
-export class TithesRegisterPageComponent implements OnInit {
+export class FirstFruitsRegisterPageComponent implements OnInit {
   protected typeSave = "create";
   protected formTreasury!: FormGroup;
   protected formSearchTreasury!: FormGroup;
@@ -46,7 +45,7 @@ export class TithesRegisterPageComponent implements OnInit {
   private fileReader: FileReader | undefined;
   private codeSearch: number = 0;
 
-  constructor(private handler: TithesHandler, private offeringKindService: OfferingKindService, private churchHandler: MemberHandler,
+  constructor(private handler: FirstFruitsHandler, private churchHandler: MemberHandler, private offeringKindService: OfferingKindService,
     private fbuilder: FormBuilder, private route: ActivatedRoute) {
 
     this.auth = new AuthService();
@@ -166,14 +165,14 @@ export class TithesRegisterPageComponent implements OnInit {
     }
 
     this.typeSave = "update";
-    var objTithes: Tithes = modelToForm.data;
+    var objTithes: FirstFruits = modelToForm.data;
 
     this.fillFormWithModel(objTithes, code);
 
     this.searchBusy = false;
   }
 
-  private fillFormWithModel(model: Tithes, code: number) {
+  private fillFormWithModel(model: FirstFruits, code: number) {
     var dayConvert = new Date(model.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
 
@@ -185,7 +184,7 @@ export class TithesRegisterPageComponent implements OnInit {
     this.formTreasury.controls['totalAmount'].setValue(model.totalAmount);
     this.formTreasury.controls['offeringKindId'].setValue(model.offeringKindId);
     
-    var resume = `Dízimo do(a) ${model.member} com competencia de ${model.competence} realizado dia ${dayStr} em forma de ${model.offeringKind}`;
+    var resume = `Primícia do(a) ${model.member} com competencia de ${model.competence} realizado dia ${dayStr} em forma de ${model.offeringKind}`;
 
     this.formTreasury.controls['resume'].setValue(resume);
   }
@@ -212,13 +211,16 @@ export class TithesRegisterPageComponent implements OnInit {
       await this.create(this.formTreasury.value)
 
     } else if (this.typeSave == "update") {
+      if(this.formTreasury.invalid)
+        return;
+        
       await this.update(this.formTreasury.value, this.formSearchTreasury.value.code);
     }
 
     this.searchBusy = false;
   }
 
-  private async create(model: Tithes) {
+  private async create(model: FirstFruits) {
     this.clearForm();
 
     var create = await this.handler.create(model)
@@ -232,12 +234,12 @@ export class TithesRegisterPageComponent implements OnInit {
     this.msgSuccesss = this.handler.getMsgSuccess();
   }
 
-  private async update(model: Tithes, modelId: string) {
+  private async update(model: FirstFruits, modelId: string) {
     this.handler.update(model, modelId)
       .then((result) => {
       })
       .catch((error) => {
-        this.msgErros.push("Ocorreu um erro ao atualizar a oferta. Tente novamente");
+        this.msgErros.push("Ocorreu um erro no cadastro. Tente novamente");
       });
 
     this.msgErros = this.handler.getMsgErro();
@@ -265,7 +267,7 @@ export class TithesRegisterPageComponent implements OnInit {
 
   private createModelByExcel(arrayModel: Array<any>) {
     var cont = 0;
-    var model: Tithes = new Tithes();
+    var model: FirstFruits = new FirstFruits();
     arrayModel.forEach(x => {
       if (cont > 0) {
         model.active = true;
@@ -302,7 +304,7 @@ export class TithesRegisterPageComponent implements OnInit {
     }
 
     if (this.formTreasury.valid) {
-      var model: Tithes = this.formTreasury.value;
+      var model: FirstFruits = this.formTreasury.value;
       var dayConvert = new Date(model.day);
       var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
 

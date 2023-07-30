@@ -13,11 +13,11 @@ import { EMPTY, Observable, catchError, lastValueFrom, map, of } from "rxjs";
 
 export class OfferingService extends BaseService {
   dashBoardServices: DashBoardService;
-  private modelName = "offering";
-
+  
   constructor(http: HttpClient, dashBoardServices: DashBoardService) {
     super(http);
     this.dashBoardServices = dashBoardServices;
+    this.modelName = "offering";
   }
 
   public getOfferingByMonth(): Promise<ResultViewModel> {
@@ -64,75 +64,6 @@ export class OfferingService extends BaseService {
     });
   }
 
-  public async createOffering(offering: Offering) : Promise<ResultViewModel | null> {
-    var auth = new AuthService();
-    const token = auth.getToken();
-
-    var churchId = (auth.getModelFromToken()).churchId;
-    offering.churchId = churchId;
-
-    const httpHeaders = new HttpHeaders()
-      .set("Content-Type", "application/json; charset=utf-8")
-      .set("Authorization", `Bearer ${JSON.parse(token)}`);
-
-    var result: ResultViewModel;
-    var msgErro : string[];
-
-    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
-      this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, offering, { headers: httpHeaders })
-        .pipe(
-          catchError((error: any): Observable<ResultViewModel> => {
-            msgErro = error.error.erros;
-            return of<ResultViewModel>(error.error);
-          })
-        )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
-          },
-          (error: any) => {
-            reject(error);
-          }
-        );
-    });
-    
-    return returnPromise;
-  }
-
-  public updateOffering(offering: Offering, offeringId: string) : Promise<ResultViewModel | null> {
-    var auth = new AuthService();
-    const token = auth.getToken();
-
-    const httpHeaders = new HttpHeaders()
-      .set("Content-Type", "application/json; charset=utf-8")
-      .set("Authorization", `Bearer ${JSON.parse(token)}`);
-
-    var msgErro : string[];
-    var churchId = (auth.getModelFromToken()).churchId;
-
-    offering.churchId = churchId;
-
-    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
-      this.http.put<ResultViewModel>(`${this.url}/v1/${this.modelName}/${offeringId}`, offering, { headers: httpHeaders })
-        .pipe(
-          catchError((error: any): Observable<ResultViewModel> => {
-            msgErro = error.error.erros;
-            return of<ResultViewModel>(error.error);
-          })
-        )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
-          },
-          (error: any) => {
-            reject(error);
-          }
-        );
-    });
-    
-    return returnPromise;
-  }
-
   public async getOfferingLimit(limit: number): Promise<ResultViewModel> {
     var auth = new AuthService();
     const token = auth.getToken();
@@ -177,36 +108,8 @@ export class OfferingService extends BaseService {
     });
   }
 
-  delete(id: any) {
-    var auth = new AuthService();
-    const token = auth.getToken();
-
-    const httpHeaders = new HttpHeaders()
-      .set("Content-Type", "application/json; charset=utf-8")
-      .set("Authorization", `Bearer ${JSON.parse(token)}`);
-
-    var result: ResultViewModel;
-    var msgErro : string[];
-
-    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
-      this.http.delete<ResultViewModel>(`${this.url}/v1/${this.modelName}/${id}`, { headers: httpHeaders })
-        .pipe(
-          catchError((error: any): Observable<ResultViewModel> => {
-            msgErro = error.error.erros;
-            return of<ResultViewModel>(error.error);
-          })
-        )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
-          },
-          (error: any) => {
-            reject(error);
-          }
-        );
-    });
-    
-    return returnPromise;
+  getOffering(): ResultViewModel | PromiseLike<ResultViewModel> {
+    throw new Error("Method not implemented.");
   }
 
 }

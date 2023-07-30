@@ -7,7 +7,7 @@ import { BaseHandler } from "./baseHandler";
     providedIn: 'root'
 })
 
-export class MemberHandler extends BaseHandler {
+export class ChurchHadler extends BaseHandler {
     private service: ChurchService;
 
     constructor(service: ChurchService) {
@@ -19,5 +19,10 @@ export class MemberHandler extends BaseHandler {
         var result: ResultViewModel = await this.service.getMembers();
         return result;
     }
+
+    public async getMembersByChurch(): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getMembersByChurchByMonth();
+        return result;
+    } 
 
 }

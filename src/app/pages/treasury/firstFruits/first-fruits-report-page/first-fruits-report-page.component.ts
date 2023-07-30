@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { OfferingHandler } from 'src/app/handlers/offeringHandler';
-import { Offering } from 'src/app/models/offering.models';
+import { formatDate } from '@angular/common';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DashBoardService } from 'src/app/services/dashboard.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { formatDate } from '@angular/common';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
+import { FirstFruits } from 'src/app/models/firstFruits.model';
+import { FirstFruitsHandler } from 'src/app/handlers/firstFruitsHandler';
 
 @Component({
-  selector: 'app-treasury-offering-relatory-page',
-  templateUrl: './treasury-offering-relatory-page.component.html'
+  selector: 'app-first-fruits-report-page',
+  templateUrl: './first-fruits-report-page.component.html'
 })
-export class TreasuryOfferingRelatoryPageComponent implements OnInit {
+
+export class FirstFruitsReportPageComponent implements OnInit {
+
   private excelMethod: ExcelMethods;
 
   protected idHandle: number = 0;
@@ -19,15 +21,13 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
 
   protected formLimit!: FormGroup;
   protected busy = false;
-  protected offerings$!: Offering[];
+  protected tithes$!: FirstFruits[];
   protected msgErrosOffering: string[] = [];
   protected msgSuccesssOffering: string[] = [];
 
-  public DashMonth!:  [string, string][];
-  public dashMonthSelected: string | undefined;
-  
+  public DashMonth!:  [string, string][];  
 
-  constructor(private handler: OfferingHandler, private router: Router, private dashBoardService: DashBoardService, private fbuilder: FormBuilder) {
+  constructor(private handler: FirstFruitsHandler, private router: Router, private dashBoardService: DashBoardService, private fbuilder: FormBuilder) {
     this.formLimit = this.fbuilder.group({
       initialDate: ['', Validators.compose([
         Validators.required,
@@ -60,20 +60,20 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
     var initialDate = this.formLimit.value.initialDate;
     var finalDate = this.formLimit.value.finalDate; 
     
-    var result = await this.handler.getOfferingByPeriod(initialDate, finalDate);
+    var result = await this.handler.getByPeriod(initialDate, finalDate);
 
     if(result.errors != null && result.errors.length > 0){
-      this.offerings$ = [];
+      this.tithes$ = [];
     }else{
-      this.offerings$ = result.data;
+      this.tithes$ = result.data;
 
-      this.offerings$.forEach(x => {
+      this.tithes$.forEach(x => {
         var daySplit = x.day.split("-");
         var dayStr = `${daySplit[2].replace('T00:00:00', '')}/${daySplit[1]}/${daySplit[0]}`;
         x.day = dayStr;
       });
     }
-    this.loadDashMonth()
+
     this.busy = false;
   }
 
@@ -90,55 +90,22 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
     this.dashBoard();
   }
 
-  public loadDashMonth() {
-    const mesesAbreviados = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-
-    const dataAtual: Date = new Date();
-
-    const mes: number = dataAtual.getMonth(); // +1 porque os meses são indexados de 0 a 11
-    const mesFormatado: string = mes.toString().padStart(2, '0');
-
-    const ano: number = dataAtual.getFullYear();
-    const anoAnterior = ano - 1;
-
-    const mesAno: string = `${ano}${mesFormatado}`;
-    const meuObjeto: Record<string, string> = {};
-
-    for (let index = mes; index >= 0; index--) {
-      var key = `${(mesesAbreviados[index]).toString()}/${ano}`;
-      var value = `${ano}${(index + 1).toString().padStart(2, '0')}`
-
-      meuObjeto[key] = value;
-    }
-
-    for (let index = 11; index >= mes; index--) {
-      var key = `${(mesesAbreviados[index])}/${anoAnterior}`;
-      var value = `${anoAnterior}${(index + 1).toString().padStart(2, '0')}`
-
-      meuObjeto[key] = value;
-    }
-
-    this.DashMonth = Object.entries(meuObjeto);
-  }
-
   protected async changeDashMonth() {
     this.busy = true;
-    this.dashBoardService.setDashBoardMonth(this.dashMonthSelected!.toString());
-
+    
     await this.dashBoard();
     this.busy = false;
   }
 
-  public setIdToDelete(eventId: any, eventDescription: string){
+  public setIdToDelete(eventId: any, memberName: string){
     this.idHandle = eventId
-    this.descriptionHandle = eventDescription;
+    this.descriptionHandle = memberName;
   }
 
   public deleteOffering(){
     if(this.idHandle > 0){
       var result = this.handler.delete(this.idHandle)
       .then((result) => {
-        //console.log(result);
         this.dashBoard();
         this.msgErrosOffering = this.handler.getMsgErro();
         this.msgSuccesssOffering = this.handler.getMsgSuccess();
@@ -147,7 +114,8 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
         console.log(error);
       });
     }
-    
+
+    this.handler.clear();
   }
 
   protected clear(): void{
@@ -167,5 +135,5 @@ export class TreasuryOfferingRelatoryPageComponent implements OnInit {
       this.msgErrosOffering.push("Ocorreu um erro ao gerar o arquivo. tente novamente");
     }
   }
-
+  
 }

@@ -32,7 +32,7 @@ export class OfferingHandler extends BaseHandler {
     }
 
     public async create(offering: Offering): Promise<Boolean> {
-        var result = await this.service.createOffering(offering);
+        var result = await this.service.create(offering);
 
         if (result!.errors != null && result!.errors.length > 0) {
             result!.errors.forEach(x => {
@@ -51,7 +51,7 @@ export class OfferingHandler extends BaseHandler {
             return false;
         }
 
-        var result = await this.service.updateOffering(offering, offeringId);
+        var result = await this.service.update(offering, offeringId);
 
         if (result!.errors != null && result!.errors.length > 0) {
             result!.errors.forEach(x => {
@@ -78,4 +78,6 @@ export class OfferingHandler extends BaseHandler {
         var result: ResultViewModel = await this.service.getOfferingByPeiod(initialDate, finalDate);
         return result;
     }
+
+  
 }

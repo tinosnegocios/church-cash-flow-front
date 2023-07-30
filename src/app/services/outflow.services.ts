@@ -5,7 +5,6 @@ import { AuthService } from "./auth.services";
 import { ResultViewModel } from "../models/resultViewModel.models";
 import { Observable, map } from "rxjs";
 import { OutFlow } from "../models/Outflow.Models";
-import { Member } from "../models/Member.models";
 import { DashBoardService } from "./dashboard.service";
 
 @Injectable({
@@ -18,6 +17,7 @@ export class OutflowService extends BaseService {
     constructor(http: HttpClient, dashBoardServices: DashBoardService) {
         super(http);
         this.dashBoardServices = dashBoardServices;
+        this.modelName = "out-flow";
     }
 
     public getOutflowByMonth():  Promise<ResultViewModel> {
@@ -31,7 +31,7 @@ export class OutflowService extends BaseService {
         var churchId = (auth.getModelFromToken()).churchId;
         var yearMonth = this.dashBoardServices.getDashBoardMonth();
         
-        const outflowObservable = this.http.get<ResultViewModel>(`${this.url}/v1/out-flow/${yearMonth}/${churchId}`, { headers: httpHeaders }).toPromise();
+        const outflowObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/${yearMonth}/${churchId}`, { headers: httpHeaders }).toPromise();
 
         //return outflowObservable.pipe(map((result: ResultViewModel) => result.data));
         //return outflowObservable.pipe(map(result => result));

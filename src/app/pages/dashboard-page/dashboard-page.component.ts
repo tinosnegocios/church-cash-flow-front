@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, map, tap } from 'rxjs';
-import { Member } from 'src/app/models/Member.models';
+import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { ModelToken } from 'src/app/models/ModelToken.models';
 import { OutFlow } from 'src/app/models/Outflow.Models';
+import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 
 import { Tithes } from 'src/app/models/Tithes.models';
 import { FirstFruits } from 'src/app/models/firstFruits.model';
@@ -44,7 +45,7 @@ export class DashboardPageComponent implements OnInit {
   public dashMonthSelected: string | undefined;
 
 
-  constructor(private router: Router, private membersService: MembersService,
+  constructor(private router: Router, private churchHandler: ChurchHadler,
     private outflowService: OutflowService, private tithesService: TithesService,
     private offeringService: OfferingService, private firstFruitsService: FirstFruitsService,
     private dashBoardService: DashBoardService) {
@@ -75,10 +76,10 @@ export class DashboardPageComponent implements OnInit {
 
     //get members
     try {
-      const dados = await this.membersService.getMembersByChurchByMonth();
+      const dados = await this.churchHandler.getMembersByChurch;
       this.members = dados;
       this.totalMembers = 0;
-      this.members.forEach((x: Member) => {
+      this.members.forEach((x: MemberReadModel) => {
         this.totalMembers += 1;
       });
     } catch (error) {

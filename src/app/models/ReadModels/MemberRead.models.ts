@@ -1,13 +1,13 @@
-import { EntitieResultApi } from "./Entitie.models";
+import { EntitieResultApi } from "../Entitie.models";
 
-export class Member extends EntitieResultApi{
+export class MemberReadModel extends EntitieResultApi {
     code: string = "";
+    description: string = "";
     name: string = "";
     photo: string = "";
     dateBirth: string = "";
     dateBaptism: string = "";
+    dateRegister: string = "";;
     church: string = "";
-    post: string = "";
     memberPosts: string[] = [];
-    id: number = 0;
 }
