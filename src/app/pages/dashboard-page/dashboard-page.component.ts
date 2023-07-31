@@ -13,6 +13,7 @@ import { OfferingService } from 'src/app/services/offering.services';
 import { TithesService } from 'src/app/services/tithes.service';
 import { OutFlowHandler } from 'src/app/handlers/outflowHandler';
 import { OutFlowReadModel } from 'src/app/models/ReadModels/OutflowRead.model';
+import { TithesHandler } from 'src/app/handlers/tithesHandler';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -42,7 +43,7 @@ export class DashboardPageComponent implements OnInit {
 
 
   constructor(private router: Router, private churchHandler: ChurchHadler,
-    private outflowHandler: OutFlowHandler, private tithesService: TithesService,
+    private outflowHandler: OutFlowHandler, private tithesHandler: TithesHandler,
     private offeringService: OfferingService, private firstFruitsService: FirstFruitsService,
     private dashBoardService: DashBoardService) {
     this.auth = new AuthService();
@@ -96,8 +97,8 @@ export class DashboardPageComponent implements OnInit {
 
     //get tithes
     try {
-      const dados = await this.tithesService.getTithesByMonth();
-      this.tithes = dados;
+      const dados = await this.tithesHandler.getTithesByMonth();
+      this.tithes = dados.data;
       this.totalTithes = 0;
       this.tithes.forEach((x: Tithes) => {
         this.totalTithes += x.totalAmount;

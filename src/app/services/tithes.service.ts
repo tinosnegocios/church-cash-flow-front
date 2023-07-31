@@ -33,12 +33,9 @@ export class TithesService extends BaseService {
 
     const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/tithes/all/${churchId}/${yearMonth}`, { headers: httpHeaders }).toPromise();
 
-    //return outflowObservable.pipe(map((result: ResultViewModel) => result.data));
-    //return outflowObservable.pipe(map(result => result));
-
     return returnObservable.then(result => {
       if (result) {
-        return result.data;
+        return result;
       } else {
         throw new Error('Result is undefined.');
       }
