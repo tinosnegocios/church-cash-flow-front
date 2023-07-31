@@ -3,8 +3,6 @@ import { Injectable } from "@angular/core";
 import { BaseService } from "./base.services";
 import { AuthService } from "./auth.services";
 import { ResultViewModel } from "../models/resultViewModel.models";
-import { Observable, map } from "rxjs";
-import { OutFlow } from "../models/Outflow.Models";
 import { DashBoardService } from "./dashboard.service";
 
 @Injectable({
@@ -38,7 +36,7 @@ export class OutflowService extends BaseService {
 
         return outflowObservable.then(result => {
             if (result) {
-              return result.data;
+              return result;
             } else {
               throw new Error('Result is undefined.');
             }

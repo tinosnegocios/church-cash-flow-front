@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, map, tap } from 'rxjs';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { ModelToken } from 'src/app/models/ModelToken.models';
-import { OutFlow } from 'src/app/models/Outflow.Models';
-import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
-
 import { Tithes } from 'src/app/models/Tithes.models';
 import { FirstFruits } from 'src/app/models/firstFruits.model';
 import { Offering } from 'src/app/models/offering.models';
@@ -13,10 +9,10 @@ import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 import { AuthService } from 'src/app/services/auth.services';
 import { DashBoardService } from 'src/app/services/dashboard.service';
 import { FirstFruitsService } from 'src/app/services/firstFruits.services';
-import { MembersService } from 'src/app/services/members.services';
 import { OfferingService } from 'src/app/services/offering.services';
-import { OutflowService } from 'src/app/services/outflow.services';
 import { TithesService } from 'src/app/services/tithes.service';
+import { OutFlowHandler } from 'src/app/handlers/outflowHandler';
+import { OutFlowReadModel } from 'src/app/models/ReadModels/OutflowRead.model';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -46,7 +42,7 @@ export class DashboardPageComponent implements OnInit {
 
 
   constructor(private router: Router, private churchHandler: ChurchHadler,
-    private outflowService: OutflowService, private tithesService: TithesService,
+    private outflowHandler: OutFlowHandler, private tithesService: TithesService,
     private offeringService: OfferingService, private firstFruitsService: FirstFruitsService,
     private dashBoardService: DashBoardService) {
     this.auth = new AuthService();
@@ -79,7 +75,7 @@ export class DashboardPageComponent implements OnInit {
       const dados = await this.churchHandler.getMembersByChurch;
       this.members = dados;
       this.totalMembers = 0;
-      this.members.forEach((x: MemberReadModel) => {
+      this.members.forEach((x: string) => {
         this.totalMembers += 1;
       });
     } catch (error) {
@@ -88,10 +84,10 @@ export class DashboardPageComponent implements OnInit {
 
     //get outflow  
     try {
-      const dados = await this.outflowService.getOutflowByMonth();
-      this.outflows = dados;
+      const dados = await this.outflowHandler.getOutflowByMonth();
+      this.outflows = dados.data;
       this.totalOutFlow = 0;
-      this.outflows.forEach((x: OutFlow) => {
+      this.outflows.forEach((x: OutFlowReadModel) => {
         this.totalOutFlow += x.totalAmount;
       });
     } catch (error) {
