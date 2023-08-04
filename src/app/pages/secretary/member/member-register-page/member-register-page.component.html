@@ -137,7 +137,7 @@
                             role="tablist" aria-orientation="vertical">
                             <a class="nav-link text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
                                 id="advancedTab" data-bs-toggle="tab" data-bs-target="#advancedTabContent" role="tab"
-                                aria-controls="advancedTabContent" aria-selected="false"> 
+                                aria-controls="advancedTabContent" aria-selected="false">
                                 <span class="me-sm-2 fs-4 nav-icons" data-feather="lock"></span>
                                 <span class="d-none d-sm-inline">Cargos</span>
                             </a>
@@ -158,8 +158,8 @@
                                 <div class="row g-3">
                                     <div class="col-12 col-lg-6" *ngFor="let post of postToSelect ">
                                         <div class="form-check form-check-inline">
-                                            <input formControlName="posts" class="form-check-input" id="inlineCheckbox1"
-                                                type="checkbox" value={{post[1]}} (click)="setPostId(post[1])" />
+                                            <input class="form-check-input" id="inlineCheckbox1"
+                                                type="checkbox" value={{post[1]}} (click)="setPostId(post[1])" [checked]="PostIdSelected.includes(tryParseInt(post[1]))" />
 
                                             <label class="form-check-label" for="inlineCheckbox1">{{post[0]}}</label>
                                         </div>
@@ -172,45 +172,48 @@
             </div>
         </div>
 
-        <div class="col-12 col-xl-12">
+    </form>
 
-            <div class="row g-0 border-top border-bottom border-300">
-                <div class="col-sm-4">
-                    <div class="nav flex-sm-column border-bottom border-bottom-sm-0 border-end-sm border-300 fs--1 vertical-tab h-100 justify-content-between"
-                        role="tablist" aria-orientation="vertical">
-                        <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center active"
-                            id="pricingTab" data-bs-toggle="tab" data-bs-target="#pricingTabContent" role="tab"
-                            aria-controls="pricingTabContent" aria-selected="true"> <span class="me-sm-2 fs-4 nav-icons"
-                                data-feather="tag"></span><span class="d-none d-sm-inline">Recebimento</span></a>
 
-                        <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
-                            id="restockTab" data-bs-toggle="tab" data-bs-target="#restockTabContent" role="tab"
-                            aria-controls="restockTabContent" aria-selected="false"> <span
-                                class="me-sm-2 fs-4 nav-icons" data-feather="package"></span><span
-                                class="d-none d-sm-inline">Desligamento</span></a>
-                    </div>
+    <div class="col-12 col-xl-12">
+
+        <div class="row g-0 border-top border-bottom border-300">
+            <div class="col-sm-4">
+                <div class="nav flex-sm-column border-bottom border-bottom-sm-0 border-end-sm border-300 fs--1 vertical-tab h-100 justify-content-between"
+                    role="tablist" aria-orientation="vertical">
+                    <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center active"
+                        id="pricingTab" data-bs-toggle="tab" data-bs-target="#pricingTabContent" role="tab"
+                        aria-controls="pricingTabContent" aria-selected="true"> <span class="me-sm-2 fs-4 nav-icons"
+                            data-feather="tag"></span><span class="d-none d-sm-inline">Recebimento</span></a>
+
+                    <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
+                        id="restockTab" data-bs-toggle="tab" data-bs-target="#restockTabContent" role="tab"
+                        aria-controls="restockTabContent" aria-selected="false"> <span class="me-sm-2 fs-4 nav-icons"
+                            data-feather="package"></span><span class="d-none d-sm-inline">Desligamento</span></a>
                 </div>
+            </div>
 
-                <div class="col-sm-8">
+            <div class="col-sm-8">
 
-                    <div class="tab-content py-3 ps-sm-4 h-100">
+                <div class="tab-content py-3 ps-sm-4 h-100">
 
+                    <form class="mb-3" [formGroup]="formMemberIn">
                         <div class="tab-pane fade show active" id="pricingTabContent" role="tabpanel">
                             <h4 class="mb-3 d-sm-none">Igreja</h4>
                             <div class="row g-3">
                                 <div class="col-12 col-lg-4">
                                     <h5 class="mb-2 text-1000">Igreja</h5>
-                                    <input class="form-control" type="text" placeholder="igreja que o membro veio" />
+                                    <input class="form-control" type="text" formControlName="church" placeholder="igreja que o membro veio" />
                                 </div>
 
                                 <div class="col-12 col-lg-4">
                                     <h5 class="mb-2 text-1000">Cargo</h5>
-                                    <input class="form-control" type="text" placeholder="cargo ocupado" />
+                                    <input class="form-control" type="text" formControlName="post" placeholder="cargo ocupado" />
                                 </div>
 
                                 <div class="col-12 col-lg-3">
                                     <h5 class="mb-2 text-1000">Saida</h5>
-                                    <select class="form-control" name="" id="">
+                                    <select class="form-control" formControlName="letter">
                                         <option value=""></option>
                                         <option value="">com carta</option>
                                         <option value="">sem carta</option>
@@ -219,13 +222,16 @@
 
                             </div>
                         </div>
+                    </form>
 
+
+                    <form class="mb-3" [formGroup]="formMemberOut">
                         <div class="tab-pane fade h-100" id="restockTabContent" role="tabpanel"
                             aria-labelledby="restockTab">
                             <div class="row g-3">
                                 <div class="col-12 col-lg-4">
                                     <h5 class="mb-2 text-1000">Motivo</h5>
-                                    <select class="form-control" name="" id="">
+                                    <select class="form-control" formControlName="reason">
                                         <option value=""></option>
                                         <option value="">Abandono</option>
                                         <option value="">Solicitação</option>
@@ -235,17 +241,20 @@
 
                                 <div class="col-12 col-lg-4">
                                     <h5 class="mb-2 text-1000">Dia</h5>
-                                    <input class="form-control" type="date" />
+                                    <input class="form-control" type="date" formControlName="day" />
                                 </div>
 
                             </div>
                         </div>
-                    </div>
+                    </form>
+
                 </div>
+
             </div>
         </div>
+    </div>
 
-    </form>
+
 
 
 

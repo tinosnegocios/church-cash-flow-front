@@ -13,11 +13,14 @@ import { ResultViewModel } from 'src/app/models/resultViewModel.models';
   templateUrl: './member-register-page.component.html'
 })
 export class MemberRegisterPageComponent implements OnInit {
+
   private post!: ResultViewModel['data'];
-  private PostIdSelected: number[] = [];
-  
+  protected PostIdSelected: number[] = [];
+    
   protected typeSave = "create";
   protected formMember!: FormGroup;
+  protected formMemberOut!: FormGroup;
+  protected formMemberIn!: FormGroup;
   protected formSearch!: FormGroup;
   protected postToSelect!: [string, string][];
   protected msgErros: string[] = [];
@@ -51,6 +54,25 @@ export class MemberRegisterPageComponent implements OnInit {
         Validators.required
       ])],
     });
+
+    this.formMemberOut = this.fbuilder.group({
+      reason: ['', Validators.compose([
+        Validators.required,
+      ])],
+      day: ['', Validators.compose([
+        Validators.required
+      ])]
+    });
+
+    this.formMemberIn = this.fbuilder.group({
+      church: ['', Validators.compose([
+      ])],
+      post: ['', Validators.compose([
+      ])],
+      letter: ['', Validators.compose([
+        Validators.required
+      ])],
+    });
   }
 
   async ngOnInit() {
@@ -62,6 +84,7 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   async searchByCode(code: string = ""){
+    console.log(code);
     this.searchBusy = true;
     
     if (code.length <= 0)
@@ -96,6 +119,14 @@ export class MemberRegisterPageComponent implements OnInit {
     this.formMember.controls['dateBaptism'].setValue(formatDate(model.dateBaptism, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['name'].setValue(model.name);
     this.formMember.controls['description'].setValue(model.description);
+
+    if(model.memberPost.length > 0){
+      model.memberPost.forEach(x => {
+        this.PostIdSelected.push(x.id);
+        console.log(x.id);
+      })
+    }
+
   }
 
   protected async loadPosts() {
@@ -177,5 +208,10 @@ export class MemberRegisterPageComponent implements OnInit {
 
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
+  }
+
+
+  tryParseInt(number: string): number {
+    return parseInt(number);
   }
 }
