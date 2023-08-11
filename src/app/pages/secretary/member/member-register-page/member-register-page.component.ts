@@ -65,11 +65,11 @@ export class MemberRegisterPageComponent implements OnInit {
     });
 
     this.formMemberIn = this.fbuilder.group({
-      church: ['', Validators.compose([
+      churchName: ['', Validators.compose([
       ])],
-      post: ['', Validators.compose([
+      lastPost: ['', Validators.compose([
       ])],
-      letter: ['', Validators.compose([
+      letterReceiver: ['', Validators.compose([
         Validators.required
       ])],
     });
@@ -84,7 +84,6 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   async searchByCode(code: string = ""){
-    console.log(code);
     this.searchBusy = true;
     
     if (code.length <= 0)
@@ -111,19 +110,25 @@ export class MemberRegisterPageComponent implements OnInit {
     this.formSearch.controls['code'].setValue(code);
   }
 
-  private fillFormWithModel(model: MemberReadModel, code: string) {
+  private fillFormWithModel(model: MemberReadModel, code: string) {    
     console.log(model);
-    
+
     this.formMember.controls['dateBirth'].setValue(formatDate(model.dateBirth, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['dateRegister'].setValue(formatDate(model.dateRegister, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['dateBaptism'].setValue(formatDate(model.dateBaptism, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['name'].setValue(model.name);
     this.formMember.controls['description'].setValue(model.description);
 
+    if(model.memberIn !== null) {
+        console.log("preenchendo member in");
+        this.formMemberIn.controls["letterReceiver"].setValue(model.memberIn!.letterReceiver.toLowerCase().trim() == "com carta" ? 1 : 2);
+        this.formMemberIn.controls["lastPost"].setValue(model.memberIn!.lastPost);
+        this.formMemberIn.controls["churchName"].setValue(model.memberIn!.churchName);
+    }
+
     if(model.memberPost.length > 0){
       model.memberPost.forEach(x => {
         this.PostIdSelected.push(x.id);
-        console.log(x.id);
       })
     }
 
@@ -180,6 +185,9 @@ export class MemberRegisterPageComponent implements OnInit {
     this.searchBusy = true;
 
     var member: MemberEditModel = this.formMember.value;
+    if(member.dateBaptism.length <= 0){
+      member.dateBaptism = "0001-01-01"
+    }
     member.postIds = this.PostIdSelected;
     this.create(member);
 
