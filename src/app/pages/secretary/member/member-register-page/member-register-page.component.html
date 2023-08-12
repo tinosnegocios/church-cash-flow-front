@@ -203,20 +203,20 @@
                             <div class="row g-3">
                                 <div class="col-12 col-lg-4">
                                     <h5 class="mb-2 text-1000">Igreja</h5>
-                                    <input class="form-control" type="text" formControlName="church" placeholder="igreja que o membro veio" />
+                                    <input class="form-control" type="text" formControlName="churchName" placeholder="igreja que o membro veio" />
                                 </div>
 
                                 <div class="col-12 col-lg-4">
                                     <h5 class="mb-2 text-1000">Cargo</h5>
-                                    <input class="form-control" type="text" formControlName="post" placeholder="cargo ocupado" />
+                                    <input class="form-control" type="text" formControlName="lastPost" placeholder="cargo ocupado" />
                                 </div>
 
                                 <div class="col-12 col-lg-3">
                                     <h5 class="mb-2 text-1000">Saida</h5>
-                                    <select class="form-control" formControlName="letter">
-                                        <option value=""></option>
-                                        <option value="">com carta</option>
-                                        <option value="">sem carta</option>
+                                    <select class="form-control" formControlName="letterReceiver">
+                                        <option value="0"></option>
+                                        <option value="1">com carta</option>
+                                        <option value="2">sem carta</option>
                                     </select>
                                 </div>
 
@@ -232,10 +232,10 @@
                                 <div class="col-12 col-lg-4">
                                     <h5 class="mb-2 text-1000">Motivo</h5>
                                     <select class="form-control" formControlName="reason">
-                                        <option value=""></option>
-                                        <option value="">Abandono</option>
-                                        <option value="">Solicitação</option>
-                                        <option value="">Falecimento</option>
+                                        <option value="0"></option>
+                                        <option value="1">abandono</option>
+                                        <option value="2">solicitação</option>
+                                        <option value="3">falecimento</option>
                                     </select>
                                 </div>
 

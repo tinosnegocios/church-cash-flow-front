@@ -121,9 +121,20 @@ export class MemberRegisterPageComponent implements OnInit {
 
     if(model.memberIn !== null) {
         console.log("preenchendo member in");
-        this.formMemberIn.controls["letterReceiver"].setValue(model.memberIn!.letterReceiver.toLowerCase().trim() == "com carta" ? 1 : 2);
-        this.formMemberIn.controls["lastPost"].setValue(model.memberIn!.lastPost);
-        this.formMemberIn.controls["churchName"].setValue(model.memberIn!.churchName);
+        this.formMemberIn.controls['letterReceiver'].setValue(model.memberIn!.letterReceiver.toLowerCase().trim() == "com carta" ? 1 : 2);
+        this.formMemberIn.controls['lastPost'].setValue(model.memberIn!.lastPost);
+        this.formMemberIn.controls['churchName'].setValue(model.memberIn!.churchName);
+    }
+
+    if(model.memberOut !== null) {
+      var idReason = 1;
+      if(model.memberOut!.reason.toString().trim() == "solicitação"){
+        idReason = 2;
+      }else if(model.memberOut!.reason.toString().trim() == "falecimento"){
+        idReason = 3;
+      }
+      this.formMemberOut.controls['reason'].setValue(idReason);
+      this.formMemberOut.controls['day'].setValue(model.memberOut!.day)
     }
 
     if(model.memberPost.length > 0){
@@ -189,7 +200,13 @@ export class MemberRegisterPageComponent implements OnInit {
       member.dateBaptism = "0001-01-01"
     }
     member.postIds = this.PostIdSelected;
-    this.create(member);
+
+    if(this.typeSave == "create"){
+      this.create(member);
+    }else if(this.typeSave == "update"){
+      this.update(member);
+    }
+    
 
     this.searchBusy = false;
   }

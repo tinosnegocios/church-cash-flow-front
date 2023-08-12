@@ -1,4 +1,6 @@
 import { EntitieResultApi } from "../Entitie.models";
+import { MemberInReadModel } from "./MemberInRead.model";
+import { MemberOutReadModel } from "./MemberOutRead.model";
 import { PostReadModel } from "./PostRead.models";
 
 export class MemberReadModel extends EntitieResultApi {
@@ -11,5 +13,6 @@ export class MemberReadModel extends EntitieResultApi {
     dateRegister: string = "";;
     church: string = "";
     memberPost: PostReadModel[] = [];
-    memberOut: MemberReadModel | undefined;
+    memberOut: MemberOutReadModel | undefined;
+    memberIn: MemberInReadModel | undefined;
 }
