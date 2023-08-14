@@ -1,3 +1,5 @@
+import { MemberInEditModel } from "./MemberInEdit.models";
+
 export class MemberEditModel {
     name: string = "";
     description: string = "";
@@ -8,4 +10,5 @@ export class MemberEditModel {
     churchId: number = 0;
     postIds: number[] = [];
     active: boolean = true;
+    editMemberInDto: MemberInEditModel | undefined;
 }

@@ -42,9 +42,23 @@ export class MemberHandler extends BaseHandler {
         }
     }
 
-    update(model: MemberEditModel): Promise<Boolean> {
-        throw new Error('Method not implemented.');
-      }
+    public async update(model: MemberEditModel, modelId: string): Promise<Boolean> {
+        if(! this.validate(model))
+            return false;
+
+        var result = await this.service.update(model, modelId);            
+
+            if (result!.errors != null && result!.errors.length > 0) {
+                result!.errors.forEach(x => {
+                    this.setMsgErro(x);
+                })
+                return false;
+            } else {
+                var resultData: MemberReadModel = result!.data;
+                this.setMsgSuccess(`Membro ${model.name} - ${resultData.code} salvo com sucesso`);
+                return true;
+            }    
+    }
 
     private validate(model: MemberEditModel): boolean {
         if(model.name.length <= 0 || model.dateBirth.length <= 0 || model.description.length <= 0 || model.postIds.length <= 0){

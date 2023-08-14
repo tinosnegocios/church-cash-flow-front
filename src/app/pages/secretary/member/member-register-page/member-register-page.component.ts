@@ -15,6 +15,7 @@ import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 export class MemberRegisterPageComponent implements OnInit {
 
   private post!: ResultViewModel['data'];
+  private MemberId : string = "";
   protected PostIdSelected: number[] = [];
     
   protected typeSave = "create";
@@ -80,6 +81,7 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   async dashBoard(){
+    await this.clear();
     await this.loadPosts();
   }
 
@@ -113,6 +115,7 @@ export class MemberRegisterPageComponent implements OnInit {
   private fillFormWithModel(model: MemberReadModel, code: string) {    
     console.log(model);
 
+    this.MemberId = model.id.toString();
     this.formMember.controls['dateBirth'].setValue(formatDate(model.dateBirth, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['dateRegister'].setValue(formatDate(model.dateRegister, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['dateBaptism'].setValue(formatDate(model.dateBaptism, 'yyyy-MM-dd', 'en'));
@@ -190,6 +193,10 @@ export class MemberRegisterPageComponent implements OnInit {
     this.handler.clear();
     this.formMember.reset();
     this.formSearch.reset();
+    this.formMemberIn.reset();
+    this.formMemberOut.reset();
+    this.typeSave = "create";
+    this.MemberId = "";
   }
 
   protected save(): void {
@@ -200,6 +207,13 @@ export class MemberRegisterPageComponent implements OnInit {
       member.dateBaptism = "0001-01-01"
     }
     member.postIds = this.PostIdSelected;
+  
+    if(this.formMemberIn.valid){
+      var memberEditDto = this.formMemberIn.value;
+      member.editMemberInDto = memberEditDto;
+    }
+
+    console.log(member);
 
     if(this.typeSave == "create"){
       this.create(member);
@@ -224,7 +238,7 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   private async update(model: MemberEditModel) {
-    await this.handler.update(model)
+    await this.handler.update(model, this.MemberId)
     .then((result) => {
     })
     .catch((error) => {
