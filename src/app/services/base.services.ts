@@ -44,7 +44,7 @@ export abstract class BaseService {
     return returnPromise;
   }
 
-  update(model: any, modelId: string): Promise<ResultViewModel | null> {
+  public async update(model: any, modelId: string): Promise<ResultViewModel | null> {
     var auth = new AuthService();
     const token = auth.getToken();
 

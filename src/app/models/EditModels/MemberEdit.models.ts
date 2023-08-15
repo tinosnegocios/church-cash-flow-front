@@ -1,4 +1,5 @@
 import { MemberInEditModel } from "./MemberInEdit.models";
+import { MemberOutEditDto } from "./MemberOutEdit.models";
 
 export class MemberEditModel {
     name: string = "";
@@ -10,5 +11,6 @@ export class MemberEditModel {
     churchId: number = 0;
     postIds: number[] = [];
     active: boolean = true;
-    editMemberInDto: MemberInEditModel | undefined;
+    editMemberInDto?: MemberInEditModel | null;
+    editMemberOutDto?: MemberOutEditDto | null;
 }

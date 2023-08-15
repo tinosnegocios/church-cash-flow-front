@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostHandler } from 'src/app/handlers/PostHandler';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { MemberEditModel } from 'src/app/models/EditModels/MemberEdit.models';
+import { MemberOutEditDto } from 'src/app/models/EditModels/MemberOutEdit.models';
 import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 import { PostReadModel } from 'src/app/models/ReadModels/PostRead.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
@@ -104,6 +105,8 @@ export class MemberRegisterPageComponent implements OnInit {
     this.typeSave = "update";
     var objModel: MemberReadModel = modelToForm.data;
 
+    console.log(objModel);
+
     this.fillFormWithModel(objModel, code);
 
     this.memberIsValid = objModel.active;
@@ -113,8 +116,6 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   private fillFormWithModel(model: MemberReadModel, code: string) {    
-    console.log(model);
-
     this.MemberId = model.id.toString();
     this.formMember.controls['dateBirth'].setValue(formatDate(model.dateBirth, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['dateRegister'].setValue(formatDate(model.dateRegister, 'yyyy-MM-dd', 'en'));
@@ -123,7 +124,6 @@ export class MemberRegisterPageComponent implements OnInit {
     this.formMember.controls['description'].setValue(model.description);
 
     if(model.memberIn !== null) {
-        console.log("preenchendo member in");
         this.formMemberIn.controls['letterReceiver'].setValue(model.memberIn!.letterReceiver.toLowerCase().trim() == "com carta" ? 1 : 2);
         this.formMemberIn.controls['lastPost'].setValue(model.memberIn!.lastPost);
         this.formMemberIn.controls['churchName'].setValue(model.memberIn!.churchName);
@@ -199,7 +199,7 @@ export class MemberRegisterPageComponent implements OnInit {
     this.MemberId = "";
   }
 
-  protected save(): void {
+  protected async save() {
     this.searchBusy = true;
 
     var member: MemberEditModel = this.formMember.value;
@@ -208,17 +208,25 @@ export class MemberRegisterPageComponent implements OnInit {
     }
     member.postIds = this.PostIdSelected;
   
+    member.editMemberInDto = null;
+    member.editMemberOutDto = null;
+
     if(this.formMemberIn.valid){
       var memberEditDto = this.formMemberIn.value;
+      memberEditDto.letterReceiver = this.getLetterReceiverMemberIn(memberEditDto.letterReceiver);
       member.editMemberInDto = memberEditDto;
     }
 
-    console.log(member);
+    if(this.formMemberOut.valid) {
+      var formOut = this.formMemberOut.value;
+      var memberOutEditDto = new MemberOutEditDto(this.getReasonMemberOut(formOut.reason), formOut.day);
+      member.editMemberOutDto = memberOutEditDto;
+    }
 
     if(this.typeSave == "create"){
-      this.create(member);
+      await this.create(member);
     }else if(this.typeSave == "update"){
-      this.update(member);
+      await this.update(member);
     }
     
 
@@ -252,5 +260,18 @@ export class MemberRegisterPageComponent implements OnInit {
 
   tryParseInt(number: string): number {
     return parseInt(number);
+  }
+
+  private getReasonMemberOut(id: string): string{
+    if(id == "1") return "abandono";
+    if(id == "2") return "solicitação";
+    if(id == "3") return "falecimento";
+    return "";
+  }
+
+  private getLetterReceiverMemberIn(id: string): string{
+    if(id == "1") return "com carta";
+    if(id == "2") return "sem carta";
+    return "";
   }
 }
