@@ -23,11 +23,11 @@ export class MemberHandler extends BaseHandler {
         var result: ResultViewModel = await this.service.getMembersByChurch();
         return result;
     }
-    
+
     public async create(model: MemberEditModel): Promise<Boolean> {
-        if(! this.validate(model))
+        if (!this.validate(model))
             return false;
-        
+
         var result = await this.service.create(model);
 
         if (result!.errors != null && result!.errors.length > 0) {
@@ -42,12 +42,27 @@ export class MemberHandler extends BaseHandler {
         }
     }
 
-    update(model: MemberEditModel): Promise<Boolean> {
-        throw new Error('Method not implemented.');
-      }
+    public async update(model: MemberEditModel, modelId: string): Promise<Boolean> {
+        if (! await this.validate(model))
+            return false;
 
-    private validate(model: MemberEditModel): boolean {
-        if(model.name.length <= 0 || model.dateBirth.length <= 0 || model.description.length <= 0 || model.postIds.length <= 0){
+        var result = await this.service.update(model, modelId);
+
+        if (result!.errors != null && result!.errors.length > 0) {
+            result!.errors.forEach(x => {
+                this.setMsgErro(x);
+            })
+            return false;
+        } else {
+            var resultData: MemberReadModel = result!.data;
+            this.setMsgSuccess(`Membro salvo com sucesso`);
+            
+            return true;
+        }
+    }
+
+    private async validate(model: MemberEditModel): Promise<boolean> {
+        if (model.name.length <= 0 || model.dateBirth.length <= 0 || model.description == "" || model.postIds.length <= 0) {
             this.setMsgErro("Informe os dados obrigatórios corretamente");
             return false;
         }

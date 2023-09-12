@@ -1,7 +1,6 @@
-import { EntitieResultApi } from "./Entitie.models";
-
-export class OutFlow extends EntitieResultApi {
-    day: Date = new Date();
+export class OutflowEditModel {
+    active: boolean = true;
+    day: string = "";
     competence: string = "";
     description: string = "";
     authorized: boolean = true;
@@ -9,6 +8,6 @@ export class OutFlow extends EntitieResultApi {
     interest: number = 0;
     discount: number = 0;
     totalAmount: number = 0;
-    outFlow: string = "";
-    church: string = "";
+    outFlowKindId: number = 0;
+    churchId: number = 0;
 }

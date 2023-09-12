@@ -289,14 +289,6 @@ export class offeringRegisterPageComponent implements OnInit {
     });
   }
 
-
-
-
-
-
-
-
-
   protected sumPeoples() {
     this.formTreasury.controls['totalPeoples'].setValue(this.formTreasury.value.adultQuantity + this.formTreasury.value.childrenQuantity);
   }

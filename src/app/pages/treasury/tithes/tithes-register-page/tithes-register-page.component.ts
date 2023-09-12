@@ -2,15 +2,15 @@ import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { TithesHandler } from 'src/app/handlers/tithesHandler';
 import { ModelToken } from 'src/app/models/ModelToken.models';
+import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 import { Tithes } from 'src/app/models/Tithes.models';
-import { MeetingKind } from 'src/app/models/meetingKind.models copy';
 import { OfferingKind } from 'src/app/models/offeringKind.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 import { AuthService } from 'src/app/services/auth.services';
-import { MeetingKindService } from 'src/app/services/meetingKind.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
@@ -46,7 +46,7 @@ export class TithesRegisterPageComponent implements OnInit {
   private fileReader: FileReader | undefined;
   private codeSearch: number = 0;
 
-  constructor(private handler: TithesHandler, private offeringKindService: OfferingKindService, private churchHandler: MemberHandler,
+  constructor(private handler: TithesHandler, private offeringKindService: OfferingKindService, private churchHandler: ChurchHadler,
     private fbuilder: FormBuilder, private route: ActivatedRoute) {
 
     this.auth = new AuthService();
@@ -129,23 +129,20 @@ export class TithesRegisterPageComponent implements OnInit {
   protected async loadMembers() {
     try {
       const dados = await this.churchHandler.getByChurch();
-      this.members = dados;
+      this.members = dados.data;
 
       var meuObjeto: Record<string, string> = {};
-      var cont = 1;
+      this.members.forEach((x: MemberReadModel) => {
+        var key = x.name;
+        var value = x.id;
 
-      this.members.forEach((x: string) => {
-        var key = x;
-        var value = cont;
-
-        cont++;
         meuObjeto[key] = `${value}`;
       });
 
       this.membersToSelect = Object.entries(meuObjeto);
       
     } catch (error) {
-      console.log('error to get offering-kind:', error);
+      console.log('error to get members:', error);
     }
   }
 
@@ -219,7 +216,7 @@ export class TithesRegisterPageComponent implements OnInit {
   }
 
   private async create(model: Tithes) {
-    this.clearForm();
+    //this.clearForm();
 
     var create = await this.handler.create(model)
       .then((result) => {

@@ -8,7 +8,7 @@ import { BaseHandler } from "./baseHandler";
     providedIn: 'root'
 })
 
-export class TithesHandler extends BaseHandler{
+export class TithesHandler extends BaseHandler {
 
     private service: TithesService;
 
@@ -19,7 +19,7 @@ export class TithesHandler extends BaseHandler{
 
     public async create(handler: Tithes): Promise<Boolean> {
         var result = await this.service.create(handler);
-        
+
         if (result!.errors != null && result!.errors.length > 0) {
             result!.errors.forEach(x => {
                 this.setMsgErro(x);
@@ -31,23 +31,22 @@ export class TithesHandler extends BaseHandler{
         }
     }
 
-        
     public async delete(id: number) {
-        var result = await  this.service.delete(id);
-  
+        var result = await this.service.delete(id);
+
         if (result!.errors != null && result!.errors.length > 0) {
-          result!.errors.forEach(x => {
-              this.setMsgErro(x);
-          })
-          return false;
-          } else {
-              this.setMsgSuccess("dizimo excluído com sucesso");
-              return true;
-          }
-      }
+            result!.errors.forEach(x => {
+                this.setMsgErro(x);
+            })
+            return false;
+        } else {
+            this.setMsgSuccess("dizimo excluído com sucesso");
+            return true;
+        }
+    }
 
     public async update(model: Tithes, modelId: string): Promise<Boolean> {
-        if(!model || modelId == ""){
+        if (!model || modelId == "") {
             this.setMsgErro("data invalid!")
             return false;
         }
@@ -65,7 +64,7 @@ export class TithesHandler extends BaseHandler{
         }
     }
 
-    public async getById(id: number) : Promise<ResultViewModel>{
+    public async getById(id: number): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.searchByIdByChurch(id);
         return result;
     }
@@ -74,4 +73,10 @@ export class TithesHandler extends BaseHandler{
         var result: ResultViewModel = await this.service.getByPeriod(initialDate, finalDate);
         return result;
     }
+
+    public async getTithesByMonth(): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getTithesByMonth();
+        return result;
+    }
+
 }

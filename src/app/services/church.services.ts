@@ -34,7 +34,6 @@ export class ChurchService extends BaseService {
       if (result) {
         return result;
       } else {
-        console.log('nao deu');
         throw new Error('Result is undefined.');
       }
     });

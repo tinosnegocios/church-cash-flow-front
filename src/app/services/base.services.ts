@@ -4,7 +4,7 @@ import { AuthService } from "./auth.services";
 import { Observable, catchError, of } from "rxjs";
 
 export abstract class BaseService {
-  protected url: string = 'https://localhost:7171/api';
+  protected url: string = 'http://localhost:5000/api';
   protected modelName!: string;
 
   constructor(protected http: HttpClient) { }
@@ -44,7 +44,7 @@ export abstract class BaseService {
     return returnPromise;
   }
 
-  update(model: any, modelId: string): Promise<ResultViewModel | null> {
+  public async update(model: any, modelId: string): Promise<ResultViewModel | null> {
     var auth = new AuthService();
     const token = auth.getToken();
 

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostHandler } from 'src/app/handlers/PostHandler';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { MemberEditModel } from 'src/app/models/EditModels/MemberEdit.models';
+import { MemberOutEditDto } from 'src/app/models/EditModels/MemberOutEdit.models';
 import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 import { PostReadModel } from 'src/app/models/ReadModels/PostRead.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
@@ -13,17 +14,22 @@ import { ResultViewModel } from 'src/app/models/resultViewModel.models';
   templateUrl: './member-register-page.component.html'
 })
 export class MemberRegisterPageComponent implements OnInit {
+
   private post!: ResultViewModel['data'];
-  private PostIdSelected: number[] = [];
-  
+  private MemberId : string = "";
+  protected PostIdSelected: number[] = [];
+    
   protected typeSave = "create";
   protected formMember!: FormGroup;
+  protected formMemberOut!: FormGroup;
+  protected formMemberIn!: FormGroup;
   protected formSearch!: FormGroup;
   protected postToSelect!: [string, string][];
   protected msgErros: string[] = [];
   protected msgSuccesss: string[] = [];
   protected searchBusy: boolean = false;
   protected memberIsValid: boolean = false;
+  protected base64Image: string = "";
 
   constructor(private fbuilder: FormBuilder, private handler: MemberHandler, private postHandler: PostHandler) {
     this.formMember = this.fbuilder.group({
@@ -51,6 +57,25 @@ export class MemberRegisterPageComponent implements OnInit {
         Validators.required
       ])],
     });
+
+    this.formMemberOut = this.fbuilder.group({
+      reason: ['', Validators.compose([
+        Validators.required,
+      ])],
+      day: ['', Validators.compose([
+        Validators.required
+      ])]
+    });
+
+    this.formMemberIn = this.fbuilder.group({
+      churchName: ['', Validators.compose([
+      ])],
+      lastPost: ['', Validators.compose([
+      ])],
+      letterReceiver: ['', Validators.compose([
+        Validators.required
+      ])],
+    });
   }
 
   async ngOnInit() {
@@ -58,6 +83,7 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   async dashBoard(){
+    await this.clear();
     await this.loadPosts();
   }
 
@@ -88,14 +114,37 @@ export class MemberRegisterPageComponent implements OnInit {
     this.formSearch.controls['code'].setValue(code);
   }
 
-  private fillFormWithModel(model: MemberReadModel, code: string) {
-    console.log(model);
-    
+  private fillFormWithModel(model: MemberReadModel, code: string) {    
+    this.MemberId = model.id.toString();
     this.formMember.controls['dateBirth'].setValue(formatDate(model.dateBirth, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['dateRegister'].setValue(formatDate(model.dateRegister, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['dateBaptism'].setValue(formatDate(model.dateBaptism, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['name'].setValue(model.name);
     this.formMember.controls['description'].setValue(model.description);
+
+    if(model.memberIn !== null) {
+        this.formMemberIn.controls['letterReceiver'].setValue(model.memberIn!.letterReceiver.toLowerCase().trim() == "com carta" ? 1 : 2);
+        this.formMemberIn.controls['lastPost'].setValue(model.memberIn!.lastPost);
+        this.formMemberIn.controls['churchName'].setValue(model.memberIn!.churchName);
+    }
+
+    if(model.memberOut !== null) {
+      var idReason = 1;
+      if(model.memberOut!.reason.toString().trim() == "solicitação"){
+        idReason = 2;
+      }else if(model.memberOut!.reason.toString().trim() == "falecimento"){
+        idReason = 3;
+      }
+      this.formMemberOut.controls['reason'].setValue(idReason);
+      this.formMemberOut.controls['day'].setValue(model.memberOut!.day)
+    }
+
+    if(model.memberPost.length > 0){
+      model.memberPost.forEach(x => {
+        this.PostIdSelected.push(x.id);
+      })
+    }
+
   }
 
   protected async loadPosts() {
@@ -143,14 +192,63 @@ export class MemberRegisterPageComponent implements OnInit {
     this.handler.clear();
     this.formMember.reset();
     this.formSearch.reset();
+    this.formMemberIn.reset();
+    this.formMemberOut.reset();
+    this.typeSave = "create";
+    this.MemberId = "";
+    this.base64Image = "";
   }
 
-  protected save(): void {
+  protected loadImage(event: any) {
+    
+    const file = event.target.files[0];
+    console.log(file);
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.base64Image = e.target.result;
+        
+        //console.log(base64Image);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
+  protected async save() {
     this.searchBusy = true;
 
     var member: MemberEditModel = this.formMember.value;
+    console.log(this.base64Image);
+    member.base64Image = this.base64Image;
+
+    if(member.dateBaptism.length <= 0){
+      member.dateBaptism = "0001-01-01"
+    }
     member.postIds = this.PostIdSelected;
-    this.create(member);
+  
+    member.editMemberInDto = null;
+    member.editMemberOutDto = null;
+    
+    if(this.formMemberIn.valid){
+      var memberEditDto = this.formMemberIn.value;
+      memberEditDto.letterReceiver = this.getLetterReceiverMemberIn(memberEditDto.letterReceiver.toString());
+      member.editMemberInDto = memberEditDto;
+    }
+
+    if(this.formMemberOut.valid) {
+      var formOut = this.formMemberOut.value;
+      var memberOutEditDto = new MemberOutEditDto(this.getReasonMemberOut(formOut.reason.toString()), formOut.day);
+      member.editMemberOutDto = memberOutEditDto;
+    }
+    
+    if(this.typeSave == "create"){
+      await this.create(member);
+    }else if(this.typeSave == "update"){
+      await this.update(member);
+    }
+    
 
     this.searchBusy = false;
   }
@@ -168,7 +266,7 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   private async update(model: MemberEditModel) {
-    await this.handler.update(model)
+    await this.handler.update(model, this.MemberId)
     .then((result) => {
     })
     .catch((error) => {
@@ -177,5 +275,23 @@ export class MemberRegisterPageComponent implements OnInit {
 
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
+  }
+
+
+  tryParseInt(number: string): number {
+    return parseInt(number);
+  }
+
+  private getReasonMemberOut(id: string): string{
+    if(id == "1") return "abandono";
+    if(id == "2") return "solicitação";
+    if(id == "3") return "falecimento";
+    return "";
+  }
+
+  private getLetterReceiverMemberIn(id: string): string{
+    if(id === '1') return "com carta";
+    if(id === '2') return "sem carta";
+    return "";
   }
 }

@@ -25,7 +25,7 @@
                 data-bs-toggle="collapse" aria-expanded="true" aria-controls="home">
                 <div class="d-flex align-items-center">
                   <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span
-                    class="nav-link-icon"><span data-feather="pie-chart"></span></span><span
+                    class="nav-link-icon"><span data-feather="home"></span></span><span
                     class="nav-link-text">Home</span>
                 </div>
               </a>
@@ -34,13 +34,12 @@
                   <li class="collapsed-nav-item-title d-none">Home
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link active" [routerLink]="['/']" data-bs-toggle=""
-                      aria-expanded="false">
+                    <a class="nav-link" [routerLink]="['/']" data-bs-toggle="" aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Inicio</span>
                       </div>
                     </a>
                   </li>
-                  <li class="nav-item"><a class="nav-link active" href="index.html" data-bs-toggle=""
+                  <li class="nav-item"><a class="nav-link" href="index.html" data-bs-toggle=""
                       aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Documentação</span>
                       </div>
@@ -60,14 +59,14 @@
 
             <!-- grupo cadastro secretaria-->
             <div class="nav-item-wrapper">
-              <a class="nav-link dropdown-indicator label-1" href="#CRM" role="button" data-bs-toggle="collapse"
-                aria-expanded="false" aria-controls="CRM">
+              <a class="nav-link dropdown-indicator label-1" href="#SECCREATE" role="button" data-bs-toggle="collapse"
+                aria-expanded="false" aria-controls="SECCREATE">
                 <div class="d-flex align-items-center">
                   <div class="dropdown-indicator-icon">
                     <span class="fas fa-caret-right"></span>
                   </div>
                   <span class="nav-link-icon">
-                    <span data-feather="phone"></span>
+                    <span data-feather="user"></span>
                   </span>
                   <!--titulo-->
                   <span class="nav-link-text">Cadastro</span>
@@ -75,68 +74,78 @@
               </a>
 
               <div class="parent-wrapper label-1">
-                <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="CRM">
+                <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="SECCREATE">
 
                   <li class="collapsed-nav-item-title d-none">Cadastro
                   </li>
 
-                  <li class="nav-item"><a class="nav-link" [routerLink]="['/member-register']" data-bs-toggle=""
-                      aria-expanded="false">
+                  <li class="nav-item">
+                    <a class="nav-link" [routerLink]="['/member-register']" data-bs-toggle="" aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Membro</span>
                       </div>
                     </a>
                     <!-- more inner pages-->
                   </li>
 
-                  <li class="nav-item"><a class="nav-link" href="apps/crm/deals.html" data-bs-toggle=""
+                  <li class="nav-item">
+                    <a class="nav-link" href="apps/crm/deals.html" data-bs-toggle=""
                       aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Igreja</span>
                       </div>
                     </a>
                     <!-- more inner pages-->
                   </li>
-                  <li class="nav-item"><a class="nav-link" href="apps/crm/deal-details.html" data-bs-toggle=""
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="apps/crm/deal-details.html" data-bs-toggle=""
                       aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Culto</span>
                       </div>
                     </a>
                     <!-- more inner pages-->
                   </li>
-                  <li class="nav-item"><a class="nav-link" href="apps/crm/leads.html" data-bs-toggle=""
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="apps/crm/leads.html" data-bs-toggle=""
                       aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Cargo</span>
                       </div>
                     </a>
                     <!-- more inner pages-->
                   </li>
-                  <li class="nav-item"><a class="nav-link" href="apps/crm/lead-details.html" data-bs-toggle=""
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="apps/crm/lead-details.html" data-bs-toggle=""
                       aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Secretario local</span>
                       </div>
                     </a>
                     <!-- more inner pages-->
                   </li>
-                  <li class="nav-item"><a class="nav-link" href="apps/crm/reports.html" data-bs-toggle=""
+
+                  <li class="nav-item">
+                    <a class="nav-link" href="apps/crm/reports.html" data-bs-toggle=""
                       aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Secretario ministerio</span>
                       </div>
                     </a>
                     <!-- more inner pages-->
                   </li>
+                  
                 </ul>
               </div>
             </div>
 
             <!-- grupo relatorio secretaria-->
             <div class="nav-item-wrapper">
-              <a class="nav-link dropdown-indicator label-1" href="#CRM" role="button" data-bs-toggle="collapse"
-                aria-expanded="false" aria-controls="CRM">
+              <a class="nav-link dropdown-indicator label-1" href="#SECREPORT" role="button" data-bs-toggle="collapse"
+                aria-expanded="false" aria-controls="SECREPORT">
                 <div class="d-flex align-items-center">
                   <div class="dropdown-indicator-icon">
                     <span class="fas fa-caret-right"></span>
                   </div>
                   <span class="nav-link-icon">
-                    <span data-feather="phone"></span>
+                    <span data-feather="file-text"></span>
                   </span>
                   <!--titulo-->
                   <span class="nav-link-text">Relatorio</span>
@@ -144,7 +153,7 @@
               </a>
 
               <div class="parent-wrapper label-1">
-                <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="CRM">
+                <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="SECREPORT">
 
                   <li class="collapsed-nav-item-title d-none">Cadastro
                   </li>
@@ -195,8 +204,9 @@
                 </ul>
               </div>
             </div>
-
           </li>
+
+
 
           <!--tesouraria-->
           <li class="nav-item">
@@ -208,14 +218,15 @@
 
             <!-- grupo cadastro -->
             <div class="nav-item-wrapper">
-              <a class="nav-link dropdown-indicator label-1" href="#landing" role="button"
-                data-bs-toggle="collapse" aria-expanded="false" aria-controls="landing">
+              <a class="nav-link dropdown-indicator label-1" href="#landing" role="button" data-bs-toggle="collapse"
+                aria-expanded="false" aria-controls="landing">
                 <div class="d-flex align-items-center">
                   <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span
-                    class="nav-link-icon"><span data-feather="globe"></span></span><span
+                    class="nav-link-icon"><span data-feather="dollar-sign"></span></span><span
                     class="nav-link-text">Cadastro</span>
                 </div>
               </a>
+
               <div class="parent-wrapper label-1">
                 <ul class="nav collapse parent" data-bs-parent="#navbarVerticalCollapse" id="landing">
                   <li class="collapsed-nav-item-title d-none">Cadastro
@@ -235,7 +246,8 @@
                     <!-- more inner pages-->
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" [routerLink]="['/first-fruits-register']" data-bs-toggle="" aria-expanded="false">
+                    <a class="nav-link" [routerLink]="['/first-fruits-register']" data-bs-toggle=""
+                      aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Primicias</span>
                       </div>
                     </a>
@@ -255,11 +267,11 @@
 
             <!-- grupo relatorio -->
             <div class="nav-item-wrapper">
-              <a class="nav-link dropdown-indicator label-1" href="#pricing" role="button"
-                data-bs-toggle="collapse" aria-expanded="false" aria-controls="pricing">
+              <a class="nav-link dropdown-indicator label-1" href="#pricing" role="button" data-bs-toggle="collapse"
+                aria-expanded="false" aria-controls="pricing">
                 <div class="d-flex align-items-center">
                   <div class="dropdown-indicator-icon"><span class="fas fa-caret-right"></span></div><span
-                    class="nav-link-icon"><span data-feather="tag"></span></span><span
+                    class="nav-link-icon"><span data-feather="file-text"></span></span><span
                     class="nav-link-text">Relatorio</span>
                 </div>
               </a>
@@ -298,13 +310,7 @@
                 </ul>
               </div>
             </div>
-
-
-            
           </li>
-
- 
-
         </ul>
       </div>
 
@@ -335,7 +341,7 @@
       </div>
 
       <ul class="navbar-nav navbar-nav-icons flex-row">
-        
+
         <li class="nav-item">
           <div class="theme-control-toggle fa-icon-wait px-2">
             <input class="form-check-input ms-0 theme-control-toggle-input" type="checkbox"
@@ -348,7 +354,7 @@
                 data-feather="sun"></span></label>
           </div>
         </li>
-        
+
         <li class="nav-item dropdown">
           <a class="nav-link" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false" data-bs-auto-close="outside"><span data-feather="bell"
@@ -533,8 +539,8 @@
         </li>
 
         <li class="nav-item dropdown">
-          <a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button"
-            data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link lh-1 pe-0" id="navbarDropdownUser" href="#!" role="button" data-bs-toggle="dropdown"
+            data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false">
             <div class="avatar avatar-l ">
               <img class="rounded-circle " src="assets/img/team/40x40/57.webp" alt="" />
 
