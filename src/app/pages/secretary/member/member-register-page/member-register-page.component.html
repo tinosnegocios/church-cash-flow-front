@@ -111,7 +111,7 @@
                 <div class="mb-6">
                     <div class="col-12 col-lg-12">
                         <h4 class="mb-3">Imagem</h4>
-                        <input class="form-control mb-xl-3" formControlName="photo" type="file" accept=".jpg, .jpeg" />
+                        <input class="form-control mb-xl-3" formControlName="photo" (change)="loadImage($event)" type="file" accept=".jpg, .jpeg" />
                     </div>
                 </div>
 

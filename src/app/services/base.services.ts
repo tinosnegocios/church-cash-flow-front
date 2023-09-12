@@ -4,7 +4,7 @@ import { AuthService } from "./auth.services";
 import { Observable, catchError, of } from "rxjs";
 
 export abstract class BaseService {
-  protected url: string = 'http://localhost:8181/api';
+  protected url: string = 'http://localhost:5000/api';
   protected modelName!: string;
 
   constructor(protected http: HttpClient) { }

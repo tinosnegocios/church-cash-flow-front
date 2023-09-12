@@ -29,6 +29,7 @@ export class MemberRegisterPageComponent implements OnInit {
   protected msgSuccesss: string[] = [];
   protected searchBusy: boolean = false;
   protected memberIsValid: boolean = false;
+  protected base64Image: string = "";
 
   constructor(private fbuilder: FormBuilder, private handler: MemberHandler, private postHandler: PostHandler) {
     this.formMember = this.fbuilder.group({
@@ -104,8 +105,6 @@ export class MemberRegisterPageComponent implements OnInit {
 
     this.typeSave = "update";
     var objModel: MemberReadModel = modelToForm.data;
-
-    console.log(objModel);
 
     this.fillFormWithModel(objModel, code);
 
@@ -197,12 +196,33 @@ export class MemberRegisterPageComponent implements OnInit {
     this.formMemberOut.reset();
     this.typeSave = "create";
     this.MemberId = "";
+    this.base64Image = "";
+  }
+
+  protected loadImage(event: any) {
+    
+    const file = event.target.files[0];
+    console.log(file);
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => {
+        this.base64Image = e.target.result;
+        
+        //console.log(base64Image);
+      };
+
+      reader.readAsDataURL(file);
+    }
   }
 
   protected async save() {
     this.searchBusy = true;
 
     var member: MemberEditModel = this.formMember.value;
+    console.log(this.base64Image);
+    member.base64Image = this.base64Image;
+
     if(member.dateBaptism.length <= 0){
       member.dateBaptism = "0001-01-01"
     }
@@ -210,19 +230,19 @@ export class MemberRegisterPageComponent implements OnInit {
   
     member.editMemberInDto = null;
     member.editMemberOutDto = null;
-
+    
     if(this.formMemberIn.valid){
       var memberEditDto = this.formMemberIn.value;
-      memberEditDto.letterReceiver = this.getLetterReceiverMemberIn(memberEditDto.letterReceiver);
+      memberEditDto.letterReceiver = this.getLetterReceiverMemberIn(memberEditDto.letterReceiver.toString());
       member.editMemberInDto = memberEditDto;
     }
 
     if(this.formMemberOut.valid) {
       var formOut = this.formMemberOut.value;
-      var memberOutEditDto = new MemberOutEditDto(this.getReasonMemberOut(formOut.reason), formOut.day);
+      var memberOutEditDto = new MemberOutEditDto(this.getReasonMemberOut(formOut.reason.toString()), formOut.day);
       member.editMemberOutDto = memberOutEditDto;
     }
-
+    
     if(this.typeSave == "create"){
       await this.create(member);
     }else if(this.typeSave == "update"){
@@ -270,8 +290,8 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   private getLetterReceiverMemberIn(id: string): string{
-    if(id == "1") return "com carta";
-    if(id == "2") return "sem carta";
+    if(id === '1') return "com carta";
+    if(id === '2') return "sem carta";
     return "";
   }
 }
