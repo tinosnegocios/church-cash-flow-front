@@ -50,7 +50,8 @@
     </form>
 
 
-    <form class="mb-9" [formGroup]="formMember">
+    <form class="" [formGroup]="formMember">
+
         <div class="row g-3 flex-between-end mb-5">
             <div class="col-auto">
                 <h2 class="mb-2">Registro de membro
@@ -69,190 +70,221 @@
             </div>
         </div>
 
-        <div class="row g-5">
-            <div class="col-12 col-xl-8">
+        <div class="row col-xl-12">
+
+            <div class="row col-9">
 
                 <div class="row">
-                    <div class="col-8">
-                        <h4 class="mb-3">Nome completo</h4>
-                        <input class="form-control mb-5" type="text" formControlName="name"
-                            placeholder="nome completo do membro" />
-                    </div>
 
-                    <div class="col-4">
-                        <h4 class="mb-3">Data nascimento</h4>
-                        <input class="form-control" type="date" placeholder="dd/mm/yyyy" formControlName="dateBirth">
-                    </div>
-                </div>
+                    <div class="col-12 col-xl-12">
 
-                <div class="row">
-                    <div class="col-8">
-                        <div class="mb-6">
-                            <h4 class="mb-3">Considerações</h4>
-                            <textarea class="form-control" name="content" formControlName="description"></textarea>
+                        <div class="row">
+                            <div class="col-8">
+                                <h4 class="mb-3">Nome completo</h4>
+                                <input class="form-control mb-5" type="text" formControlName="name"
+                                    placeholder="nome completo do membro" />
+                            </div>
+
+                            <div class="col-4">
+                                <h4 class="mb-3">Data nascimento</h4>
+                                <input class="form-control" type="date" placeholder="dd/mm/yyyy"
+                                    formControlName="dateBirth">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-4">
-                        <div class="mb-6">
-                            <div class="col-12 col-lg-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-6">
+                                    <h4 class="mb-3">Considerações</h4>
+                                    <textarea class="form-control" name="content"
+                                        formControlName="description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
                                 <h4 class="mb-3">data batismo</h4>
                                 <input class="form-control" type="date" formControlName="dateBaptism"
                                     placeholder="dd/mm/yyyy">
                             </div>
+
+                            <div class="col-6">
+                                <h4 class="mb-3">data cadastro</h4>
+                                <input class="form-control" type="date" formControlName="dateRegister"
+                                    placeholder="dd/mm/yyyy">
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-            </div>
-
-            <div class="col-12 col-xl-4">
-
-                <div class="mb-6">
-                    <div class="col-12 col-lg-12">
-                        <h4 class="mb-3">Imagem</h4>
-                        <input class="form-control mb-xl-3" formControlName="photo" (change)="loadImage($event)" type="file" accept=".jpg, .jpeg" />
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <div class="col-12 col-lg-12">
-                        <h4 class="mb-3">data cadastro</h4>
-                        <input class="form-control" type="date" formControlName="dateRegister" placeholder="dd/mm/yyyy">
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-
-
-        <div class="row g-5 mb-6">
-            <div class="col-12 col-xl-12">
-
-                <div class="row g-0 border-top border-bottom border-300">
-
-                    <div class="col-sm-4">
-                        <div class="nav flex-sm-column border-bottom border-bottom-sm-0 border-end-sm border-300 fs--1 vertical-tab h-100 justify-content-between"
-                            role="tablist" aria-orientation="vertical">
-                            <a class="nav-link text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
-                                id="advancedTab" data-bs-toggle="tab" data-bs-target="#advancedTabContent" role="tab"
-                                aria-controls="advancedTabContent" aria-selected="false">
-                                <span class="me-sm-2 fs-4 nav-icons" data-feather="lock"></span>
-                                <span class="d-none d-sm-inline">Cargos</span>
-                            </a>
-
-                            <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
-                                id="attributesTab" data-bs-toggle="tab" data-bs-target="#attributesTabContent"
-                                role="tab" aria-controls="attributesTabContent" aria-selected="false">
-                                <span class="me-sm-2 fs-4 nav-icons" data-feather="sliders"></span>
-                                <span class="d-none d-sm-inline">Close</span>
-                            </a>
-                        </div>
                     </div>
 
-                    <div class="col-sm-8">
-                        <div class="tab-content py-3 ps-sm-4 h-100">
-                            <div class="tab-pane fade" id="advancedTabContent" role="tabpanel"
-                                aria-labelledby="advancedTab">
-                                <div class="row g-3">
-                                    <div class="col-12 col-lg-6" *ngFor="let post of postToSelect ">
-                                        <div class="form-check form-check-inline">
-                                            <input class="form-check-input" id="inlineCheckbox1"
-                                                type="checkbox" value={{post[1]}} (click)="setPostId(post[1])" [checked]="PostIdSelected.includes(tryParseInt(post[1]))" />
+                    <div class="row g-5 mb-6">
+                        <div class="col-12 col-xl-12">
 
-                                            <label class="form-check-label" for="inlineCheckbox1">{{post[0]}}</label>
+                            <div class="row g-0 border-top border-bottom border-300">
+
+                                <div class="col-sm-4">
+                                    <div class="nav flex-sm-column border-bottom border-bottom-sm-0 border-end-sm border-300 fs--1 vertical-tab h-100 justify-content-between"
+                                        role="tablist" aria-orientation="vertical">
+                                        <a class="nav-link text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
+                                            id="advancedTab" data-bs-toggle="tab" data-bs-target="#advancedTabContent"
+                                            role="tab" aria-controls="advancedTabContent" aria-selected="false">
+                                            <span class="me-sm-2 fs-4 nav-icons" data-feather="lock"></span>
+                                            <span class="d-none d-sm-inline">Cargos</span>
+                                        </a>
+
+                                        <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
+                                            id="attributesTab" data-bs-toggle="tab"
+                                            data-bs-target="#attributesTabContent" role="tab"
+                                            aria-controls="attributesTabContent" aria-selected="false">
+                                            <span class="me-sm-2 fs-4 nav-icons" data-feather="sliders"></span>
+                                            <span class="d-none d-sm-inline">Close</span>
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-8">
+                                    <div class="tab-content py-3 ps-sm-4 h-100">
+                                        <div class="tab-pane fade" id="advancedTabContent" role="tabpanel"
+                                            aria-labelledby="advancedTab">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-lg-6" *ngFor="let post of postToSelect ">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" id="inlineCheckbox1"
+                                                            type="checkbox" value={{post[1]}}
+                                                            (click)="setPostId(post[1])"
+                                                            [checked]="PostIdSelected.includes(tryParseInt(post[1]))" />
+
+                                                        <label class="form-check-label"
+                                                            for="inlineCheckbox1">{{post[0]}}</label>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-5 mb-6">
+                        <div class="col-12 col-xl-12">
+                            <div class="row g-0 border-top border-bottom border-300">
+                                <div class="col-sm-4">
+                                    <div class="nav flex-sm-column border-bottom border-bottom-sm-0 border-end-sm border-300 fs--1 vertical-tab h-100 justify-content-between"
+                                        role="tablist" aria-orientation="vertical">
+                                        <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center active"
+                                            id="pricingTab" data-bs-toggle="tab" data-bs-target="#pricingTabContent"
+                                            role="tab" aria-controls="pricingTabContent" aria-selected="true"> <span
+                                                class="me-sm-2 fs-4 nav-icons" data-feather="tag"></span><span
+                                                class="d-none d-sm-inline">Recebimento</span></a>
+
+                                        <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
+                                            id="restockTab" data-bs-toggle="tab" data-bs-target="#restockTabContent"
+                                            role="tab" aria-controls="restockTabContent" aria-selected="false"> <span
+                                                class="me-sm-2 fs-4 nav-icons" data-feather="package"></span><span
+                                                class="d-none d-sm-inline">Desligamento</span></a>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-8">
+
+                                    <div class="tab-content py-3 ps-sm-4 h-100">
+
+                                        <form class="mb-3" [formGroup]="formMemberIn">
+                                            <div class="tab-pane fade show active" id="pricingTabContent"
+                                                role="tabpanel">
+                                                <h4 class="mb-3 d-sm-none">Igreja</h4>
+                                                <div class="row g-3">
+                                                    <div class="col-12 col-lg-4">
+                                                        <h5 class="mb-2 text-1000">Igreja</h5>
+                                                        <input class="form-control" type="text"
+                                                            formControlName="churchName"
+                                                            placeholder="igreja que o membro veio" />
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <h5 class="mb-2 text-1000">Cargo</h5>
+                                                        <input class="form-control" type="text"
+                                                            formControlName="lastPost" placeholder="cargo ocupado" />
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-3">
+                                                        <h5 class="mb-2 text-1000">Saida</h5>
+                                                        <select class="form-control" formControlName="letterReceiver">
+                                                            <option value="0"></option>
+                                                            <option value="1">com carta</option>
+                                                            <option value="2">sem carta</option>
+                                                        </select>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </form>
+
+
+                                        <form class="mb-3" [formGroup]="formMemberOut">
+                                            <div class="tab-pane fade h-100" id="restockTabContent" role="tabpanel"
+                                                aria-labelledby="restockTab">
+                                                <div class="row g-3">
+                                                    <div class="col-12 col-lg-4">
+                                                        <h5 class="mb-2 text-1000">Motivo</h5>
+                                                        <select class="form-control" formControlName="reason">
+                                                            <option value="0"></option>
+                                                            <option value="1">abandono</option>
+                                                            <option value="2">solicitação</option>
+                                                            <option value="3">falecimento</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <h5 class="mb-2 text-1000">Dia</h5>
+                                                        <input class="form-control" type="date" formControlName="day" />
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                    </div>
+
                                 </div>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
+
+            <div class="row col-3">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="mb-6">
+                            <div class="col-12">
+                                <h4 class="mb-3">Imagem</h4>
+                                <input class="form-control mb-xl-3" formControlName="photo" (change)="loadImage($event)"
+                                    type="file" accept=".jpg, .jpeg" />
+                            </div>
+                            <img src="http://app.rodolfodev.cf/assets/images/rodolfo-story.jpg"
+                                class="rounded float-right" alt="...">
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
         </div>
+
+
+
 
     </form>
 
 
-    <div class="col-12 col-xl-12">
 
-        <div class="row g-0 border-top border-bottom border-300">
-            <div class="col-sm-4">
-                <div class="nav flex-sm-column border-bottom border-bottom-sm-0 border-end-sm border-300 fs--1 vertical-tab h-100 justify-content-between"
-                    role="tablist" aria-orientation="vertical">
-                    <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center active"
-                        id="pricingTab" data-bs-toggle="tab" data-bs-target="#pricingTabContent" role="tab"
-                        aria-controls="pricingTabContent" aria-selected="true"> <span class="me-sm-2 fs-4 nav-icons"
-                            data-feather="tag"></span><span class="d-none d-sm-inline">Recebimento</span></a>
-
-                    <a class="nav-link border-end border-end-sm-0 border-bottom-sm border-300 text-center text-sm-start cursor-pointer outline-none d-sm-flex align-items-sm-center"
-                        id="restockTab" data-bs-toggle="tab" data-bs-target="#restockTabContent" role="tab"
-                        aria-controls="restockTabContent" aria-selected="false"> <span class="me-sm-2 fs-4 nav-icons"
-                            data-feather="package"></span><span class="d-none d-sm-inline">Desligamento</span></a>
-                </div>
-            </div>
-
-            <div class="col-sm-8">
-
-                <div class="tab-content py-3 ps-sm-4 h-100">
-
-                    <form class="mb-3" [formGroup]="formMemberIn">
-                        <div class="tab-pane fade show active" id="pricingTabContent" role="tabpanel">
-                            <h4 class="mb-3 d-sm-none">Igreja</h4>
-                            <div class="row g-3">
-                                <div class="col-12 col-lg-4">
-                                    <h5 class="mb-2 text-1000">Igreja</h5>
-                                    <input class="form-control" type="text" formControlName="churchName" placeholder="igreja que o membro veio" />
-                                </div>
-
-                                <div class="col-12 col-lg-4">
-                                    <h5 class="mb-2 text-1000">Cargo</h5>
-                                    <input class="form-control" type="text" formControlName="lastPost" placeholder="cargo ocupado" />
-                                </div>
-
-                                <div class="col-12 col-lg-3">
-                                    <h5 class="mb-2 text-1000">Saida</h5>
-                                    <select class="form-control" formControlName="letterReceiver">
-                                        <option value="0"></option>
-                                        <option value="1">com carta</option>
-                                        <option value="2">sem carta</option>
-                                    </select>
-                                </div>
-
-                            </div>
-                        </div>
-                    </form>
-
-
-                    <form class="mb-3" [formGroup]="formMemberOut">
-                        <div class="tab-pane fade h-100" id="restockTabContent" role="tabpanel"
-                            aria-labelledby="restockTab">
-                            <div class="row g-3">
-                                <div class="col-12 col-lg-4">
-                                    <h5 class="mb-2 text-1000">Motivo</h5>
-                                    <select class="form-control" formControlName="reason">
-                                        <option value="0"></option>
-                                        <option value="1">abandono</option>
-                                        <option value="2">solicitação</option>
-                                        <option value="3">falecimento</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-12 col-lg-4">
-                                    <h5 class="mb-2 text-1000">Dia</h5>
-                                    <input class="form-control" type="date" formControlName="day" />
-                                </div>
-
-                            </div>
-                        </div>
-                    </form>
-
-                </div>
-
-            </div>
-        </div>
-    </div>
 
 
 
