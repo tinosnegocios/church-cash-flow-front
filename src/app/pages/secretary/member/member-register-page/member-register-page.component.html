@@ -72,7 +72,7 @@
 
         <div class="row col-xl-12">
 
-            <div class="row col-9">
+            <div class="row col-xl-9">
 
                 <div class="row">
 
@@ -257,7 +257,7 @@
                 </div>
             </div>
 
-            <div class="row col-3">
+            <div class="row col-xl-3">
 
                 <div class="row">
                     <div class="col-12">
@@ -267,10 +267,9 @@
                                 <input class="form-control mb-xl-3" formControlName="photo" (change)="loadImage($event)"
                                     type="file" accept=".jpg, .jpeg" />
                             </div>
-                            <img src="http://app.rodolfodev.cf/assets/images/rodolfo-story.jpg"
-                                class="rounded float-right" alt="...">
+                            <img src={{memberPhotoUrl}}
+                                class="rounded float-right" width="420" height="420" alt="...">
                         </div>
-
                     </div>
                 </div>
 
@@ -278,16 +277,6 @@
 
         </div>
 
-
-
-
     </form>
-
-
-
-
-
-
-
 
 </div>

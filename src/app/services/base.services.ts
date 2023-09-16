@@ -2,12 +2,15 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { ResultViewModel } from "../models/resultViewModel.models";
 import { AuthService } from "./auth.services";
 import { Observable, catchError, of } from "rxjs";
+import { configAplication } from "../config/configAplication";
 
 export abstract class BaseService {
-  protected url: string = 'http://localhost:5000/api';
+  protected url: string = '';
   protected modelName!: string;
 
-  constructor(protected http: HttpClient) { }
+  constructor(protected http: HttpClient) {
+    this.url = configAplication.getApiHosy();
+   }
 
   public async create(offering: any): Promise<ResultViewModel | null> {
     var auth = new AuthService();
