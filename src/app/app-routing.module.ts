@@ -10,6 +10,7 @@ import { TithesReportPageComponent } from './pages/treasury/tithes/tithes-report
 import { FirstFruitsRegisterPageComponent } from './pages/treasury/firstFruits/first-fruits-register-page/first-fruits-register-page.component';
 import { FirstFruitsReportPageComponent } from './pages/treasury/firstFruits/first-fruits-report-page/first-fruits-report-page.component';
 import { MemberRegisterPageComponent } from './pages/secretary/member/member-register-page/member-register-page.component';
+import { MemberReportPageComponent } from './pages/secretary/member/member-report-page/member-report-page.component';
 
 const routes: Routes = [
   {
@@ -65,6 +66,12 @@ const routes: Routes = [
     component: HeadFrameComponent,
     children: [
       { path: '', component: MemberRegisterPageComponent }
+    ]
+   },{
+    path: 'member-report',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: MemberReportPageComponent }
     ]
    }
 ];
