@@ -12,11 +12,17 @@ import { MemberReadModel } from "../models/ReadModels/MemberRead.models";
 })
 
 export class MemberHandler extends BaseHandler {
+
     private service: MembersService;
 
     constructor(service: MembersService) {
         super();
         this.service = service;
+    }
+
+    public async getMembersByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getOfferingByPeriod(initialDate, finalDate);
+        return result;
     }
 
     public async getByChurch(): Promise<ResultViewModel> {

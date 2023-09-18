@@ -86,7 +86,7 @@ export class OfferingService extends BaseService {
     });
   }
 
-  public async getOfferingByPeiod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
+  public async getOfferingByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
     var auth = new AuthService();
     const token = auth.getToken();
 

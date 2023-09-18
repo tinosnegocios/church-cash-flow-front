@@ -75,7 +75,7 @@ export class OfferingHandler extends BaseHandler {
     }
 
     public async getOfferingByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
-        var result: ResultViewModel = await this.service.getOfferingByPeiod(initialDate, finalDate);
+        var result: ResultViewModel = await this.service.getOfferingByPeriod(initialDate, finalDate);
         return result;
     }
 
