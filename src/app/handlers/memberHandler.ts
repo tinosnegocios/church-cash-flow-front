@@ -67,6 +67,20 @@ export class MemberHandler extends BaseHandler {
         }
     }
 
+    public async delete(id: number) {
+        var result = await  this.service.delete(id);
+  
+        if (result!.errors != null && result!.errors.length > 0) {
+          result!.errors.forEach(x => {
+              this.setMsgErro(x);
+          })
+          return false;
+          } else {
+              this.setMsgSuccess("membro excluído com sucesso");
+              return true;
+          }
+      }
+
     private async validate(model: MemberEditModel): Promise<boolean> {
         if (model.name.length <= 0 || model.dateBirth.length <= 0 || model.description == "" || model.postIds.length <= 0) {
             this.setMsgErro("Informe os dados obrigatórios corretamente");

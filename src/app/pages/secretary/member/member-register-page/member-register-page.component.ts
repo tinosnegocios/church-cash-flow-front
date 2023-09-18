@@ -1,6 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { configAplication } from 'src/app/config/configAplication';
 import { PostHandler } from 'src/app/handlers/PostHandler';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
@@ -19,9 +20,10 @@ import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 export class MemberRegisterPageComponent implements OnInit {
 
   private post!: ResultViewModel['data'];
+
   private MemberId : string = "";
   protected PostIdSelected: number[] = [];
-    
+  protected filebusy : boolean = false;
   protected typeSave = "create";
   protected formMember!: FormGroup;
   protected formMemberOut!: FormGroup;
@@ -34,8 +36,9 @@ export class MemberRegisterPageComponent implements OnInit {
   protected memberIsValid: boolean = false;
   protected base64Image: string = "";
   protected memberPhotoUrl : string = "";
+  protected codeSearch : string = "";
 
-  constructor(private fbuilder: FormBuilder, private handler: MemberHandler, private postHandler: PostHandler, private cloudService: CloudService) {
+  constructor(private fbuilder: FormBuilder, private handler: MemberHandler, private postHandler: PostHandler, private cloudService: CloudService, private route: ActivatedRoute) {
     this.formMember = this.fbuilder.group({
       name: ['', Validators.compose([
         Validators.required, ,
@@ -83,12 +86,22 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.route.queryParams
+    .subscribe(params => {
+      this.codeSearch = params['id'];
+    });
+
     await this.dashBoard();
   }
 
   async dashBoard(){
     await this.clear();
     await this.loadPosts();
+
+    if(this.codeSearch != "" && this.codeSearch.length > 0){
+      this.typeSave = "update"
+      this.searchByCode(this.codeSearch);
+    }
   }
 
   async searchByCode(code: string = ""){
@@ -118,12 +131,14 @@ export class MemberRegisterPageComponent implements OnInit {
     this.formSearch.controls['code'].setValue(code);
   }
 
-  private fillFormWithModel(model: MemberReadModel, code: string) {    
+  private async fillFormWithModel(model: MemberReadModel, code: string) {    
     this.MemberId = model.id.toString();
 
     //load the model image
     if(model.photo != null && model.photo.length > 5) {
+      this.filebusy = true;
       this.memberPhotoUrl = this.cloudService.getUrlImageMembersStorage(model.code);
+      this.filebusy = false;
     }
 
     this.formMember.controls['dateBirth'].setValue(formatDate(model.dateBirth, 'yyyy-MM-dd', 'en'));

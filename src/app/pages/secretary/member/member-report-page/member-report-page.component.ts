@@ -3,16 +3,21 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
+import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
 @Component({
   selector: 'app-member-report-page',
   templateUrl: './member-report-page.component.html'
 })
 export class MemberReportPageComponent implements OnInit  {
+  private excelMethod: ExcelMethods;
+  
   protected busy : boolean = false;
   protected msgErrosOffering: string[] = [];
   protected msgSuccesssOffering: string[] = [];
   protected readMembers$!: MemberReadModel[];
+  protected idHandle: number = 0;
+  protected nameHandler : string = "";
   
   protected formLimit!: FormGroup;
 
@@ -25,6 +30,8 @@ export class MemberReportPageComponent implements OnInit  {
         Validators.required,
       ])]
     });    
+
+    this.excelMethod = new ExcelMethods();
   }
 
   async ngOnInit() {
@@ -72,16 +79,40 @@ export class MemberReportPageComponent implements OnInit  {
     this.busy = false;
   }
 
-  protected setIdToDelete(eventId: any, nameString: string){
-    console.log('deletando membro ' + nameString);
+  protected setIdToDelete(eventId: any, eventDescription: string){
+    this.idHandle = eventId
+    this.nameHandler = eventDescription;
+  }
+
+  protected delete(){
+    if(this.idHandle > 0){
+      var result = this.handler.delete(this.idHandle)
+      .then((result) => {
+        //console.log(result);
+        this.dashBoard();
+        this.msgErrosOffering = this.handler.getMsgErro();
+        this.msgSuccesssOffering = this.handler.getMsgSuccess();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
   }
 
   protected exportarExcel(){
+    try{
+      let element = document.getElementById('excel-table'); 
+      var fileName = `relatorio-de-membro`;
+      this.excelMethod.exportExcel(element, fileName);
 
+      this.msgSuccesssOffering.push("arquivo excel exportado. confira sua pasta de download");
+    }catch{
+      this.msgErrosOffering.push("Ocorreu um erro ao gerar o arquivo. tente novamente");
+    }
   }
 
-  private clear(){
-
+  protected clear(){
+    this.idHandle = 0;
   }
 
 

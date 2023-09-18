@@ -21,6 +21,7 @@ import { FirstFruitsReportPageComponent } from './pages/treasury/firstFruits/fir
 import { MemberRegisterPageComponent } from './pages/secretary/member/member-register-page/member-register-page.component';
 import { configAplication } from './config/configAplication';
 import { MemberReportPageComponent } from './pages/secretary/member/member-report-page/member-report-page.component';
+import { LoadingFileComponent } from './pages/shared/loading-file/loading-file.component';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { MemberReportPageComponent } from './pages/secretary/member/member-repor
     FirstFruitsReportPageComponent,
     MemberRegisterPageComponent,
     MemberReportPageComponent,
+    LoadingFileComponent,
   ],
   imports: [
     BrowserModule,

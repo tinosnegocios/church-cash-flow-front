@@ -123,6 +123,7 @@ export class OfferingReportPageComponent implements OnInit {
     this.msgErrosOffering = [];
     this.msgSuccesssOffering = [];
     this.descriptionHandle = "";
+    this.idHandle = 0;
   }
 
   protected exportarExcel(){

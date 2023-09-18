@@ -66,7 +66,7 @@
             <div class="col-12 col-lg-3">
                 <button class="btn btn-outline-info me-1 mb-1" (click)="exportarExcel()"><span
                         class="far fa-file-excel fs-1 me-2"></span>Exportar excel</button>
-                <a [routerLink]="['/offering-register']"> <button class="btn btn-primary me-1 mb-1" id="addBtn"><span
+                <a [routerLink]="['/member-register']"> <button class="btn btn-primary me-1 mb-1" id="addBtn"><span
                             class="fas fa-plus fs-1"></span>Criar novo</button> </a>
             </div>
 
@@ -123,8 +123,8 @@
                             </button>
 
                             <div class="dropdown-menu dropdown-menu-end py-2">
-                                <a class="dropdown-item" [routerLink]="['/offering-register']"
-                                    [queryParams]="{id:model.id}">Editar</a>
+                                <a class="dropdown-item" [routerLink]="['/member-register']"
+                                    [queryParams]="{id:model.code}">Editar</a>
                                 <div class="dropdown-divider">
                                 </div>
                                 <a class="dropdown-item text-danger" data-bs-toggle="modal"
@@ -137,6 +137,30 @@
             </tbody>
         </table>
     </div>
+
+
+    <div class="modal fade" id="staticBackdrop" tabindex="-1" data-bs-backdrop="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-danger">
+              <h5 class="modal-title text-white" id="staticBackdropLabel">Exclusão de oferta</h5>
+              <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span
+                  class="fas fa-times fs--1 text-white"></span></button>
+            </div>
+            <div class="modal-body">
+              <p class="text-700 lh-lg mb-0">Deseja realmente deletar o membro selecionado?
+              </p>
+              <p class="text-700 lh-lg mb-0">{{nameHandler}}-{{idHandle}}
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-danger" data-bs-dismiss="modal" (click)="delete()"
+                type="button">Deletar</button>
+              <button class="btn btn-outline-primary" type="button" (click)="clear()" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
     <!-- ===============================================-->
