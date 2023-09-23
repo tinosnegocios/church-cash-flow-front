@@ -105,6 +105,8 @@ export class OfferingService extends BaseService {
         console.log('nao deu');
         throw new Error('Result is undefined.');
       }
+    }).catch(e => {
+      throw new Error('Result is undefined.');
     });
   }
 
