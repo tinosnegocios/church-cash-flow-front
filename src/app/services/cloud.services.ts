@@ -9,9 +9,18 @@ export class CloudService {
 
     public getUrlImageMembersStorage(imageName:string) : string {
         var urlBucket = configAplication.getObjCloudConfig().aws.bucketS3.images.url;
-        var memberPath = configAplication.getObjCloudConfig().aws.bucketS3.images.membersPath;
+        var path = configAplication.getObjCloudConfig().aws.bucketS3.images.membersPath;
         var extensionImage = configAplication.getObjCloudConfig().aws.bucketS3.images.imageTypePattern;
-        var url = `${urlBucket}/${memberPath}/${imageName}.${extensionImage}`;
+        var url = `${urlBucket}/${path}/${imageName}.${extensionImage}`;
+
+        return url;
+    }
+
+    public getUrlImageOfferingsStorage(imageName:string) : string {
+        var urlBucket = configAplication.getObjCloudConfig().aws.bucketS3.images.url;
+        var path = configAplication.getObjCloudConfig().aws.bucketS3.images.offeringPath;
+        var extensionImage = configAplication.getObjCloudConfig().aws.bucketS3.images.imageTypePattern;
+        var url = `${urlBucket}/${path}/${imageName}.${extensionImage}`;
 
         return url;
     }
@@ -20,7 +29,11 @@ export class CloudService {
         var urlBucket = configAplication.getObjCloudConfig().aws.bucketS3.images.url;
         var extensionImage = configAplication.getObjCloudConfig().aws.bucketS3.images.imageTypePattern;
 
+        var url = `${urlBucket}/${path}/${imageName}.${extensionImage}`;
+        console.log(url);
+        
         return `${urlBucket}/${path}/${imageName}.${extensionImage}`;
+
     }
 
 }

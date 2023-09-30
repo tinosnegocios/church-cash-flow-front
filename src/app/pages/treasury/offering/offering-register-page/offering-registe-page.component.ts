@@ -15,6 +15,7 @@ import { OfferingService } from 'src/app/services/offering.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
 import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
+import { CloudService } from 'src/app/services/cloud.services';
 
 @Component({
   selector: 'app-treasury-registe-page',
@@ -32,7 +33,6 @@ export class offeringRegisterPageComponent implements OnInit {
   private auth: AuthService
 
   protected modelToken: ModelToken;
-
   protected offeringKind!: ResultViewModel['data'];
   protected offeringKindToSelect!: [string, string][]
   protected base64Image: string = "";
@@ -53,7 +53,7 @@ export class offeringRegisterPageComponent implements OnInit {
 
   constructor(private offeringHandler: OfferingHandler, private offeringService: OfferingService, 
     private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, 
-    private fbuilder: FormBuilder, private route: ActivatedRoute) {
+    private fbuilder: FormBuilder, private route: ActivatedRoute, private cloudService: CloudService) {
 
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
@@ -188,6 +188,14 @@ export class offeringRegisterPageComponent implements OnInit {
     var dayConvert = new Date(offering.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
 
+    if(offering.photo != null && offering.photo.length > 5) {
+      this.imageBusy = true;
+      this.imageUrl = this.cloudService.getUrlImageOfferingsStorage(offering.photo);
+      this.imageBusy = false;
+    }else{
+      this.imageUrl = this.cloudService.getImageStore("common", "no-file");
+    }
+
     this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['preacherMemberName'].setValue(offering.preacherMemberName);
     this.formTreasury.controls['day'].setValue(formatDate(offering.day, 'yyyy-MM-dd', 'en'));
@@ -206,6 +214,7 @@ export class offeringRegisterPageComponent implements OnInit {
   }
 
   protected async clearForm() {
+    this.hiddenImage = true;
     this.msgErros = [];
     this.msgSuccesss = [];
     this.msgImport = "";
@@ -215,6 +224,7 @@ export class offeringRegisterPageComponent implements OnInit {
     this.formSearchTreasury.reset();
 
     this.typeSave = "create";
+    this.imageUrl = "";
   }
 
   protected async saveOffering() {
@@ -356,9 +366,13 @@ export class offeringRegisterPageComponent implements OnInit {
         this.formTreasury.controls["photo"].setValue(null);
         this.msgErros.push(imageMethod.getErro())
       });
+
+      console.log(this.base64Image);
   }
 
   protected showHideImage(){
+    
     this.hiddenImage = !this.hiddenImage;
+    
   }
 }
