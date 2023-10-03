@@ -25,6 +25,15 @@ export class CloudService {
         return url;
     }
 
+    public getUrlImageTithesStorage(imageName:string) : string {
+        var urlBucket = configAplication.getObjCloudConfig().aws.bucketS3.images.url;
+        var path = configAplication.getObjCloudConfig().aws.bucketS3.images.tithesPath;
+        var extensionImage = configAplication.getObjCloudConfig().aws.bucketS3.images.imageTypePattern;
+        var url = `${urlBucket}/${path}/${imageName}.${extensionImage}`;
+
+        return url;
+    }
+
     public getImageStore(path:string, imageName:string) : string {
         var urlBucket = configAplication.getObjCloudConfig().aws.bucketS3.images.url;
         var extensionImage = configAplication.getObjCloudConfig().aws.bucketS3.images.imageTypePattern;

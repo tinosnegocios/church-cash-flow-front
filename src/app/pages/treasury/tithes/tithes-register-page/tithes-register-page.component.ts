@@ -5,13 +5,16 @@ import { ActivatedRoute } from '@angular/router';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { TithesHandler } from 'src/app/handlers/tithesHandler';
+import { TithesEditModel } from 'src/app/models/EditModels/TithesEdit.model';
 import { ModelToken } from 'src/app/models/ModelToken.models';
 import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 import { Tithes } from 'src/app/models/Tithes.models';
 import { OfferingKind } from 'src/app/models/offeringKind.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 import { AuthService } from 'src/app/services/auth.services';
+import { CloudService } from 'src/app/services/cloud.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
+import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
 @Component({
@@ -19,6 +22,10 @@ import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
   templateUrl: './tithes-register-page.component.html'
 })
 export class TithesRegisterPageComponent implements OnInit {
+  protected hiddenImage = true;
+  protected imageBusy : boolean = false;
+  protected imageUrl : string = "";
+  protected base64Image: string = "";
   protected typeSave = "create";
   protected formTreasury!: FormGroup;
   protected formSearchTreasury!: FormGroup;
@@ -47,7 +54,7 @@ export class TithesRegisterPageComponent implements OnInit {
   private codeSearch: number = 0;
 
   constructor(private handler: TithesHandler, private offeringKindService: OfferingKindService, private churchHandler: ChurchHadler,
-    private fbuilder: FormBuilder, private route: ActivatedRoute) {
+    private fbuilder: FormBuilder, private route: ActivatedRoute, private cloudService: CloudService) {
 
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
@@ -172,7 +179,15 @@ export class TithesRegisterPageComponent implements OnInit {
 
   private fillFormWithModel(model: Tithes, code: number) {
     var dayConvert = new Date(model.day);
-    var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
+    var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`;
+
+    if(model.photo != null && model.photo.length > 5) {
+      this.imageBusy = true;
+      this.imageUrl = this.cloudService.getUrlImageTithesStorage(model.photo);
+      this.imageBusy = false;
+    }else{
+      this.imageUrl = this.cloudService.getImageStore("common", "no-file");
+    }
 
     this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['memberId'].setValue(model.memberId);
@@ -216,9 +231,10 @@ export class TithesRegisterPageComponent implements OnInit {
   }
 
   private async create(model: Tithes) {
-    //this.clearForm();
+    var dto = new TithesEditModel().ConvertTo(model);
+    dto.base64Image = this.base64Image;
 
-    var create = await this.handler.create(model)
+    var create = await this.handler.create(dto)
       .then((result) => {
       })
       .catch((error) => {
@@ -230,7 +246,10 @@ export class TithesRegisterPageComponent implements OnInit {
   }
 
   private async update(model: Tithes, modelId: string) {
-    this.handler.update(model, modelId)
+    var dto = new TithesEditModel().ConvertTo(model);
+    dto.base64Image = this.base64Image;
+    
+    this.handler.update(dto, modelId)
       .then((result) => {
       })
       .catch((error) => {
@@ -307,6 +326,37 @@ export class TithesRegisterPageComponent implements OnInit {
 
       this.formTreasury.controls['resume'].setValue(resume);
     }
+  }
+
+
+  protected loadImage(event: any) {
+    this.msgErros = [];
+    this.msgSuccesss = [];
+
+    const file = event.target.files[0];
+
+    var imageMethod = new ImageMethods(2 * 1024 * 1024,);
+    var base64 = imageMethod.convertToBase64(file)
+      .then((base64) => {
+        if(base64 == "")  {
+          this.formTreasury.controls["photo"].setValue(null);
+          this.msgErros.push(imageMethod.getErro())
+        }else{
+          this.base64Image = base64;
+        }
+        
+      })
+      .catch((erro) => {
+        console.log("Erro no carregamento da imagem");
+        this.formTreasury.controls["photo"].setValue(null);
+        this.msgErros.push(imageMethod.getErro())
+      });
+  }
+
+  protected showHideImage(){
+    
+    this.hiddenImage = !this.hiddenImage;
+    
   }
 
 }
