@@ -14,4 +14,5 @@ export class Offering extends EntitieResultApi {
     offeringKindId: number = 0;
     meetingKindId: number = 0;
     churchId: number = 0;
+    photo: string = "";
 }

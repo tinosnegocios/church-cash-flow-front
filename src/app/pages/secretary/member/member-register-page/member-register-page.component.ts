@@ -1,6 +1,8 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { configAplication } from 'src/app/config/configAplication';
 import { PostHandler } from 'src/app/handlers/PostHandler';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { MemberEditModel } from 'src/app/models/EditModels/MemberEdit.models';
@@ -8,6 +10,8 @@ import { MemberOutEditDto } from 'src/app/models/EditModels/MemberOutEdit.models
 import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 import { PostReadModel } from 'src/app/models/ReadModels/PostRead.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
+import { CloudService } from 'src/app/services/cloud.services';
+import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 
 @Component({
   selector: 'app-member-register-page',
@@ -16,9 +20,10 @@ import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 export class MemberRegisterPageComponent implements OnInit {
 
   private post!: ResultViewModel['data'];
+
   private MemberId : string = "";
   protected PostIdSelected: number[] = [];
-    
+  protected filebusy : boolean = false;
   protected typeSave = "create";
   protected formMember!: FormGroup;
   protected formMemberOut!: FormGroup;
@@ -30,8 +35,10 @@ export class MemberRegisterPageComponent implements OnInit {
   protected searchBusy: boolean = false;
   protected memberIsValid: boolean = false;
   protected base64Image: string = "";
+  protected memberPhotoUrl : string = "";
+  protected codeSearch : string = "";
 
-  constructor(private fbuilder: FormBuilder, private handler: MemberHandler, private postHandler: PostHandler) {
+  constructor(private fbuilder: FormBuilder, private handler: MemberHandler, private postHandler: PostHandler, private cloudService: CloudService, private route: ActivatedRoute) {
     this.formMember = this.fbuilder.group({
       name: ['', Validators.compose([
         Validators.required, ,
@@ -79,12 +86,22 @@ export class MemberRegisterPageComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.route.queryParams
+    .subscribe(params => {
+      this.codeSearch = params['id'];
+    });
+
     await this.dashBoard();
   }
 
   async dashBoard(){
     await this.clear();
     await this.loadPosts();
+
+    if(this.codeSearch != "" && this.codeSearch.length > 0){
+      this.typeSave = "update"
+      this.searchByCode(this.codeSearch);
+    }
   }
 
   async searchByCode(code: string = ""){
@@ -114,8 +131,16 @@ export class MemberRegisterPageComponent implements OnInit {
     this.formSearch.controls['code'].setValue(code);
   }
 
-  private fillFormWithModel(model: MemberReadModel, code: string) {    
+  private async fillFormWithModel(model: MemberReadModel, code: string) {    
     this.MemberId = model.id.toString();
+
+    //load the model image
+    if(model.photo != null && model.photo.length > 5) {
+      this.filebusy = true;
+      this.memberPhotoUrl = this.cloudService.getUrlImageMembersStorage(model.code);
+      this.filebusy = false;
+    }
+
     this.formMember.controls['dateBirth'].setValue(formatDate(model.dateBirth, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['dateRegister'].setValue(formatDate(model.dateRegister, 'yyyy-MM-dd', 'en'));
     this.formMember.controls['dateBaptism'].setValue(formatDate(model.dateBaptism, 'yyyy-MM-dd', 'en'));
@@ -197,23 +222,32 @@ export class MemberRegisterPageComponent implements OnInit {
     this.typeSave = "create";
     this.MemberId = "";
     this.base64Image = "";
+
+    this.memberPhotoUrl = this.cloudService.getImageStore("common", "anonymou-user");
   }
 
   protected loadImage(event: any) {
-    
+    this.msgErros = [];
+    this.msgSuccesss = [];
+
     const file = event.target.files[0];
-    console.log(file);
-    if (file) {
-      const reader = new FileReader();
 
-      reader.onload = (e: any) => {
-        this.base64Image = e.target.result;
+    var imageMethod = new ImageMethods(2 * 1024 * 1024,);
+    var base64 = imageMethod.convertToBase64(file)
+      .then((base64) => {
+        if(base64 == "")  {
+          this.formMember.controls["photo"].setValue(null);
+          this.msgErros.push(imageMethod.getErro())
+        }else{
+          this.base64Image = base64;
+        }
         
-        //console.log(base64Image);
-      };
-
-      reader.readAsDataURL(file);
-    }
+      })
+      .catch((erro) => {
+        console.log("Erro no carregamento da imagem");
+        this.formMember.controls["photo"].setValue(null);
+        this.msgErros.push(imageMethod.getErro())
+      });
   }
 
   protected async save() {

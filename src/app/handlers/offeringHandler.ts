@@ -3,6 +3,7 @@ import { Offering } from "../models/offering.models";
 import { OfferingService } from "../services/offering.services";
 import { ResultViewModel } from "../models/resultViewModel.models";
 import { BaseHandler } from "./baseHandler";
+import { OfferingEditModel } from "../models/EditModels/OfferingEdit.model";
 
 @Injectable({
     providedIn: 'root'
@@ -31,7 +32,7 @@ export class OfferingHandler extends BaseHandler {
         this.service = offeringService;
     }
 
-    public async create(offering: Offering): Promise<Boolean> {
+    public async create(offering: OfferingEditModel): Promise<Boolean> {
         var result = await this.service.create(offering);
 
         if (result!.errors != null && result!.errors.length > 0) {
@@ -45,7 +46,7 @@ export class OfferingHandler extends BaseHandler {
         }
     }
 
-    public async update(offering: Offering, offeringId: string): Promise<Boolean> {
+    public async update(offering: OfferingEditModel, offeringId: string): Promise<Boolean> {
         if(!offering || offeringId == ""){
             this.setMsgErro("data invalid!")
             return false;
@@ -75,7 +76,7 @@ export class OfferingHandler extends BaseHandler {
     }
 
     public async getOfferingByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
-        var result: ResultViewModel = await this.service.getOfferingByPeiod(initialDate, finalDate);
+        var result: ResultViewModel = await this.service.getOfferingByPeriod(initialDate, finalDate);
         return result;
     }
 

@@ -1,33 +1,27 @@
-import { Component, OnInit } from '@angular/core';
-import { OfferingHandler } from 'src/app/handlers/offeringHandler';
-import { Offering } from 'src/app/models/offering.models';
-import { Router } from '@angular/router';
-import { DashBoardService } from 'src/app/services/dashboard.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MemberHandler } from 'src/app/handlers/memberHandler';
+import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
 @Component({
-  selector: 'app-offering-report-page',
-  templateUrl: './offering-report-page.component.html'
+  selector: 'app-member-report-page',
+  templateUrl: './member-report-page.component.html'
 })
-export class OfferingReportPageComponent implements OnInit {
+export class MemberReportPageComponent implements OnInit  {
   private excelMethod: ExcelMethods;
-
-  protected idHandle: number = 0;
-  protected descriptionHandle: string = "";
-
-  protected formLimit!: FormGroup;
-  protected busy = false;
-  protected offerings$!: Offering[];
+  
+  protected busy : boolean = false;
   protected msgErrosOffering: string[] = [];
   protected msgSuccesssOffering: string[] = [];
-
-  public DashMonth!:  [string, string][];
-  public dashMonthSelected: string | undefined;
+  protected readMembers$!: MemberReadModel[];
+  protected idHandle: number = 0;
+  protected nameHandler : string = "";
   
+  protected formLimit!: FormGroup;
 
-  constructor(private handler: OfferingHandler, private router: Router, private dashBoardService: DashBoardService, private fbuilder: FormBuilder) {
+  constructor(private handler: MemberHandler, private fbuilder: FormBuilder) {
     this.formLimit = this.fbuilder.group({
       initialDate: ['', Validators.compose([
         Validators.required,
@@ -35,7 +29,7 @@ export class OfferingReportPageComponent implements OnInit {
       finalDate: ['', Validators.compose([
         Validators.required,
       ])]
-    });
+    });    
 
     this.excelMethod = new ExcelMethods();
   }
@@ -44,15 +38,15 @@ export class OfferingReportPageComponent implements OnInit {
       var today = new Date();
       var todayMinus = new Date(today);
       var d = today.getDate();
-      todayMinus.setDate(today.getDate() - today.getDate() + 1);
+      todayMinus.setDate(today.getDate() - (today.getDate() + (365 * 50) ) );
       
       this.formLimit.controls['initialDate'].setValue(formatDate(todayMinus, 'yyyy-MM-dd', 'en'));
       this.formLimit.controls['finalDate'].setValue(formatDate(today, 'yyyy-MM-dd', 'en'));
     
-    await this.dashBoard();
+      await this.dashBoard();
   }
 
-  protected async dashBoard(){
+  public async dashBoard(){
     this.busy = true;   
 
     this.clear();
@@ -60,50 +54,37 @@ export class OfferingReportPageComponent implements OnInit {
     var initialDate = this.formLimit.value.initialDate;
     var finalDate = this.formLimit.value.finalDate; 
     
-    var result = await this.handler.getOfferingByPeriod(initialDate, finalDate);
+    var result = await this.handler.getMembersByPeriod(initialDate, finalDate);
 
     if(result.errors != null && result.errors.length > 0){
-      this.offerings$ = [];
+      this.readMembers$ = [];
     }else{
-      this.offerings$ = result.data;
+      this.readMembers$ = result.data;
 
-      this.offerings$.forEach(x => {
-        var daySplit = x.day.split("-");
+      this.readMembers$.forEach(x => {
+        var daySplit = x.dateBirth.split("-");
         var dayStr = `${daySplit[2].replace('T00:00:00', '')}/${daySplit[1]}/${daySplit[0]}`;
-        x.day = dayStr;
+        x.dateBirth = dayStr;
+
+        daySplit = x.dateBaptism.split("-");
+        dayStr = `${daySplit[2].replace('T00:00:00', '')}/${daySplit[1]}/${daySplit[0]}`;
+        x.dateBaptism = dayStr;
+
+        var daySplit = x.dateRegister.split("-");
+        var dayStr = `${daySplit[2].replace('T00:00:00', '')}/${daySplit[1]}/${daySplit[0]}`;
+        x.dateRegister = dayStr;
       });
     }
-    
+
     this.busy = false;
   }
 
-  public reload() {
-    this.router.navigate([this.router.url]);
-  }
-
-  protected submit(){
-    if(this.formLimit.invalid) {
-      this.msgErrosOffering.push("Preenche todos os campos de pesquisa");
-      return;
-    }
-
-    this.dashBoard();
-  }
-
-  protected async changeDashMonth() {
-    this.busy = true;
-    this.dashBoardService.setDashBoardMonth(this.dashMonthSelected!.toString());
-
-    await this.dashBoard();
-    this.busy = false;
-  }
-
-  public setIdToDelete(eventId: any, eventDescription: string){
+  protected setIdToDelete(eventId: any, eventDescription: string){
     this.idHandle = eventId
-    this.descriptionHandle = eventDescription;
+    this.nameHandler = eventDescription;
   }
 
-  public deleteOffering(){
+  protected delete(){
     if(this.idHandle > 0){
       var result = this.handler.delete(this.idHandle)
       .then((result) => {
@@ -116,20 +97,12 @@ export class OfferingReportPageComponent implements OnInit {
         console.log(error);
       });
     }
-    
-  }
-
-  protected clear(): void{
-    this.msgErrosOffering = [];
-    this.msgSuccesssOffering = [];
-    this.descriptionHandle = "";
-    this.idHandle = 0;
   }
 
   protected exportarExcel(){
     try{
       let element = document.getElementById('excel-table'); 
-      var fileName = `relatorio-de-oferta`;
+      var fileName = `relatorio-de-membro`;
       this.excelMethod.exportExcel(element, fileName);
 
       this.msgSuccesssOffering.push("arquivo excel exportado. confira sua pasta de download");
@@ -137,5 +110,13 @@ export class OfferingReportPageComponent implements OnInit {
       this.msgErrosOffering.push("Ocorreu um erro ao gerar o arquivo. tente novamente");
     }
   }
+
+  protected clear(){
+    this.idHandle = 0;
+  }
+
+
+
+
 
 }

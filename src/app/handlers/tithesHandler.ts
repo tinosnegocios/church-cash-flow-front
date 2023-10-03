@@ -3,6 +3,7 @@ import { TithesService } from "../services/tithes.service";
 import { ResultViewModel } from "../models/resultViewModel.models";
 import { Tithes } from "../models/Tithes.models";
 import { BaseHandler } from "./baseHandler";
+import { TithesEditModel } from "../models/EditModels/TithesEdit.model";
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,7 @@ export class TithesHandler extends BaseHandler {
         this.service = handlerService;
     }
 
-    public async create(handler: Tithes): Promise<Boolean> {
+    public async create(handler: TithesEditModel): Promise<Boolean> {
         var result = await this.service.create(handler);
 
         if (result!.errors != null && result!.errors.length > 0) {
@@ -45,7 +46,7 @@ export class TithesHandler extends BaseHandler {
         }
     }
 
-    public async update(model: Tithes, modelId: string): Promise<Boolean> {
+    public async update(model: TithesEditModel, modelId: string): Promise<Boolean> {
         if (!model || modelId == "") {
             this.setMsgErro("data invalid!")
             return false;

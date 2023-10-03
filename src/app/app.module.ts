@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
 import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModelToken } from './models/ModelToken.models';
@@ -19,6 +19,9 @@ import { TithesReportPageComponent } from './pages/treasury/tithes/tithes-report
 import { FirstFruitsRegisterPageComponent } from './pages/treasury/firstFruits/first-fruits-register-page/first-fruits-register-page.component';
 import { FirstFruitsReportPageComponent } from './pages/treasury/firstFruits/first-fruits-report-page/first-fruits-report-page.component';
 import { MemberRegisterPageComponent } from './pages/secretary/member/member-register-page/member-register-page.component';
+import { configAplication } from './config/configAplication';
+import { MemberReportPageComponent } from './pages/secretary/member/member-report-page/member-report-page.component';
+import { LoadingFileComponent } from './pages/shared/loading-file/loading-file.component';
 
 
 @NgModule({
@@ -36,6 +39,8 @@ import { MemberRegisterPageComponent } from './pages/secretary/member/member-reg
     FirstFruitsRegisterPageComponent,
     FirstFruitsReportPageComponent,
     MemberRegisterPageComponent,
+    MemberReportPageComponent,
+    LoadingFileComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,4 +55,8 @@ import { MemberRegisterPageComponent } from './pages/secretary/member/member-reg
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+  constructor(){
+    configAplication.loadConfig();
+  }
+}

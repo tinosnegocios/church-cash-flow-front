@@ -12,11 +12,17 @@ import { MemberReadModel } from "../models/ReadModels/MemberRead.models";
 })
 
 export class MemberHandler extends BaseHandler {
+
     private service: MembersService;
 
     constructor(service: MembersService) {
         super();
         this.service = service;
+    }
+
+    public async getMembersByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getOfferingByPeriod(initialDate, finalDate);
+        return result;
     }
 
     public async getByChurch(): Promise<ResultViewModel> {
@@ -60,6 +66,20 @@ export class MemberHandler extends BaseHandler {
             return true;
         }
     }
+
+    public async delete(id: number) {
+        var result = await  this.service.delete(id);
+  
+        if (result!.errors != null && result!.errors.length > 0) {
+          result!.errors.forEach(x => {
+              this.setMsgErro(x);
+          })
+          return false;
+          } else {
+              this.setMsgSuccess("membro excluído com sucesso");
+              return true;
+          }
+      }
 
     private async validate(model: MemberEditModel): Promise<boolean> {
         if (model.name.length <= 0 || model.dateBirth.length <= 0 || model.description == "" || model.postIds.length <= 0) {

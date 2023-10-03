@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { OfferingHandler } from 'src/app/handlers/offeringHandler';
 import { ModelToken } from 'src/app/models/ModelToken.models';
+import { OfferingEditModel } from 'src/app/models/EditModels/OfferingEdit.model';
 import { MeetingKind } from 'src/app/models/meetingKind.models copy';
 import { Offering } from 'src/app/models/offering.models';
 import { OfferingKind } from 'src/app/models/offeringKind.models';
@@ -12,7 +13,9 @@ import { AuthService } from 'src/app/services/auth.services';
 import { MeetingKindService } from 'src/app/services/meetingKind.services';
 import { OfferingService } from 'src/app/services/offering.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
+import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
+import { CloudService } from 'src/app/services/cloud.services';
 
 @Component({
   selector: 'app-treasury-registe-page',
@@ -24,23 +27,25 @@ export class offeringRegisterPageComponent implements OnInit {
   protected formSearchTreasury!: FormGroup;
 
   protected busy = false;
+  protected imageBusy : boolean = false;
+  protected imageUrl : string = "";
   protected searchBusy = false;
   private auth: AuthService
 
   protected modelToken: ModelToken;
-
   protected offeringKind!: ResultViewModel['data'];
   protected offeringKindToSelect!: [string, string][]
-
+  protected base64Image: string = "";
   protected meetingKind!: ResultViewModel['data'];
   protected meetingKindToSelect!: [string, string][]
+  protected hiddenImage: boolean = true;
 
   public offeringKindSelected: string | undefined;
   public meetingKindSelected: string | undefined;
 
-  public msgErrosOffering: string[] = [];
-  public msgSuccesssOffering: string[] = [];
-  public msgImportOffering: string = "";
+  public msgErros: string[] = [];
+  public msgSuccesss: string[] = [];
+  public msgImport: string = "";
 
   public selectedFileExcel: File | undefined;
   private fileReader: FileReader | undefined;
@@ -48,7 +53,7 @@ export class offeringRegisterPageComponent implements OnInit {
 
   constructor(private offeringHandler: OfferingHandler, private offeringService: OfferingService, 
     private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, 
-    private fbuilder: FormBuilder, private route: ActivatedRoute) {
+    private fbuilder: FormBuilder, private route: ActivatedRoute, private cloudService: CloudService) {
 
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
@@ -84,6 +89,8 @@ export class offeringRegisterPageComponent implements OnInit {
       ])],
       meetingKindId: ['', Validators.compose([
         Validators.required,
+      ])],
+      photo: ['', Validators.compose([
       ])],
       resume: ['']
     });
@@ -165,7 +172,7 @@ export class offeringRegisterPageComponent implements OnInit {
 
     if (offeringToForm.errors!.length > 0) {
       this.searchBusy = false;
-      this.msgErrosOffering.push("Offering not found");
+      this.msgErros.push("Offering not found");
       return;
     }
 
@@ -180,6 +187,14 @@ export class offeringRegisterPageComponent implements OnInit {
   private fillFormWithOffering(offering: Offering, code: number){
     var dayConvert = new Date(offering.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
+
+    if(offering.photo != null && offering.photo.length > 5) {
+      this.imageBusy = true;
+      this.imageUrl = this.cloudService.getUrlImageOfferingsStorage(offering.photo);
+      this.imageBusy = false;
+    }else{
+      this.imageUrl = this.cloudService.getImageStore("common", "no-file");
+    }
 
     this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['preacherMemberName'].setValue(offering.preacherMemberName);
@@ -199,15 +214,17 @@ export class offeringRegisterPageComponent implements OnInit {
   }
 
   protected async clearForm() {
-    this.msgErrosOffering = [];
-    this.msgSuccesssOffering = [];
-    this.msgImportOffering = "";
+    this.hiddenImage = true;
+    this.msgErros = [];
+    this.msgSuccesss = [];
+    this.msgImport = "";
     this.offeringHandler.clear();
 
     this.formTreasury.reset();
     this.formSearchTreasury.reset();
 
     this.typeSave = "create";
+    this.imageUrl = "";
   }
 
   protected async saveOffering() {
@@ -223,28 +240,35 @@ export class offeringRegisterPageComponent implements OnInit {
   }
 
   private async createOffering(offering: Offering) {
-    this.clearForm();
-    var create = await this.offeringHandler.create(offering)
+    //this.clearForm();
+
+    var readDto = new OfferingEditModel().ConvertTo(offering);
+    readDto.base64Image = this.base64Image != null ? this.base64Image : "";    
+
+    var create = await this.offeringHandler.create(readDto)
       .then((result) => {
       })
       .catch((error) => {
-        this.msgErrosOffering.push("Ocorreu um erro ao cadastrar a oferta. Tente novamente");
+        this.msgErros.push("Ocorreu um erro ao cadastrar a oferta. Tente novamente");
       });
 
-    this.msgErrosOffering = this.offeringHandler.getMsgErro();
-    this.msgSuccesssOffering = this.offeringHandler.getMsgSuccess();
+    this.msgErros = this.offeringHandler.getMsgErro();
+    this.msgSuccesss = this.offeringHandler.getMsgSuccess();
   }
 
   private async updateOffering(offering: Offering, offeringId: string) {
-    this.offeringHandler.update(offering, offeringId)
+    var readDto = new OfferingEditModel().ConvertTo(offering);
+    readDto.base64Image = this.base64Image != null ? this.base64Image : "";  
+
+    this.offeringHandler.update(readDto, offeringId)
     .then((result) => {
     })
     .catch((error) => {
-      this.msgErrosOffering.push("Ocorreu um erro ao atualizar a oferta. Tente novamente");
+      this.msgErros.push("Ocorreu um erro ao atualizar a oferta. Tente novamente");
     });
 
-  this.msgErrosOffering = this.offeringHandler.getMsgErro();
-  this.msgSuccesssOffering = this.offeringHandler.getMsgSuccess();
+    this.msgErros = this.offeringHandler.getMsgErro();
+    this.msgSuccesss = this.offeringHandler.getMsgSuccess();
   }
 
   public setExcel(event: any): void {
@@ -262,7 +286,7 @@ export class offeringRegisterPageComponent implements OnInit {
         this.createOfferingByExcel(jsonData);
       })
       .catch((error) => {
-        this.msgErrosOffering = error;
+        this.msgErros = error;
       });
 
 
@@ -318,5 +342,37 @@ export class offeringRegisterPageComponent implements OnInit {
 
       this.formTreasury.controls['resume'].setValue(resume);
     }
+  }
+
+  protected loadImage(event: any) {
+    this.msgErros = [];
+    this.msgSuccesss = [];
+
+    const file = event.target.files[0];
+
+    var imageMethod = new ImageMethods(2 * 1024 * 1024,);
+    var base64 = imageMethod.convertToBase64(file)
+      .then((base64) => {
+        if(base64 == "")  {
+          this.formTreasury.controls["photo"].setValue(null);
+          this.msgErros.push(imageMethod.getErro())
+        }else{
+          this.base64Image = base64;
+        }
+        
+      })
+      .catch((erro) => {
+        console.log("Erro no carregamento da imagem");
+        this.formTreasury.controls["photo"].setValue(null);
+        this.msgErros.push(imageMethod.getErro())
+      });
+
+      console.log(this.base64Image);
+  }
+
+  protected showHideImage(){
+    
+    this.hiddenImage = !this.hiddenImage;
+    
   }
 }
