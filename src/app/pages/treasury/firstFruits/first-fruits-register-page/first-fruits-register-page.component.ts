@@ -2,15 +2,18 @@ import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { FirstFruitsHandler } from 'src/app/handlers/firstFruitsHandler';
-import { MemberHandler } from 'src/app/handlers/memberHandler';
-import { OfferingHandler } from 'src/app/handlers/offeringHandler';
+import { FirstFruitsEditModel } from 'src/app/models/EditModels/firstFruitsEdit.models';
 import { ModelToken } from 'src/app/models/ModelToken.models';
+import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 import { FirstFruits } from 'src/app/models/firstFruits.model';
 import { OfferingKind } from 'src/app/models/offeringKind.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 import { AuthService } from 'src/app/services/auth.services';
+import { CloudService } from 'src/app/services/cloud.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
+import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
 @Component({
@@ -21,6 +24,10 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
   protected typeSave = "create";
   protected formTreasury!: FormGroup;
   protected formSearchTreasury!: FormGroup;
+  protected imageBusy : boolean = false;
+  protected imageUrl : string = "";
+  protected base64Image: string = "";
+  protected hiddenImage = true;
 
   protected busy = false;
   protected searchBusy = false;
@@ -45,8 +52,8 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
   private fileReader: FileReader | undefined;
   private codeSearch: number = 0;
 
-  constructor(private handler: FirstFruitsHandler, private churchHandler: MemberHandler, private offeringKindService: OfferingKindService,
-    private fbuilder: FormBuilder, private route: ActivatedRoute) {
+  constructor(private handler: FirstFruitsHandler, private churchHandler: ChurchHadler, private offeringKindService: OfferingKindService,
+    private fbuilder: FormBuilder, private route: ActivatedRoute, private cloudService: CloudService) {
 
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
@@ -75,7 +82,9 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
       competence: ['', Validators.compose([
         Validators.required,
       ])],
-      resume: ['']
+      resume: [''],
+      photo: ['', Validators.compose([
+      ])],
     });
   }
 
@@ -121,31 +130,24 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
       this.offeringKindToSelect = Object.entries(meuObjeto);
       
     } catch (error) {
-      console.log('error to get offering-kind:', error);
+      console.error('error to get offering-kind:', error);
     }
   }
 
   protected async loadMembers() {
-    try {
       const dados = await this.churchHandler.getByChurch();
-      this.members = dados;
-
+      this.members = dados.data;
       var meuObjeto: Record<string, string> = {};
-      var cont = 1;
+      this.members.forEach((x: MemberReadModel) => {
+        var key = x.name;
+        var value = x.id;
 
-      this.members.forEach((x: string) => {
-        var key = x;
-        var value = cont;
-
-        cont++;
         meuObjeto[key] = `${value}`;
       });
 
       this.membersToSelect = Object.entries(meuObjeto);
       
-    } catch (error) {
-      console.log('error to get offering-kind:', error);
-    }
+    
   }
 
   protected async searchByCode(code: number = 0) {
@@ -176,6 +178,14 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
     var dayConvert = new Date(model.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
 
+    if(model.photo != null && model.photo.length > 5) {
+      this.imageBusy = true;
+      this.imageUrl = this.cloudService.getUrlImageFirstFruitsStorage(model.photo);
+      this.imageBusy = false;
+    }else{
+      this.imageUrl = this.cloudService.getImageStore("common", "no-file");
+    }
+    
     this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['memberId'].setValue(model.memberId);
     this.formTreasury.controls['day'].setValue(formatDate(model.day, 'yyyy-MM-dd', 'en'));
@@ -190,6 +200,7 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
   }
 
   protected async clearForm() {
+    this.hiddenImage = true;
     this.msgErros = [];
     this.msgSuccesss = [];
     this.msgImport = "";
@@ -199,6 +210,7 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
     this.formSearchTreasury.reset();
 
     this.typeSave = "create";
+    this.imageUrl = "";
   }
 
   protected async save() {
@@ -223,7 +235,11 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
   private async create(model: FirstFruits) {
     this.clearForm();
 
-    var create = await this.handler.create(model)
+    var editDto = new FirstFruitsEditModel();
+    var dto = editDto.ConvertTo(model);
+    dto.base64Image = this.base64Image;
+
+    var create = await this.handler.create(dto)
       .then((result) => {
       })
       .catch((error) => {
@@ -235,7 +251,11 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
   }
 
   private async update(model: FirstFruits, modelId: string) {
-    this.handler.update(model, modelId)
+    var editDto = new FirstFruitsEditModel();
+    var dto = editDto.ConvertTo(model);
+    dto.base64Image = this.base64Image;
+
+    this.handler.update(dto, modelId)
       .then((result) => {
       })
       .catch((error) => {
@@ -285,8 +305,6 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
     });
   }
 
-
-
   protected showResume() {
     var oferta: string = '';
     var membro: string;
@@ -312,6 +330,36 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
 
       this.formTreasury.controls['resume'].setValue(resume);
     }
+  }
+
+  protected loadImage(event: any) {
+    this.msgErros = [];
+    this.msgSuccesss = [];
+
+    const file = event.target.files[0];
+
+    var imageMethod = new ImageMethods(2 * 1024 * 1024,);
+    var base64 = imageMethod.convertToBase64(file)
+      .then((base64) => {
+        if(base64 == "")  {
+          this.formTreasury.controls["photo"].setValue(null);
+          this.msgErros.push(imageMethod.getErro())
+        }else{
+          this.base64Image = base64;
+        }
+        
+      })
+      .catch((erro) => {
+        console.error("Erro no carregamento da imagem");
+        this.formTreasury.controls["photo"].setValue(null);
+        this.msgErros.push(imageMethod.getErro())
+      });
+  }
+
+  protected showHideImage(){
+    
+    this.hiddenImage = !this.hiddenImage;
+    
   }
 
 }

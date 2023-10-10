@@ -134,7 +134,6 @@ export class MemberRegisterPageComponent implements OnInit {
   private async fillFormWithModel(model: MemberReadModel, code: string) {    
     this.MemberId = model.id.toString();
 
-    //load the model image
     if(model.photo != null && model.photo.length > 5) {
       this.filebusy = true;
       this.memberPhotoUrl = this.cloudService.getUrlImageMembersStorage(model.code);
@@ -310,7 +309,6 @@ export class MemberRegisterPageComponent implements OnInit {
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
   }
-
 
   tryParseInt(number: string): number {
     return parseInt(number);

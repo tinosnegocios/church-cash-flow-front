@@ -83,7 +83,9 @@ export class TithesRegisterPageComponent implements OnInit {
       competence: ['', Validators.compose([
         Validators.required,
       ])],
-      resume: ['']
+      resume: [''],
+      photo: ['', Validators.compose([
+      ])],
     });
   }
 
@@ -188,7 +190,7 @@ export class TithesRegisterPageComponent implements OnInit {
     }else{
       this.imageUrl = this.cloudService.getImageStore("common", "no-file");
     }
-
+    
     this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['memberId'].setValue(model.memberId);
     this.formTreasury.controls['day'].setValue(formatDate(model.day, 'yyyy-MM-dd', 'en'));
@@ -203,6 +205,7 @@ export class TithesRegisterPageComponent implements OnInit {
   }
 
   protected async clearForm() {
+    this.hiddenImage = true;
     this.msgErros = [];
     this.msgSuccesss = [];
     this.msgImport = "";
@@ -212,6 +215,7 @@ export class TithesRegisterPageComponent implements OnInit {
     this.formSearchTreasury.reset();
 
     this.typeSave = "create";
+    this.imageUrl = "";
   }
 
   protected async save() {
