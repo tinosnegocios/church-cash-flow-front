@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { OfferingHandler } from 'src/app/handlers/offeringHandler';
-import { ModelToken } from 'src/app/models/ModelToken.models';
 import { OfferingEditModel } from 'src/app/models/EditModels/OfferingEdit.model';
 import { MeetingKind } from 'src/app/models/meetingKind.models copy';
 import { Offering } from 'src/app/models/offering.models';
@@ -11,50 +10,36 @@ import { OfferingKind } from 'src/app/models/offeringKind.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 import { AuthService } from 'src/app/services/auth.services';
 import { MeetingKindService } from 'src/app/services/meetingKind.services';
-import { OfferingService } from 'src/app/services/offering.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
 import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 import { CloudService } from 'src/app/services/cloud.services';
+import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 
 @Component({
   selector: 'app-treasury-registe-page',
   templateUrl: './offering-register-page.component.html'
 })
-export class offeringRegisterPageComponent implements OnInit {
-  protected typeSave = "create";
+export class offeringRegisterPageComponent extends RegistersPageComponent implements OnInit {
   protected formTreasury!: FormGroup;
   protected formSearchTreasury!: FormGroup;
 
-  protected busy = false;
-  protected imageBusy : boolean = false;
-  protected imageUrl : string = "";
-  protected searchBusy = false;
-  private auth: AuthService
-
-  protected modelToken: ModelToken;
   protected offeringKind!: ResultViewModel['data'];
   protected offeringKindToSelect!: [string, string][]
-  protected base64Image: string = "";
+  
   protected meetingKind!: ResultViewModel['data'];
-  protected meetingKindToSelect!: [string, string][]
-  protected hiddenImage: boolean = true;
+  protected meetingKindToSelect!: [string, string][];
 
   public offeringKindSelected: string | undefined;
   public meetingKindSelected: string | undefined;
 
-  public msgErros: string[] = [];
-  public msgSuccesss: string[] = [];
-  public msgImport: string = "";
-
-  public selectedFileExcel: File | undefined;
-  private fileReader: FileReader | undefined;
   private codeSearch: number = 0;
 
-  constructor(private offeringHandler: OfferingHandler, private offeringService: OfferingService, 
-    private offeringKindService: OfferingKindService, private meetingKindService: MeetingKindService, 
-    private fbuilder: FormBuilder, private route: ActivatedRoute, private cloudService: CloudService) {
-
+  constructor(private offeringHandler: OfferingHandler, private offeringKindService: OfferingKindService, 
+    private meetingKindService: MeetingKindService, private fbuilder: FormBuilder, private route: ActivatedRoute, 
+    private cloudService: CloudService) {
+    
+    super();
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
 
@@ -214,17 +199,10 @@ export class offeringRegisterPageComponent implements OnInit {
   }
 
   protected async clearForm() {
-    this.hiddenImage = true;
-    this.msgErros = [];
-    this.msgSuccesss = [];
-    this.msgImport = "";
     this.offeringHandler.clear();
-
+    this.clearCommonObj();
     this.formTreasury.reset();
     this.formSearchTreasury.reset();
-
-    this.typeSave = "create";
-    this.imageUrl = "";
   }
 
   protected async saveOffering() {
@@ -240,8 +218,6 @@ export class offeringRegisterPageComponent implements OnInit {
   }
 
   private async createOffering(offering: Offering) {
-    //this.clearForm();
-
     var readDto = new OfferingEditModel().ConvertTo(offering);
     readDto.base64Image = this.base64Image != null ? this.base64Image : "";    
 
@@ -271,12 +247,6 @@ export class offeringRegisterPageComponent implements OnInit {
     this.msgSuccesss = this.offeringHandler.getMsgSuccess();
   }
 
-  public setExcel(event: any): void {
-    this.clearForm();
-
-    this.selectedFileExcel = event.target.files[0];
-  }
-
   public readExcel(): void {
     this.clearForm();
 
@@ -288,8 +258,6 @@ export class offeringRegisterPageComponent implements OnInit {
       .catch((error) => {
         this.msgErros = error;
       });
-
-
   }
 
   private createOfferingByExcel(arrayOffering: Array<any>) {
@@ -370,9 +338,4 @@ export class offeringRegisterPageComponent implements OnInit {
       console.log(this.base64Image);
   }
 
-  protected showHideImage(){
-    
-    this.hiddenImage = !this.hiddenImage;
-    
-  }
 }

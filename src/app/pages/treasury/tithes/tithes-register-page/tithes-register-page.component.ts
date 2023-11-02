@@ -3,14 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
-import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { TithesHandler } from 'src/app/handlers/tithesHandler';
 import { TithesEditModel } from 'src/app/models/EditModels/TithesEdit.model';
-import { ModelToken } from 'src/app/models/ModelToken.models';
 import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 import { Tithes } from 'src/app/models/Tithes.models';
 import { OfferingKind } from 'src/app/models/offeringKind.models';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
+import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 import { AuthService } from 'src/app/services/auth.services';
 import { CloudService } from 'src/app/services/cloud.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
@@ -21,21 +20,9 @@ import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
   selector: 'app-tithes-register-page',
   templateUrl: './tithes-register-page.component.html'
 })
-export class TithesRegisterPageComponent implements OnInit {
-  protected hiddenImage = true;
-  protected imageBusy : boolean = false;
-  protected imageUrl : string = "";
-  protected base64Image: string = "";
-  protected typeSave = "create";
+export class TithesRegisterPageComponent extends RegistersPageComponent implements OnInit {
   protected formTreasury!: FormGroup;
   protected formSearchTreasury!: FormGroup;
-
-  protected busy = false;
-  protected searchBusy = false;
-  private auth: AuthService
-
-  protected modelToken: ModelToken;
-
   protected offeringKind!: ResultViewModel['data'];
   protected offeringKindToSelect!: [string, string][]
 
@@ -44,18 +31,12 @@ export class TithesRegisterPageComponent implements OnInit {
 
   public offeringKindSelected: string | undefined;
   public meetingKindSelected: string | undefined;
-
-  public msgErros: string[] = [];
-  public msgSuccesss: string[] = [];
-  public msgImport: string = "";
-
-  public selectedFileExcel: File | undefined;
-  private fileReader: FileReader | undefined;
   private codeSearch: number = 0;
 
   constructor(private handler: TithesHandler, private offeringKindService: OfferingKindService, private churchHandler: ChurchHadler,
     private fbuilder: FormBuilder, private route: ActivatedRoute, private cloudService: CloudService) {
-
+    
+    super();
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
 
@@ -205,11 +186,8 @@ export class TithesRegisterPageComponent implements OnInit {
   }
 
   protected async clearForm() {
-    this.hiddenImage = true;
-    this.msgErros = [];
-    this.msgSuccesss = [];
-    this.msgImport = "";
     this.handler.clear();
+    this.clearCommonObj();
 
     this.formTreasury.reset();
     this.formSearchTreasury.reset();
@@ -262,12 +240,6 @@ export class TithesRegisterPageComponent implements OnInit {
 
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
-  }
-
-  public setExcel(event: any): void {
-    this.clearForm();
-
-    this.selectedFileExcel = event.target.files[0];
   }
 
   public readExcel(): void {
@@ -356,11 +328,4 @@ export class TithesRegisterPageComponent implements OnInit {
         this.msgErros.push(imageMethod.getErro())
       });
   }
-
-  protected showHideImage(){
-    
-    this.hiddenImage = !this.hiddenImage;
-    
-  }
-
 }
