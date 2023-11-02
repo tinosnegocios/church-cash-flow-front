@@ -1,1 +1,293 @@
-<p>outflow-register-page works!</p>
+<!-- ===============================================-->
+<!--    Main Content-->
+<!-- ===============================================-->
+
+
+<div class="content">
+
+    <form class="mb-3" [formGroup]="formSearch">
+        <div class="row g-5">
+            <div class="col-12 col-lg-6">
+                <div class="row g-2">
+                    <div class="col-12 col-lg-6">
+                        <h4 class="mb-3">Busca por código</h4>
+                        <input class="form-control mb-5" formControlName="code" type="text"
+                            placeholder="código da oferta" />
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <h4 class="mb-3"><a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt "></span></a>
+                        </h4>
+                        <button class="btn btn-primary mb-2 mb-sm-0" type="submit"
+                        (click)="searchByCode()">Buscar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!--msg erro and loading spinner-->
+            <div class="col-12 col-lg-6">
+
+                <div *ngIf="searchBusy" class="spinner-grow" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+
+                <div *ngFor="let msgSuccess of msgSuccesss">
+                    <div class="row g-2">
+                        <div class="alert alert-outline-success d-flex align-items-center" role="alert">
+                            <span class="fas fa-check-circle text-success fs-3 me-3"></span>
+                            <p class="mb-0 flex-1">{{msgSuccess}}</p>
+
+                            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngFor="let msgError of msgErros">
+                    <div class="alert alert-outline-danger d-flex align-items-center" role="alert">
+                        <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
+                        <p class="mb-0 flex-1">{{msgError}}</p>
+
+                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+
+                <div class="row g-2">
+                    <div *ngIf="" class="alert alert-outline-danger d-flex align-items-center"
+                        role="alert">
+                        <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
+                        <p class="mb-0 flex-1">Arquivo de importação inválido!</p>
+
+                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <form class="mb-3" [formGroup]="formOutflow" (change)="showResume()">
+
+        <div class="row g-3 flex-between-end mb-5">
+
+            <div class="col-auto">
+                <h2 class="mb-2">Inserir nova despesa</h2>
+            </div>
+
+            <div class="col-auto">
+                <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" (click)="clearForm()"
+                    type="button">Limpar/Cancelar</button>
+
+                    <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1"  type="button">
+                        <a class="btn btn-sm btn-phoenix-primary code-btn ms-2" data-bs-toggle="collapse"
+                            href="#show-image-model" role="button" aria-controls="show-image-model" aria-expanded="false">
+                            <span class="me-2" data-feather="code"></span>View code</a>Ver imagem
+                    </button>
+                    
+                <button class="btn btn-primary btn-lg me-1 mb-1" [disabled]="formOutflow.invalid" (click)="save()"
+                    type="submit"><span class="far fa-save fs-1"></span>Salvar</button>
+            </div>
+
+
+            <div class="row g-5">
+
+                <div class="row g-2">
+
+                    <div class="col-12 col-xl-8">
+
+                        <div class="row g-5">
+                            <div class="col-12 col-lg-4">
+                                <h4 class="mb-3">Dia</h4>
+                                <input class="form-control" type="date" placeholder="dd/mm/yyyy" formControlName="day">
+                            </div>
+
+                            <div class="col-12 col-lg-4">
+                                <h4 class="mb-3">competencia do dizimo</h4>
+                                <input class="form-control" type="month" placeholder="mm/yyyy" formControlName="competence">
+                            </div>
+
+                            <div class="col-12 col-lg-2">
+                                <h4 class="mb-3">Autorizado</h4>
+                                <input class="form-control mb-5" type="text" formControlName="authorized" step="0.1"
+                                    placeholder="aprovado" readonly />
+                            </div>
+                        </div>
+
+                        <div class="row g-5">
+                            <div class="col-12 col-lg-3">
+                                <h4 class="mb-3">Valor original</h4>
+                                <input class="form-control" type="number" step="0.1" value="0" formControlName="amount">
+                            </div>
+
+                            <div class="col-12 col-lg-3">
+                                <h4 class="mb-3">Juros</h4>
+                                <input class="form-control" type="number" step="0.1" value="0" formControlName="interest">
+                            </div>
+
+                            <div class="col-12 col-lg-3">
+                                <h4 class="mb-3">Desconto</h4>
+                                <input class="form-control" type="number" step="0.1" value="0" formControlName="discount">
+                            </div>
+
+                            <div class="col-12 col-lg-3">
+                                <h4 class="mb-3">Valor toal</h4>
+                                <input class="form-control" type="number" readonly value="0" formControlName="totalamount">
+                            </div>
+                            
+                        </div>
+
+                        <div class="row g-5">
+                            <div class="col-12">
+                                <h4 class="mb-3">Descrição</h4>
+                                <textarea class="form-control" formControlName="description"
+                                            id="exampleFormControlTextarea1"></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-12 col-xl-4">
+                        <div class="row g-2">
+                            <div class="col-12 col-xl-12">
+    
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h4 class="mb-4">Organização</h4>
+    
+                                        <div class="row g-3">
+    
+                                            <div class="col-12 col-sm-6 col-xl-12">
+    
+                                                <div class="mb-4">
+                                                    <div class="d-flex flex-wrap mb-2">
+                                                        <h5 class="mb-0 text-1000 me-2">Tipo da saida
+                                                            <a href="#" ><span
+                                                                    class="fas fa-undo-alt "></span></a>
+                                                        </h5>
+                                                        <a class="fw-bold fs--1" href="#!">Add novo tipo de saida</a>
+                                                    </div>
+    
+                                                    <select *ngIf="!busy" class="form-select mb-3" aria-label="category"
+                                                        formControlName="outflowKindId">
+                                                        <option value=""></option>
+                                                        
+    
+                                                    </select>
+    
+                                                    <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
+                                                        <span class="sr-only"></span>
+                                                    </div>
+                                                </div>
+    
+                                            </div>
+    
+                                            <div class="col-12 col-sm-6 col-xl-12">
+                                                <div class="mb-xl-4">
+                                                    <h5 class="mb-2 text-1000">Igreja</h5>
+                                                    <input class="form-control mb-xl-3" type="text" placeholder="Collection"
+                                                        readonly="readonly" value={{modelToken.churchName}} />
+                                                </div>
+                                            </div>
+    
+                                        </div>
+    
+                                    </div>
+    
+                                </div>
+    
+                                <!--input excel csv-->
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <h4 class="mb-4">Importar excel</h4>
+                                        <div class="row g-3">
+                                            <div class="col-12 col-sm-6 col-xl-12">
+                                                <div class="mb-xl-4">
+                                                    <h5 class="mb-2 text-1000">selecione ou arraste
+                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                            <span
+                                                                class="badge ms-2 badge badge-phoenix badge-phoenix-info ">atente-se
+                                                                ao layout</span>
+                                                        </a>
+                                                    </h5>
+    
+                                                    <div class="row g-5">
+                                                        <div class="col-12 col-lg-9">
+                                                            <input class="form-control mb-xl-3" id="inputFileToImport"
+                                                                type="file" (change)="setExcel($event)"
+                                                                accept=".xls, .xlsx, .csv" />
+                                                        </div>
+                                                        <div class="col-12 col-lg-3">
+                                                            <button class="btn btn-outline-info me-1 mb-1"
+                                                                type="button">Importar</button>
+                                                        </div>
+                                                    </div>
+    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                                <!--csv example input-->
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">O arquivo deve seguir o
+                                                    layout abaixo para importado corretamente</h5>
+                                                <button class="btn p-1" type="button" data-bs-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span class="fas fa-times fs--1"></span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+    
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col">dia</th>
+                                                            <th scope="col">competencia(mm-yyyy)</th>
+                                                            <th scope="col">descricao</th>
+                                                            <th scope="col">Valor</th>
+                                                            <th scope="col">Juros</th>
+                                                            <th scope="col">Desconto</th>
+                                                            <th scope="col">Valor total</th>
+                                                            <th scope="col">tipo de saida(cod)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+    
+                                                    </tbody>
+                                                </table>
+    
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button class="btn btn-primary" type="button">Okay</button>
+                                                <button class="btn btn-outline-primary" type="button"
+                                                    data-bs-dismiss="modal">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+    
+                            </div>
+    
+                        </div>
+    
+                    </div>
+
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+</div>
+
+
+<!-- ===============================================-->
+<!--    End of Main Content-->
+<!-- ===============================================-->
