@@ -22,7 +22,9 @@ import { MemberRegisterPageComponent } from './pages/secretary/member/member-reg
 import { configAplication } from './config/configAplication';
 import { MemberReportPageComponent } from './pages/secretary/member/member-report-page/member-report-page.component';
 import { LoadingFileComponent } from './pages/shared/loading-file/loading-file.component';
-
+import { RegistersPageComponent } from './pages/shared/registers-page/registers-page.component';
+import { OutflowRegisterPageComponent } from './pages/treasury/outflow/outflow-register-page/outflow-register-page.component';
+import { OutflowReportPageComponent } from './pages/treasury/outflow/outflow-report-page/outflow-report-page.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { LoadingFileComponent } from './pages/shared/loading-file/loading-file.c
     MemberRegisterPageComponent,
     MemberReportPageComponent,
     LoadingFileComponent,
+    OutflowRegisterPageComponent,
+    OutflowReportPageComponent
   ],
   imports: [
     BrowserModule,
