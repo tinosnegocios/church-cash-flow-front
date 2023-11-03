@@ -1,0 +1,21 @@
+{
+    "api":{
+        "host":"http://localhost:5000/api"
+    },
+    "cloudServices": {
+        "aws": {
+          "region": "us-eats-1",
+          "bucketS3": {
+            "images": {
+              "name": "church-manager-dev",
+              "url":"https://church-manager-dev.s3.us-east-1.amazonaws.com/image",
+              "imageTypePattern": "jpg",
+              "membersPath": "members",
+              "offeringPath": "offerings",
+              "tithesPath": "tithes",
+              "firstFruitsPath": "first-fruits"
+            }
+          }
+        }
+    }
+}
