@@ -1,4 +1,4 @@
-import configData from './settings/settings-dev.json';
+import configData from './settings/settings-prd.json';
 
 export class configAplication {
   private static config: any;
