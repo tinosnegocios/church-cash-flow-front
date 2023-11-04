@@ -48,4 +48,9 @@ export abstract class RegistersPageComponent {
   protected showHideImage(){    
     this.hiddenImage = !this.hiddenImage; 
   }
+
+  protected isNumeric(value: any): boolean {
+    return !isNaN(value) && typeof value === 'number';
+  }
+
 }

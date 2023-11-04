@@ -10,13 +10,16 @@ import { OutflowKindService } from "../services/outFlowKind.service";
 })
 
 export class OutFlowKindHandler extends BaseHandler {
-    getOfferingKind(): Promise<ResultViewModel>  {
-      throw new Error('Method not implemented.');
-    }
     private service: OutflowKindService;
 
     constructor(service: OutflowKindService) {
         super();
         this.service = service;
     }
+
+    getOfferingKind(): Promise<ResultViewModel>  {
+        var result = this.service.getOutflowKind();
+        return result;
+    }
+
 }

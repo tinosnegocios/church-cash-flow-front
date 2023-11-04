@@ -18,7 +18,7 @@ export class OutFlowHandler extends BaseHandler {
 
     public async create(handler: OutflowEditModel): Promise<Boolean> {
         var result = await this.service.create(handler);
-
+        
         if (result!.errors != null && result!.errors.length > 0) {
             result!.errors.forEach(x => {
                 this.setMsgErro(x);

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { OutFlowKindHandler } from 'src/app/handlers/outFlowKindHandler';
 import { OutFlowHandler } from 'src/app/handlers/outflowHandler';
 import { OutflowEditModel } from 'src/app/models/EditModels/OutFlowEdit.Models';
@@ -20,12 +21,60 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
 
   private codeSearch: number = 0;
 
-  constructor(private handler: OutFlowHandler, private handlerOutFlowKind: OutFlowKindHandler, private fbuilder: FormBuilder) {
+  constructor(private handler: OutFlowHandler, private handlerOutFlowKind: OutFlowKindHandler, private fbuilder: FormBuilder,
+    private route: ActivatedRoute) {
     super();
 
     this.formSearch = this.fbuilder.group({
       code: ['']
     });
+
+    this.formOutflow = this.fbuilder.group({
+      day: ['', Validators.compose([
+        Validators.required,
+      ])],
+      competence: ['', Validators.compose([
+        Validators.required,
+      ])],
+      authorized: ['aprovado', Validators.compose([
+        Validators.required
+      ])],
+      amount: ['', Validators.compose([
+        Validators.required,
+        Validators.min(0.1)
+      ])],
+      interest: ['', Validators.compose([
+        Validators.required,
+        Validators.min(0.1)
+      ])],
+      discount: ['', Validators.compose([
+        Validators.required,
+        Validators.min(0.1)
+      ])],
+      totalamount: ['', Validators.compose([
+        Validators.required,
+        Validators.min(0.1)
+      ])],
+      description: ['', Validators.compose([
+        Validators.required,
+        Validators.minLength(6),
+      ])],
+      outflowKindId: ['', Validators.compose([
+        Validators.required,
+      ])],
+      resume: [''],
+      photo: ['', Validators.compose([
+      ])],
+    });
+  }
+
+  async ngOnInit() {
+    this.route.queryParams
+      .subscribe(params => {
+        this.codeSearch = params['id'];
+      });
+
+    await this.dashBoard();
   }
   
  
@@ -85,11 +134,10 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
     this.searchBusy = false;
   }
   private async create(model: OutflowEditModel) {
-    //var dto = new TithesEditModel().ConvertTo(model);
-    //dto.base64Image = this.base64Image;
-
+    model.authorized = true;
     var create = await this.handler.create(model)
       .then((result) => {
+        console.log(result);
       })
       .catch((error) => {
         this.msgErros.push("Ocorreu um erro no cadastro. Tente novamente");
@@ -117,7 +165,34 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
     
   }
 
-  protected showResume(code: number = 0): void{
-    
+  protected showResume() {
+    var outflow: string = '';
+
+    var amout = 0, interest = 0, discount = 0, totalAmount = 0;
+    if(this.isNumeric(this.formOutflow.controls['amount'].value))
+      amout = this.formOutflow.controls['amount'].value;
+    if(this.isNumeric(this.formOutflow.controls['interest'].value))
+    interest = this.formOutflow.controls['interest'].value;
+    if(this.isNumeric(this.formOutflow.controls['discount'].value))
+      discount = this.formOutflow.controls['discount'].value;
+
+    totalAmount = (amout + interest - discount );  
+    this.formOutflow.controls['totalamount'].setValue(totalAmount);      
+
+    if (this.formOutflow.controls['outflowKindId'].value > 0) {
+      var value: string = this.formOutflow.controls['outflowKindId'].value.toString();
+      var outflowSelect = this.outFlowKindToSelect.find(key => key[1] === value);
+      outflow = outflowSelect![0];
+    }
+
+    if (this.formOutflow.valid) {
+      var model: OutflowEditModel = this.formOutflow.value;
+      var dayConvert = new Date(model.day);
+      var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
+
+      var resume = `Despesa com ${outflow!} para competencia de ${model.competence} realizado dia ${dayStr} total de ${totalAmount}`;
+
+      this.formOutflow.controls['resume'].setValue(resume);
+    }
   }
 }
