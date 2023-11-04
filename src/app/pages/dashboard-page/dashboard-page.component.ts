@@ -73,8 +73,8 @@ export class DashboardPageComponent implements OnInit {
 
     //get members
     try {
-      const dados = await this.churchHandler.getMembersByChurch;
-      this.members = dados;
+      const dados = await this.churchHandler.getMembersByChurch();
+      this.members = dados.data;
       this.totalMembers = 0;
       this.members.forEach((x: string) => {
         this.totalMembers += 1;

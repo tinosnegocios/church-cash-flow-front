@@ -54,11 +54,12 @@ export class ChurchService extends BaseService {
 
         return returnObservable.then(result => {
             if (result) {
-              return result.data;
+              return result;
             } else {
               throw new Error('Result is undefined.');
             }
           });
 
     }
+    
 }
