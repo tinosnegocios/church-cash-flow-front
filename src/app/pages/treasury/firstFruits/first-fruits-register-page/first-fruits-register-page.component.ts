@@ -166,7 +166,10 @@ export class FirstFruitsRegisterPageComponent extends RegistersPageComponent imp
     this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['memberId'].setValue(model.memberId);
     this.formTreasury.controls['day'].setValue(formatDate(model.day, 'yyyy-MM-dd', 'en'));
-    this.formTreasury.controls['competence'].setValue(model.competence.replace('/','-'));
+    var comp = model.competence.replace('/','-');
+    var compSplit = comp.split("-");
+    var comAnoMes = compSplit[1]+"-"+compSplit[0];
+    this.formTreasury.controls['competence'].setValue(comAnoMes);
     this.formTreasury.controls['description'].setValue(model.description);
     this.formTreasury.controls['totalAmount'].setValue(model.totalAmount);
     this.formTreasury.controls['offeringKindId'].setValue(model.offeringKindId);
