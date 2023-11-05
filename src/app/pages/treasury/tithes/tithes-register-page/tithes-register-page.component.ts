@@ -143,7 +143,7 @@ export class TithesRegisterPageComponent extends RegistersPageComponent implemen
       code = this.formSearchTreasury.value.code;
 
     var modelToForm: ResultViewModel = await this.handler.getById(code);
-
+    
     this.clearForm();
     
     if (modelToForm.errors!.length > 0) {
@@ -163,7 +163,7 @@ export class TithesRegisterPageComponent extends RegistersPageComponent implemen
   private fillFormWithModel(model: Tithes, code: number) {
     var dayConvert = new Date(model.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`;
-
+    
     if(model.photo != null && model.photo.length > 5) {
       this.imageBusy = true;
       this.imageUrl = this.cloudService.getUrlImageTithesStorage(model.photo);

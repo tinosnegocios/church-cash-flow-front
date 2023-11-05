@@ -10,4 +10,5 @@ export class OutflowEditModel {
     totalAmount: number = 0;
     outFlowKindId: number = 0;
     churchId: number = 0;
+    base64Image: string = "";
 }

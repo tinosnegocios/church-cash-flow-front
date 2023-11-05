@@ -34,11 +34,12 @@ export class OutFlowHandler extends BaseHandler {
         if (!model || modelId == "") {
             this.setMsgErro("data invalid!")
             return false;
-        }
+        }     
 
         var result = await this.service.update(model, modelId);
-
-        if (result!.errors != null && result!.errors.length > 0) {
+        console.log(result);
+        
+        if (result!.errors != null) {
             result!.errors.forEach(x => {
                 this.setMsgErro(x);
             })
@@ -51,6 +52,11 @@ export class OutFlowHandler extends BaseHandler {
 
     public async getOutflowByMonth(): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.getOutflowByMonth();
+        return result;
+    }
+
+    public async getById(id: number): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getById(id);
         return result;
     }
 

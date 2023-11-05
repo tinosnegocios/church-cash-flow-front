@@ -1,3 +1,4 @@
+import { formatDate } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -5,8 +6,10 @@ import { OutFlowKindHandler } from 'src/app/handlers/outFlowKindHandler';
 import { OutFlowHandler } from 'src/app/handlers/outflowHandler';
 import { OutflowEditModel } from 'src/app/models/EditModels/OutFlowEdit.Models';
 import { OutFlowKindReadModel } from 'src/app/models/ReadModels/OutFlowKindRead.model';
+import { OutFlowReadModel } from 'src/app/models/ReadModels/OutflowRead.model';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
+import { CloudService } from 'src/app/services/cloud.services';
 
 @Component({
   selector: 'app-outflow-register-page',
@@ -22,7 +25,7 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
   private codeSearch: number = 0;
 
   constructor(private handler: OutFlowHandler, private handlerOutFlowKind: OutFlowKindHandler, private fbuilder: FormBuilder,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute, private cloudService: CloudService) {
     super();
 
     this.formSearch = this.fbuilder.group({
@@ -51,9 +54,9 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
         Validators.required,
         Validators.min(0.1)
       ])],
-      totalamount: ['', Validators.compose([
+      totalAmount: ['', Validators.compose([
         Validators.required,
-        Validators.min(0.1)
+        Validators.min(0.1),
       ])],
       description: ['', Validators.compose([
         Validators.required,
@@ -66,6 +69,9 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
       photo: ['', Validators.compose([
       ])],
     });
+    this.formOutflow.controls['totalAmount'].disable();
+    this.formOutflow.controls['authorized'].disable();
+    this.formOutflow.controls['resume'].disable();
   }
 
   async ngOnInit() {
@@ -114,9 +120,8 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
   }
 
   protected override clearForm(): void {
-    
+    this.clearCommonObj();
   }
-
 
   protected async save() {
     this.searchBusy = true;
@@ -147,9 +152,6 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
     this.msgSuccesss = this.handler.getMsgSuccess();
   }
   private async update(model: OutflowEditModel, modelId: string) {
-    //var dto = new TithesEditModel().ConvertTo(model);
-    //dto.base64Image = this.base64Image;
-    
     this.handler.update(model, modelId)
       .then((result) => {
       })
@@ -161,8 +163,60 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
     this.msgSuccesss = this.handler.getMsgSuccess();
   }
 
-  protected searchByCode(code: number = 0): void{
+  protected async searchByCode(code: number = 0) {
+    this.searchBusy = true;
     
+    if (code <= 0)
+      code = this.formSearch.value.code;
+
+    var modelToForm: ResultViewModel = await this.handler.getById(code);
+
+    this.clearForm();
+    
+    if (modelToForm.errors!.length > 0) {
+      this.searchBusy = false;
+      this.msgErros.push("Offering not found");
+      return;
+    }
+
+    this.typeSave = "update";
+    var objTithes: OutFlowReadModel = modelToForm.data;
+
+    this.fillFormWithModel(objTithes, code);
+
+    this.searchBusy = false
+  }
+
+  private fillFormWithModel(model: OutFlowReadModel, code: number) {
+    var dayConvert = new Date(model.day);
+    var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`;
+    console.log(model);
+    if(model.photo != null && model.photo.length > 5) {
+      this.imageBusy = true;
+      this.imageUrl = this.cloudService.getUrlImageTithesStorage(model.photo);
+      this.imageBusy = false;
+    }else{
+      this.imageUrl = this.cloudService.getImageStore("common", "no-file");
+    }
+    
+    this.formSearch.controls['code'].setValue(code);2
+    this.formOutflow.controls['day'].setValue(formatDate(model.day, 'yyyy-MM-dd', 'en'));
+    var comp = model.competence.replace('/','-');
+    var compSplit = comp.split("-");
+    var comAnoMes = compSplit[1]+"-"+compSplit[0];
+    console.log(comAnoMes);
+    this.formOutflow.controls['competence'].setValue(comAnoMes);
+    this.formOutflow.controls['authorized'].setValue(model.authorized);        
+    this.formOutflow.controls['amount'].setValue(model.amount);
+    this.formOutflow.controls['interest'].setValue(model.interest);
+    this.formOutflow.controls['discount'].setValue(model.discount);
+    this.formOutflow.controls['totalAmount'].setValue(model.totalAmount);
+    this.formOutflow.controls['description'].setValue(model.description);
+    this.formOutflow.controls['outflowKindId'].setValue(model.outFlowKindId);
+
+    var resume = `Despesa com ${model.outFlow!} para competencia de ${model.competence} realizado dia ${dayStr} total de ${model.totalAmount}`;
+
+    this.formOutflow.controls['resume'].setValue(resume);
   }
 
   protected showResume() {
@@ -177,7 +231,7 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
       discount = this.formOutflow.controls['discount'].value;
 
     totalAmount = (amout + interest - discount );  
-    this.formOutflow.controls['totalamount'].setValue(totalAmount);      
+    this.formOutflow.controls['totalAmount'].setValue(totalAmount);      
 
     if (this.formOutflow.controls['outflowKindId'].value > 0) {
       var value: string = this.formOutflow.controls['outflowKindId'].value.toString();

@@ -95,12 +95,14 @@
                         <div class="row g-5">
                             <div class="col-12 col-lg-4">
                                 <h4 class="mb-3">Dia</h4>
-                                <input class="form-control" type="date" placeholder="dd/mm/yyyy" formControlName="day">
+                                <input class="form-control" type="date" placeholder="dd/mm/yyyy" formControlName="day"
+                                [ngClass]="{'text-danger': (!formOutflow.controls['day'].valid && !formOutflow.controls['day'].pristine)}">
                             </div>
 
                             <div class="col-12 col-lg-4">
                                 <h4 class="mb-3">competencia do dizimo</h4>
-                                <input class="form-control" type="month" placeholder="mm/yyyy" formControlName="competence">
+                                <input class="form-control" type="month" placeholder="mm/yyyy" formControlName="competence"
+                                [ngClass]="{'text-danger': (!formOutflow.controls['competence'].valid && !formOutflow.controls['competence'].pristine)}">
                             </div>
 
                             <div class="col-12 col-lg-2">
@@ -131,26 +133,29 @@
 
                             <div class="col-12 col-lg-3">
                                 <h4 class="mb-3">Valor toal</h4>
-                                <input class="form-control" type="number" readonly value="0" formControlName="totalamount"
-                                [ngClass]="{'text-danger': (!formOutflow.controls['totalamount'].valid)}"
-                                >
+                                <input class="form-control" type="number" readonly value="0" formControlName="totalAmount"
+                                [ngClass]="{'text-danger': (!formOutflow.controls['totalAmount'].valid)}">
                             </div>
-                            
+                        </div>
+                        
+                        <div class="row g-5">
+                            <div class="row g-5">
+                                <div class="col-12">
+                                    <h4 class="mb-3">Descrição</h4>
+                                    <textarea class="form-control" formControlName="description" id="exampleFormControlTextarea1"
+                                    [ngClass]="{'text-danger': (!formOutflow.controls['description'].valid && !formOutflow.controls['description'].pristine)}">
+                                </textarea>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row g-5">
-                            <div class="col-12">
-                                <h4 class="mb-3">Descrição</h4>
-                                <textarea class="form-control" formControlName="description"
-                                            id="exampleFormControlTextarea1"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="row g-5">
-                            <div class="col-12">
-                                <h4 class="mb-3">Resumo</h4>
-                                <textarea class="form-control" formControlName="resume" readonly="readonly"
-                                            id="exampleFormControlTextarea1"></textarea>
+                            <div class="row g-5">
+                                <div class="col-12">
+                                    <h4 class="mb-3">Resumo</h4>
+                                    <textarea class="form-control" formControlName="resume" readonly="readonly"
+                                                id="exampleFormControlTextarea1"></textarea>
+                                </div>
                             </div>
                         </div>
 
@@ -226,12 +231,12 @@
     
                                                     <div class="row g-5">
                                                         <div class="col-12 col-lg-9">
-                                                            <input class="form-control mb-xl-3" id="inputFileToImport"
+                                                            <input disabled class="form-control mb-xl-3" id="inputFileToImport"
                                                                 type="file" (change)="setExcel($event)"
                                                                 accept=".xls, .xlsx, .csv" />
                                                         </div>
                                                         <div class="col-12 col-lg-3">
-                                                            <button class="btn btn-outline-info me-1 mb-1"
+                                                            <button disabled class="btn btn-outline-info me-1 mb-1"
                                                                 type="button">Importar</button>
                                                         </div>
                                                     </div>
