@@ -48,11 +48,11 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
       ])],
       interest: ['', Validators.compose([
         Validators.required,
-        Validators.min(0.1)
+        Validators.min(0)
       ])],
       discount: ['', Validators.compose([
         Validators.required,
-        Validators.min(0.1)
+        Validators.min(0)
       ])],
       totalAmount: ['', Validators.compose([
         Validators.required,
@@ -158,7 +158,7 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
       .catch((error) => {
         this.msgErros.push("Ocorreu um erro ao atualizar a oferta. Tente novamente");
       });
-
+      
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
   }
@@ -204,7 +204,6 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
     var comp = model.competence.replace('/','-');
     var compSplit = comp.split("-");
     var comAnoMes = compSplit[1]+"-"+compSplit[0];
-    console.log(comAnoMes);
     this.formOutflow.controls['competence'].setValue(comAnoMes);
     this.formOutflow.controls['authorized'].setValue(model.authorized);        
     this.formOutflow.controls['amount'].setValue(model.amount);

@@ -37,10 +37,9 @@ export class OutFlowHandler extends BaseHandler {
         }     
 
         var result = await this.service.update(model, modelId);
-        console.log(result);
         
-        if (result!.errors != null) {
-            result!.errors.forEach(x => {
+        if (result!.errors!.length > 0) {
+            result!.errors!.forEach(x => {
                 this.setMsgErro(x);
             })
             return false;
