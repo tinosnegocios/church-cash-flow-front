@@ -13,7 +13,8 @@
               "membersPath": "members",
               "offeringPath": "offerings",
               "tithesPath": "tithes",
-              "firstFruitsPath": "first-fruits"
+              "firstFruitsPath": "first-fruits",
+              "outflow": "outflow"
             }
           }
         }

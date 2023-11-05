@@ -51,4 +51,14 @@ export class CloudService {
         return url;
     }
 
+    getUrlImageOutFlowStorage(imageName: string): string {
+        var urlBucket = configAplication.getObjCloudConfig().aws.bucketS3.images.url;
+        var path = configAplication.getObjCloudConfig().aws.bucketS3.images.outflow;
+        var extensionImage = configAplication.getObjCloudConfig().aws.bucketS3.images.imageTypePattern;
+        var url = `${urlBucket}/${path}/${imageName}.${extensionImage}`;
+
+        return url;
+    }
+
+
 }

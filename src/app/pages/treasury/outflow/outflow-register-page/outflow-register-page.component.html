@@ -18,7 +18,7 @@
                         <h4 class="mb-3"><a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt "></span></a>
                         </h4>
                         <button class="btn btn-primary mb-2 mb-sm-0" type="submit"
-                        (click)="searchByCode()">Buscar</button>
+                            (click)="searchByCode()">Buscar</button>
                     </div>
                 </div>
             </div>
@@ -51,8 +51,7 @@
                 </div>
 
                 <div class="row g-2">
-                    <div *ngIf="" class="alert alert-outline-danger d-flex align-items-center"
-                        role="alert">
+                    <div *ngIf="" class="alert alert-outline-danger d-flex align-items-center" role="alert">
                         <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
                         <p class="mb-0 flex-1">Arquivo de importação inválido!</p>
 
@@ -75,12 +74,12 @@
                 <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" (click)="clearForm()"
                     type="button">Limpar/Cancelar</button>
 
-                    <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1"  type="button">
-                        <a class="btn btn-sm btn-phoenix-primary code-btn ms-2" data-bs-toggle="collapse"
-                            href="#show-image-model" role="button" aria-controls="show-image-model" aria-expanded="false">
-                            <span class="me-2" data-feather="code"></span>View code</a>Ver imagem
-                    </button>
-                    
+                <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" (click)="showHideImage()" type="button">
+                    <a class="btn btn-sm btn-phoenix-primary code-btn ms-2" data-bs-toggle="collapse"
+                        href="#show-image-model" role="button" aria-controls="show-image-model" aria-expanded="false">
+                        <span class="me-2" data-feather="code"></span>View code</a>Ver imagem
+                </button>
+
                 <button class="btn btn-primary btn-lg me-1 mb-1" [disabled]="formOutflow.invalid" (click)="save()"
                     type="submit"><span class="far fa-save fs-1"></span>Salvar</button>
             </div>
@@ -96,13 +95,14 @@
                             <div class="col-12 col-lg-4">
                                 <h4 class="mb-3">Dia</h4>
                                 <input class="form-control" type="date" placeholder="dd/mm/yyyy" formControlName="day"
-                                [ngClass]="{'text-danger': (!formOutflow.controls['day'].valid && !formOutflow.controls['day'].pristine)}">
+                                    [ngClass]="{'text-danger': (!formOutflow.controls['day'].valid && !formOutflow.controls['day'].pristine)}">
                             </div>
 
                             <div class="col-12 col-lg-4">
                                 <h4 class="mb-3">competencia do dizimo</h4>
-                                <input class="form-control" type="month" placeholder="mm/yyyy" formControlName="competence"
-                                [ngClass]="{'text-danger': (!formOutflow.controls['competence'].valid && !formOutflow.controls['competence'].pristine)}">
+                                <input class="form-control" type="month" placeholder="mm/yyyy"
+                                    formControlName="competence"
+                                    [ngClass]="{'text-danger': (!formOutflow.controls['competence'].valid && !formOutflow.controls['competence'].pristine)}">
                             </div>
 
                             <div class="col-12 col-lg-2">
@@ -116,34 +116,38 @@
                             <div class="col-12 col-lg-3">
                                 <h4 class="mb-3">Valor original</h4>
                                 <input class="form-control" type="number" step="0.1" value="0" formControlName="amount"
-                                [ngClass]="{'text-danger': (!formOutflow.controls['amount'].valid && !formOutflow.controls['amount'].pristine)}">
+                                    [ngClass]="{'text-danger': (!formOutflow.controls['amount'].valid && !formOutflow.controls['amount'].pristine)}">
                             </div>
 
                             <div class="col-12 col-lg-3">
                                 <h4 class="mb-3">Juros</h4>
-                                <input class="form-control" type="number" step="0.1" value="0" formControlName="interest"
-                                [ngClass]="{'text-danger': (!formOutflow.controls['interest'].valid && !formOutflow.controls['interest'].pristine)}">
+                                <input class="form-control" type="number" step="0.1" value="0"
+                                    formControlName="interest"
+                                    [ngClass]="{'text-danger': (!formOutflow.controls['interest'].valid && !formOutflow.controls['interest'].pristine)}">
                             </div>
 
                             <div class="col-12 col-lg-3">
                                 <h4 class="mb-3">Desconto</h4>
-                                <input class="form-control" type="number" step="0.1" value="0" formControlName="discount"
-                                [ngClass]="{'text-danger': (!formOutflow.controls['discount'].valid && !formOutflow.controls['discount'].pristine)}">
+                                <input class="form-control" type="number" step="0.1" value="0"
+                                    formControlName="discount"
+                                    [ngClass]="{'text-danger': (!formOutflow.controls['discount'].valid && !formOutflow.controls['discount'].pristine)}">
                             </div>
 
                             <div class="col-12 col-lg-3">
                                 <h4 class="mb-3">Valor toal</h4>
-                                <input class="form-control" type="number" readonly value="0" formControlName="totalAmount"
-                                [ngClass]="{'text-danger': (!formOutflow.controls['totalAmount'].valid)}">
+                                <input class="form-control" type="number" readonly value="0"
+                                    formControlName="totalAmount"
+                                    [ngClass]="{'text-danger': (!formOutflow.controls['totalAmount'].valid)}">
                             </div>
                         </div>
-                        
+
                         <div class="row g-5">
                             <div class="row g-5">
                                 <div class="col-12">
                                     <h4 class="mb-3">Descrição</h4>
-                                    <textarea class="form-control" formControlName="description" id="exampleFormControlTextarea1"
-                                    [ngClass]="{'text-danger': (!formOutflow.controls['description'].valid && !formOutflow.controls['description'].pristine)}">
+                                    <textarea class="form-control" formControlName="description"
+                                        id="exampleFormControlTextarea1"
+                                        [ngClass]="{'text-danger': (!formOutflow.controls['description'].valid && !formOutflow.controls['description'].pristine)}">
                                 </textarea>
                                 </div>
                             </div>
@@ -154,7 +158,35 @@
                                 <div class="col-12">
                                     <h4 class="mb-3">Resumo</h4>
                                     <textarea class="form-control" formControlName="resume" readonly="readonly"
-                                                id="exampleFormControlTextarea1"></textarea>
+                                        id="exampleFormControlTextarea1"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-5">
+                            <div class="row g-5">
+                                <div class="col-12">
+                                    <div class="mb-6">
+                                        <div class="col-12">
+                                            <h4 class="mb-3">Imagem</h4>
+
+                                            <div *ngIf="!imageBusy">
+                                                <input class="form-control mb-xl-3" formControlName="photo"
+                                                    (change)="loadImage($event)" type="file" accept=".jpg, .jpeg" />
+                                            </div>
+
+                                            <div *ngIf="imageBusy">
+                                                <app-loading-file></app-loading-file>
+                                            </div>
+
+                                        </div>
+
+                                        <div [hidden]="hiddenImage">
+                                            <img src={{imageUrl}} class="rounded float-right" width="420" height="420"
+                                                alt="...">
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -165,24 +197,23 @@
                     <div class="col-12 col-xl-4">
                         <div class="row g-2">
                             <div class="col-12 col-xl-12">
-    
+
                                 <div class="card mb-3">
                                     <div class="card-body">
                                         <h4 class="mb-4">Organização</h4>
-    
+
                                         <div class="row g-3">
-    
+
                                             <div class="col-12 col-sm-6 col-xl-12">
-    
+
                                                 <div class="mb-4">
                                                     <div class="d-flex flex-wrap mb-2">
                                                         <h5 class="mb-0 text-1000 me-2">Tipo da saida
-                                                            <a href="#" ><span
-                                                                    class="fas fa-undo-alt "></span></a>
+                                                            <a href="#"><span class="fas fa-undo-alt "></span></a>
                                                         </h5>
                                                         <a class="fw-bold fs--1" href="#!">Add novo tipo de saida</a>
                                                     </div>
-    
+
                                                     <select *ngIf="!busy" class="form-select mb-3" aria-label="category"
                                                         formControlName="outflowKindId">
                                                         <option value=""></option>
@@ -190,30 +221,32 @@
                                                             [value]="entry[1]">
                                                             {{ entry[0] }}
                                                         </option>
-    
+
                                                     </select>
-    
-                                                    <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
+
+                                                    <div *ngIf="busy" class="spinner-grow spinner-grow-sm"
+                                                        role="status">
                                                         <span class="sr-only"></span>
                                                     </div>
                                                 </div>
-    
+
                                             </div>
-    
+
                                             <div class="col-12 col-sm-6 col-xl-12">
                                                 <div class="mb-xl-4">
                                                     <h5 class="mb-2 text-1000">Igreja</h5>
-                                                    <input class="form-control mb-xl-3" type="text" placeholder="Collection"
-                                                        readonly="readonly" value={{modelToken.churchName}} />
+                                                    <input class="form-control mb-xl-3" type="text"
+                                                        placeholder="Collection" readonly="readonly"
+                                                        value={{modelToken.churchName}} />
                                                 </div>
                                             </div>
-    
+
                                         </div>
-    
+
                                     </div>
-    
+
                                 </div>
-    
+
                                 <!--input excel csv-->
                                 <div class="card mb-3">
                                     <div class="card-body">
@@ -222,17 +255,19 @@
                                             <div class="col-12 col-sm-6 col-xl-12">
                                                 <div class="mb-xl-4">
                                                     <h5 class="mb-2 text-1000">selecione ou arraste
-                                                        <a href="#" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                        <a href="#" data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModal">
                                                             <span
                                                                 class="badge ms-2 badge badge-phoenix badge-phoenix-info ">atente-se
                                                                 ao layout</span>
                                                         </a>
                                                     </h5>
-    
+
                                                     <div class="row g-5">
                                                         <div class="col-12 col-lg-9">
-                                                            <input disabled class="form-control mb-xl-3" id="inputFileToImport"
-                                                                type="file" (change)="setExcel($event)"
+                                                            <input disabled class="form-control mb-xl-3"
+                                                                id="inputFileToImport" type="file"
+                                                                (change)="setExcel($event)"
                                                                 accept=".xls, .xlsx, .csv" />
                                                         </div>
                                                         <div class="col-12 col-lg-3">
@@ -240,13 +275,13 @@
                                                                 type="button">Importar</button>
                                                         </div>
                                                     </div>
-    
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-    
+
                                 <!--csv example input-->
                                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-hidden="true">
                                     <div class="modal-dialog modal-xl">
@@ -260,7 +295,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-    
+
                                                 <table class="table table-bordered">
                                                     <thead>
                                                         <tr>
@@ -275,10 +310,10 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-    
+
                                                     </tbody>
                                                 </table>
-    
+
                                             </div>
                                             <div class="modal-footer">
                                                 <button class="btn btn-primary" type="button">Okay</button>
@@ -288,11 +323,11 @@
                                         </div>
                                     </div>
                                 </div>
-    
+
                             </div>
-    
+
                         </div>
-    
+
                     </div>
 
 

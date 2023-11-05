@@ -10,6 +10,7 @@ import { OutFlowReadModel } from 'src/app/models/ReadModels/OutflowRead.model';
 import { ResultViewModel } from 'src/app/models/resultViewModel.models';
 import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 import { CloudService } from 'src/app/services/cloud.services';
+import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 
 @Component({
   selector: 'app-outflow-register-page',
@@ -120,7 +121,14 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
   }
 
   protected override clearForm(): void {
+    this.handler.clear();
     this.clearCommonObj();
+
+    this.formOutflow.reset();
+    this.formSearch.reset();
+
+    this.typeSave = "create";
+    this.imageUrl = "";
   }
 
   protected async save() {
@@ -139,6 +147,7 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
     this.searchBusy = false;
   }
   private async create(model: OutflowEditModel) {
+    model.base64Image = this.base64Image;
     model.authorized = true;
     var create = await this.handler.create(model)
       .then((result) => {
@@ -152,13 +161,16 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
     this.msgSuccesss = this.handler.getMsgSuccess();
   }
   private async update(model: OutflowEditModel, modelId: string) {
+    model.base64Image = this.base64Image;
+    model.authorized = true;
+    console.log(this.base64Image);
     this.handler.update(model, modelId)
       .then((result) => {
       })
       .catch((error) => {
         this.msgErros.push("Ocorreu um erro ao atualizar a oferta. Tente novamente");
       });
-      
+
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
   }
@@ -170,7 +182,6 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
       code = this.formSearch.value.code;
 
     var modelToForm: ResultViewModel = await this.handler.getById(code);
-
     this.clearForm();
     
     if (modelToForm.errors!.length > 0) {
@@ -190,10 +201,10 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
   private fillFormWithModel(model: OutFlowReadModel, code: number) {
     var dayConvert = new Date(model.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`;
-    console.log(model);
+    
     if(model.photo != null && model.photo.length > 5) {
       this.imageBusy = true;
-      this.imageUrl = this.cloudService.getUrlImageTithesStorage(model.photo);
+      this.imageUrl = this.cloudService.getUrlImageOutFlowStorage(model.photo);
       this.imageBusy = false;
     }else{
       this.imageUrl = this.cloudService.getImageStore("common", "no-file");
@@ -248,4 +259,29 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
       this.formOutflow.controls['resume'].setValue(resume);
     }
   }
+
+  protected loadImage(event: any) {
+    this.msgErros = [];
+    this.msgSuccesss = [];
+
+    const file = event.target.files[0];
+
+    var imageMethod = new ImageMethods(2 * 1024 * 1024,);
+    var base64 = imageMethod.convertToBase64(file)
+      .then((base64) => {
+        if(base64 == "")  {
+          this.formOutflow.controls["photo"].setValue(null);
+          this.msgErros.push(imageMethod.getErro())
+        }else{
+          this.base64Image = base64;
+        }
+        
+      })
+      .catch((erro) => {
+        console.log("Erro no carregamento da imagem");
+        this.formOutflow.controls["photo"].setValue(null);
+        this.msgErros.push(imageMethod.getErro())
+      });
+  }
+  
 }
