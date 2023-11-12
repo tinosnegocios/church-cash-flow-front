@@ -1,0 +1,195 @@
+<div class="content">
+
+    <!--msg erro and loading spinner-->
+    <div class="col-12 col-lg-6">
+
+    </div>
+
+    <form class="mb-3" [formGroup]="formSearch">
+        <div class="row g-5">
+            <div class="col-12 col-lg-6">
+                <div class="row g-2">
+                    <div class="col-12 col-lg-6">
+                        <h4 class="mb-3">Busca por código</h4>
+                        <input class="form-control mb-5" formControlName="code" type="text"
+                            placeholder="código da oferta" />
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <h4 class="mb-3"><a href="#"><span class="fas fa-undo-alt "></span></a>
+                        </h4>
+                        <button class="btn btn-primary mb-2 mb-sm-0" type="submit">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <form class="" [formGroup]="formRegister">
+
+        <div class="row g-3 flex-between-end mb-5">
+            <div class="col-auto">
+                <h2 class="mb-2">Registro de Igreja</h2>
+                <h5 class="text-700 fw-semi-bold">Pois onde se reunirem dois ou três em meu nome, ali eu estou no meio
+                    deles... (mt 18:20)</h5>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" (click)="clear()"
+                    type="button">Limpar/Cancelar</button>
+                <button class="btn btn-primary btn-lg me-1 mb-1" (click)="save()" type="submit"><span
+                        class="far fa-save fs-1"></span>Salvar</button>
+            </div>
+        </div>
+
+        <!-- DADOS IGREJA -->
+        <div class="row col-xl-12">
+
+            <div class="row">
+
+                <div class="col-12 col-xl-12">
+
+                    <div class="row">
+                        <div class="col-4">
+                            <h4 class="mb-3">Nome</h4>
+                            <input class="form-control mb-5" type="text" formControlName="name"
+                                placeholder="nome da igreja" 
+                                [ngClass]="{'text-danger': (!formRegister.controls['description'].valid && !formRegister.controls['description'].pristine)}"/>
+                        </div>
+
+                        <div class="col-2">
+                            <h4 class="mb-3">Abreviação</h4>
+                            <input class="form-control" type="text" placeholder="ABC123" formControlName="acronym">
+                        </div>
+
+                        <div class="col-3">
+                            <h4 class="mb-3">Data cadastro</h4>
+                            <input class="form-control" type="date" placeholder="dd/mm/yyyy"
+                                formControlName="dateRegister">
+                        </div>
+
+                        <div class="col-3">
+                            <h4 class="mb-3">Data inauguração</h4>
+                            <input class="form-control" type="date" placeholder="dd/mm/yyyy"
+                                formControlName="dateInauguration">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-2">
+                            <div class="mb-6">
+                                <h4 class="mb-3">1ª Pastor</h4>
+                                <select class="form-control" formControlName="firstPastorId">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-2">
+                            <div class="mb-6">
+                                <h4 class="mb-3">2ª Pastor</h4>
+                                <select class="form-control" formControlName="secondPastorId">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-2">
+                            <div class="mb-6">
+                                <h4 class="mb-3">1ª Tesoureiro</h4>
+                                <select class="form-control" formControlName="firstTreasurerId">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-2">
+                            <div class="mb-6">
+                                <h4 class="mb-3">2ª Tesoureiro</h4>
+                                <select class="form-control" formControlName="secondTreasurerId">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-2">
+                            <div class="mb-6">
+                                <h4 class="mb-3">1ª Secretario</h4>
+                                <select class="form-control" formControlName="firstSecretaryId">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-2">
+                            <div class="mb-6">
+                                <h4 class="mb-3">2ª Secretario</h4>
+                                <select class="form-control" formControlName="secondSecretaryId">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ENDEREÇO -->
+        <div class="row col-xl-12">
+            <div class="row">
+                <div class="col-12 col-xl-12">
+                    <div class="row mb-5">
+                        <div class="col-2">
+                            <h4 class="mb-3">CEP</h4>
+                            <input class="form-control" placeholder="99999-999" type="text" formControlName="cep">
+                        </div>
+
+                        <div class="col-3">
+                            <h4 class="mb-3">Pais</h4>
+                            <select class="form-control" name="" id="" formControlName="country">
+                                <option value="brasil">Brasil</option>
+                            </select>
+                        </div>
+
+                        <div class="col-3">
+                            <h4 class="mb-3">Estado</h4>
+                            <input class="form-control" placeholder="estado" type="text" formControlName="state">
+                        </div>
+
+                        <div class="col-4">
+                            <h4 class="mb-3">Cidade</h4>
+                            <input class="form-control" placeholder="cidade" type="text" formControlName="city">
+                        </div>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-4">
+                            <h4 class="mb-3">Bairro</h4>
+                            <input class="form-control" placeholder="vila nova" type="text" formControlName="district">
+                        </div>
+
+                        <div class="col-4">
+                            <h4 class="mb-3">Rua</h4>
+                            <input class="form-control" placeholder="Av D pedro" type="text" formControlName="street">
+                        </div>
+
+                        <div class="col-4">
+                            <h4 class="mb-3">Complemento</h4>
+                            <input class="form-control" placeholder="2ª andar" type="text" formControlName="additional">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2">
+                            <h4 class="mb-3">Numero</h4>
+                            <input class="form-control" type="number" formControlName="number">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>

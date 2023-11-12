@@ -25,6 +25,8 @@ import { LoadingFileComponent } from './pages/shared/loading-file/loading-file.c
 import { RegistersPageComponent } from './pages/shared/registers-page/registers-page.component';
 import { OutflowRegisterPageComponent } from './pages/treasury/outflow/outflow-register-page/outflow-register-page.component';
 import { OutflowReportPageComponent } from './pages/treasury/outflow/outflow-report-page/outflow-report-page.component';
+import { ChurchRegisterPageComponent } from './pages/secretary/church/church-register-page/church-register-page.component';
+import { ChurchReportPageComponent } from './pages/secretary/church/church-report-page/church-report-page.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,9 @@ import { OutflowReportPageComponent } from './pages/treasury/outflow/outflow-rep
     MemberReportPageComponent,
     LoadingFileComponent,
     OutflowRegisterPageComponent,
-    OutflowReportPageComponent
+    OutflowReportPageComponent,
+    ChurchRegisterPageComponent,
+    ChurchReportPageComponent
   ],
   imports: [
     BrowserModule,
