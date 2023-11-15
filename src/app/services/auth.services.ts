@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-import { ModelToken } from "../models/ModelToken.models";
+import { ModelToken } from "../models/churchEntitieModels/ModelToken.models";
 
 export class AuthService {
 

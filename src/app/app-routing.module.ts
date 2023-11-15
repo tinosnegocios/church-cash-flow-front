@@ -11,6 +11,10 @@ import { FirstFruitsRegisterPageComponent } from './pages/treasury/firstFruits/f
 import { FirstFruitsReportPageComponent } from './pages/treasury/firstFruits/first-fruits-report-page/first-fruits-report-page.component';
 import { MemberRegisterPageComponent } from './pages/secretary/member/member-register-page/member-register-page.component';
 import { MemberReportPageComponent } from './pages/secretary/member/member-report-page/member-report-page.component';
+import { OutflowRegisterPageComponent } from './pages/treasury/outflow/outflow-register-page/outflow-register-page.component';
+import { OutflowReportPageComponent } from './pages/treasury/outflow/outflow-report-page/outflow-report-page.component';
+import { ChurchRegisterPageComponent } from './pages/secretary/church/church-register-page/church-register-page.component';
+import { ChurchReportPageComponent } from './pages/secretary/church/church-report-page/church-report-page.component';
 
 const routes: Routes = [
   {
@@ -72,6 +76,30 @@ const routes: Routes = [
     component: HeadFrameComponent,
     children: [
       { path: '', component: MemberReportPageComponent }
+    ]
+   },{
+    path: 'outflow-register',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: OutflowRegisterPageComponent }
+    ]
+   },{
+    path: 'outflow-report',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: OutflowReportPageComponent }
+    ]
+   },{
+    path: 'church-register',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: ChurchRegisterPageComponent }
+    ]
+   },{
+    path: 'church-report',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: ChurchReportPageComponent }
     ]
    }
 ];

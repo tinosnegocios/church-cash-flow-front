@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OfferingHandler } from 'src/app/handlers/offeringHandler';
-import { Offering } from 'src/app/models/offering.models';
+import { Offering } from 'src/app/models/churchEntitieModels/offering.models';
 import { Router } from '@angular/router';
 import { DashBoardService } from 'src/app/services/dashboard.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';

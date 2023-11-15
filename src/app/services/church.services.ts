@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { BaseService } from "./base.services";
-import { ResultViewModel } from "../models/resultViewModel.models";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { AuthService } from "./auth.services";
 import { Injectable } from "@angular/core";
 import { DashBoardService } from "./dashboard.service";
@@ -54,11 +54,12 @@ export class ChurchService extends BaseService {
 
         return returnObservable.then(result => {
             if (result) {
-              return result.data;
+              return result;
             } else {
               throw new Error('Result is undefined.');
             }
           });
 
     }
+    
 }

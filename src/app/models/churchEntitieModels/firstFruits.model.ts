@@ -11,4 +11,5 @@ export class FirstFruits extends EntitieResultApi {
     memberId: number = 0;
     offeringKind: string = "";
     offeringKindId: number = 0;
+    photo: string = "";
 }

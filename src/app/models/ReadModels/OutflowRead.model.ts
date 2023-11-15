@@ -1,4 +1,4 @@
-import { EntitieResultApi } from "../Entitie.models";
+import { EntitieResultApi } from "../churchEntitieModels/Entitie.models";
 
 export class OutFlowReadModel extends EntitieResultApi {
     day: string = "";
@@ -9,6 +9,8 @@ export class OutFlowReadModel extends EntitieResultApi {
     interest: number = 0;
     discount: number = 0;
     totalAmount: number = 0;
+    outFlowKindId: number = 0;
     outFlow: string = "";
     church: string = "";
+    photo: string = "";
 }

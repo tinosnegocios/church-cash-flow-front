@@ -40,6 +40,3 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-src/app/config/settings/settings-dev.json
-src/app/config/settings/settings-prd.json
-src/app/config/settings/settings-uat.json

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserLogin } from 'src/app/models/UserLogin.models';
+import { UserLogin } from 'src/app/models/churchEntitieModels/UserLogin.models';
 import { AuthService } from 'src/app/services/auth.services';
 import { LoginService } from 'src/app/services/login.services';
 
@@ -19,7 +19,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(private loginService: LoginService, private fbuilder: FormBuilder, private router: Router) {
     this.formLogin = this.fbuilder.group({
-      code: ['58E23D',Validators.compose([
+      code: ['84DDB5',Validators.compose([
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(6)

@@ -1,4 +1,4 @@
-import { EntitieResultApi } from "../Entitie.models";
+import { EntitieResultApi } from "../churchEntitieModels/Entitie.models";
 import { MemberInReadModel } from "./MemberInRead.model";
 import { MemberOutReadModel } from "./MemberOutRead.model";
 import { PostReadModel } from "./PostRead.models";

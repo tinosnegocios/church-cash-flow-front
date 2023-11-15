@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TithesHandler } from 'src/app/handlers/tithesHandler';
-import { Tithes } from 'src/app/models/Tithes.models';
+import { Tithes } from 'src/app/models/churchEntitieModels/Tithes.models';
 import { DashBoardService } from 'src/app/services/dashboard.service';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 

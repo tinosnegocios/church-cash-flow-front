@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
-import { ModelToken } from 'src/app/models/ModelToken.models';
-import { Tithes } from 'src/app/models/Tithes.models';
-import { FirstFruits } from 'src/app/models/firstFruits.model';
-import { Offering } from 'src/app/models/offering.models';
-import { ResultViewModel } from 'src/app/models/resultViewModel.models';
+import { ModelToken } from 'src/app/models/churchEntitieModels/ModelToken.models';
+import { Tithes } from 'src/app/models/churchEntitieModels/Tithes.models';
+import { FirstFruits } from 'src/app/models/churchEntitieModels/firstFruits.model';
+import { Offering } from 'src/app/models/churchEntitieModels/offering.models';
+import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
 import { AuthService } from 'src/app/services/auth.services';
 import { DashBoardService } from 'src/app/services/dashboard.service';
 import { FirstFruitsService } from 'src/app/services/firstFruits.services';
@@ -73,8 +73,8 @@ export class DashboardPageComponent implements OnInit {
 
     //get members
     try {
-      const dados = await this.churchHandler.getMembersByChurch;
-      this.members = dados;
+      const dados = await this.churchHandler.getMembersByChurch();
+      this.members = dados.data;
       this.totalMembers = 0;
       this.members.forEach((x: string) => {
         this.totalMembers += 1;

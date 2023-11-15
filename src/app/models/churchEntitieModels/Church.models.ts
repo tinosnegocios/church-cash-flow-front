@@ -17,6 +17,5 @@ class Church extends EntitieResultApi {
     firstPastorId: number = 0;
     secondPastorId: number = 0;
     address: Address = new Address();
-    id: number = 0;
   }
   

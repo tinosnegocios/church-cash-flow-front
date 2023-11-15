@@ -1,4 +1,4 @@
-import { EntitieResultApi } from "../Entitie.models";
+import { EntitieResultApi } from "../churchEntitieModels/Entitie.models";
 
 export class MemberInReadModel extends EntitieResultApi {
     churchName: string = "";

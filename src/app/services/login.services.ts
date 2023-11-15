@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { UserLogin } from "../models/UserLogin.models";
+import { UserLogin } from "../models/churchEntitieModels/UserLogin.models";
 import { configAplication } from "../config/configAplication";
 
 @Injectable({

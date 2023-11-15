@@ -8,7 +8,7 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.co
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ModelToken } from './models/ModelToken.models';
+import { ModelToken } from './models/churchEntitieModels/ModelToken.models';
 import { LoadingPageComponent } from './pages/shared/loading-page/loading-page.component';
 import { MenusPageComponent } from './pages/shared/menus-page/menus-page.component';
 import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';
@@ -22,7 +22,11 @@ import { MemberRegisterPageComponent } from './pages/secretary/member/member-reg
 import { configAplication } from './config/configAplication';
 import { MemberReportPageComponent } from './pages/secretary/member/member-report-page/member-report-page.component';
 import { LoadingFileComponent } from './pages/shared/loading-file/loading-file.component';
-
+import { RegistersPageComponent } from './pages/shared/registers-page/registers-page.component';
+import { OutflowRegisterPageComponent } from './pages/treasury/outflow/outflow-register-page/outflow-register-page.component';
+import { OutflowReportPageComponent } from './pages/treasury/outflow/outflow-report-page/outflow-report-page.component';
+import { ChurchRegisterPageComponent } from './pages/secretary/church/church-register-page/church-register-page.component';
+import { ChurchReportPageComponent } from './pages/secretary/church/church-report-page/church-report-page.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +45,10 @@ import { LoadingFileComponent } from './pages/shared/loading-file/loading-file.c
     MemberRegisterPageComponent,
     MemberReportPageComponent,
     LoadingFileComponent,
+    OutflowRegisterPageComponent,
+    OutflowReportPageComponent,
+    ChurchRegisterPageComponent,
+    ChurchReportPageComponent
   ],
   imports: [
     BrowserModule,

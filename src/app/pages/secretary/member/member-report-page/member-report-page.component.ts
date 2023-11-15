@@ -115,8 +115,4 @@ export class MemberReportPageComponent implements OnInit  {
     this.idHandle = 0;
   }
 
-
-
-
-
 }

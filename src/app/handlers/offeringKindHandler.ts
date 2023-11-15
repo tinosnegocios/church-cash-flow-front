@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BaseHandler } from "./baseHandler";
 import { OfferingKindService } from "../services/offeringKind.services";
-import { ResultViewModel } from "../models/resultViewModel.models";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 
 @Injectable({
     providedIn: 'root'

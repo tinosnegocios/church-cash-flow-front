@@ -2,31 +2,26 @@ import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { FirstFruitsHandler } from 'src/app/handlers/firstFruitsHandler';
-import { MemberHandler } from 'src/app/handlers/memberHandler';
-import { OfferingHandler } from 'src/app/handlers/offeringHandler';
-import { ModelToken } from 'src/app/models/ModelToken.models';
-import { FirstFruits } from 'src/app/models/firstFruits.model';
-import { OfferingKind } from 'src/app/models/offeringKind.models';
-import { ResultViewModel } from 'src/app/models/resultViewModel.models';
-import { AuthService } from 'src/app/services/auth.services';
+import { FirstFruitsEditModel } from 'src/app/models/EditModels/firstFruitsEdit.models';
+import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
+import { FirstFruits } from 'src/app/models/churchEntitieModels/firstFruits.model';
+import { OfferingKind } from 'src/app/models/churchEntitieModels/offeringKind.models';
+import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
+import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
+import { CloudService } from 'src/app/services/cloud.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
+import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
 
 @Component({
   selector: 'app-first-fruits-register-page',
   templateUrl: './first-fruits-register-page.component.html'
 })
-export class FirstFruitsRegisterPageComponent implements OnInit {
-  protected typeSave = "create";
+export class FirstFruitsRegisterPageComponent extends RegistersPageComponent implements OnInit {
   protected formTreasury!: FormGroup;
   protected formSearchTreasury!: FormGroup;
-
-  protected busy = false;
-  protected searchBusy = false;
-  private auth: AuthService
-
-  protected modelToken: ModelToken;
 
   protected offeringKind!: ResultViewModel['data'];
   protected offeringKindToSelect!: [string, string][]
@@ -37,19 +32,12 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
   public offeringKindSelected: string | undefined;
   public meetingKindSelected: string | undefined;
 
-  public msgErros: string[] = [];
-  public msgSuccesss: string[] = [];
-  public msgImport: string = "";
-
-  public selectedFileExcel: File | undefined;
-  private fileReader: FileReader | undefined;
   private codeSearch: number = 0;
 
-  constructor(private handler: FirstFruitsHandler, private churchHandler: MemberHandler, private offeringKindService: OfferingKindService,
-    private fbuilder: FormBuilder, private route: ActivatedRoute) {
-
-    this.auth = new AuthService();
-    this.modelToken = this.auth.getModelFromToken();
+  constructor(private handler: FirstFruitsHandler, private churchHandler: ChurchHadler, private offeringKindService: OfferingKindService,
+    private fbuilder: FormBuilder, private route: ActivatedRoute, private cloudService: CloudService) {
+    
+    super();
 
     this.formSearchTreasury = this.fbuilder.group({
       code: ['']
@@ -75,7 +63,9 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
       competence: ['', Validators.compose([
         Validators.required,
       ])],
-      resume: ['']
+      resume: [''],
+      photo: ['', Validators.compose([
+      ])],
     });
   }
 
@@ -111,7 +101,6 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
       const meuObjeto: Record<string, string> = {};
 
       this.offeringKind.forEach((x: OfferingKind) => {
-
         var key = x.name;
         var value = x.id
 
@@ -119,33 +108,23 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
       });
 
       this.offeringKindToSelect = Object.entries(meuObjeto);
-      
     } catch (error) {
-      console.log('error to get offering-kind:', error);
+      console.error('error to get offering-kind:', error);
     }
   }
 
   protected async loadMembers() {
-    try {
       const dados = await this.churchHandler.getByChurch();
-      this.members = dados;
-
+      this.members = dados.data;
       var meuObjeto: Record<string, string> = {};
-      var cont = 1;
+      this.members.forEach((x: MemberReadModel) => {
+        var key = x.name;
+        var value = x.id;
 
-      this.members.forEach((x: string) => {
-        var key = x;
-        var value = cont;
-
-        cont++;
         meuObjeto[key] = `${value}`;
       });
 
       this.membersToSelect = Object.entries(meuObjeto);
-      
-    } catch (error) {
-      console.log('error to get offering-kind:', error);
-    }
   }
 
   protected async searchByCode(code: number = 0) {
@@ -176,10 +155,21 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
     var dayConvert = new Date(model.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`
 
+    if(model.photo != null && model.photo.length > 5) {
+      this.imageBusy = true;
+      this.imageUrl = this.cloudService.getUrlImageFirstFruitsStorage(model.photo);
+      this.imageBusy = false;
+    }else{
+      this.imageUrl = this.cloudService.getImageStore("common", "no-file");
+    }
+    
     this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['memberId'].setValue(model.memberId);
     this.formTreasury.controls['day'].setValue(formatDate(model.day, 'yyyy-MM-dd', 'en'));
-    this.formTreasury.controls['competence'].setValue(model.competence.replace('/','-'));
+    var comp = model.competence.replace('/','-');
+    var compSplit = comp.split("-");
+    var comAnoMes = compSplit[1]+"-"+compSplit[0];
+    this.formTreasury.controls['competence'].setValue(comAnoMes);
     this.formTreasury.controls['description'].setValue(model.description);
     this.formTreasury.controls['totalAmount'].setValue(model.totalAmount);
     this.formTreasury.controls['offeringKindId'].setValue(model.offeringKindId);
@@ -189,16 +179,11 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
     this.formTreasury.controls['resume'].setValue(resume);
   }
 
-  protected async clearForm() {
-    this.msgErros = [];
-    this.msgSuccesss = [];
-    this.msgImport = "";
+  protected override async clearForm() {
     this.handler.clear();
-
+    this.clearCommonObj();
     this.formTreasury.reset();
     this.formSearchTreasury.reset();
-
-    this.typeSave = "create";
   }
 
   protected async save() {
@@ -223,7 +208,11 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
   private async create(model: FirstFruits) {
     this.clearForm();
 
-    var create = await this.handler.create(model)
+    var editDto = new FirstFruitsEditModel();
+    var dto = editDto.ConvertTo(model);
+    dto.base64Image = this.base64Image;
+
+    var create = await this.handler.create(dto)
       .then((result) => {
       })
       .catch((error) => {
@@ -235,7 +224,11 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
   }
 
   private async update(model: FirstFruits, modelId: string) {
-    this.handler.update(model, modelId)
+    var editDto = new FirstFruitsEditModel();
+    var dto = editDto.ConvertTo(model);
+    dto.base64Image = this.base64Image;
+
+    this.handler.update(dto, modelId)
       .then((result) => {
       })
       .catch((error) => {
@@ -244,12 +237,6 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
 
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
-  }
-
-  public setExcel(event: any): void {
-    this.clearForm();
-
-    this.selectedFileExcel = event.target.files[0];
   }
 
   public readExcel(): void {
@@ -285,8 +272,6 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
     });
   }
 
-
-
   protected showResume() {
     var oferta: string = '';
     var membro: string;
@@ -312,6 +297,30 @@ export class FirstFruitsRegisterPageComponent implements OnInit {
 
       this.formTreasury.controls['resume'].setValue(resume);
     }
+  }
+
+  protected loadImage(event: any) {
+    this.msgErros = [];
+    this.msgSuccesss = [];
+
+    const file = event.target.files[0];
+
+    var imageMethod = new ImageMethods(2 * 1024 * 1024,);
+    var base64 = imageMethod.convertToBase64(file)
+      .then((base64) => {
+        if(base64 == "")  {
+          this.formTreasury.controls["photo"].setValue(null);
+          this.msgErros.push(imageMethod.getErro())
+        }else{
+          this.base64Image = base64;
+        }
+        
+      })
+      .catch((erro) => {
+        console.error("Erro no carregamento da imagem");
+        this.formTreasury.controls["photo"].setValue(null);
+        this.msgErros.push(imageMethod.getErro())
+      });
   }
 
 }

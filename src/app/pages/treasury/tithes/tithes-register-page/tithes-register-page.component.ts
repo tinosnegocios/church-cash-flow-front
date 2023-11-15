@@ -3,14 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
-import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { TithesHandler } from 'src/app/handlers/tithesHandler';
 import { TithesEditModel } from 'src/app/models/EditModels/TithesEdit.model';
-import { ModelToken } from 'src/app/models/ModelToken.models';
 import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
-import { Tithes } from 'src/app/models/Tithes.models';
-import { OfferingKind } from 'src/app/models/offeringKind.models';
-import { ResultViewModel } from 'src/app/models/resultViewModel.models';
+import { Tithes } from 'src/app/models/churchEntitieModels/Tithes.models';
+import { OfferingKind } from 'src/app/models/churchEntitieModels/offeringKind.models';
+import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
+import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 import { AuthService } from 'src/app/services/auth.services';
 import { CloudService } from 'src/app/services/cloud.services';
 import { OfferingKindService } from 'src/app/services/offeringKind.services';
@@ -21,21 +20,9 @@ import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
   selector: 'app-tithes-register-page',
   templateUrl: './tithes-register-page.component.html'
 })
-export class TithesRegisterPageComponent implements OnInit {
-  protected hiddenImage = true;
-  protected imageBusy : boolean = false;
-  protected imageUrl : string = "";
-  protected base64Image: string = "";
-  protected typeSave = "create";
+export class TithesRegisterPageComponent extends RegistersPageComponent implements OnInit {
   protected formTreasury!: FormGroup;
   protected formSearchTreasury!: FormGroup;
-
-  protected busy = false;
-  protected searchBusy = false;
-  private auth: AuthService
-
-  protected modelToken: ModelToken;
-
   protected offeringKind!: ResultViewModel['data'];
   protected offeringKindToSelect!: [string, string][]
 
@@ -44,18 +31,12 @@ export class TithesRegisterPageComponent implements OnInit {
 
   public offeringKindSelected: string | undefined;
   public meetingKindSelected: string | undefined;
-
-  public msgErros: string[] = [];
-  public msgSuccesss: string[] = [];
-  public msgImport: string = "";
-
-  public selectedFileExcel: File | undefined;
-  private fileReader: FileReader | undefined;
   private codeSearch: number = 0;
 
   constructor(private handler: TithesHandler, private offeringKindService: OfferingKindService, private churchHandler: ChurchHadler,
     private fbuilder: FormBuilder, private route: ActivatedRoute, private cloudService: CloudService) {
-
+    
+    super();
     this.auth = new AuthService();
     this.modelToken = this.auth.getModelFromToken();
 
@@ -83,7 +64,9 @@ export class TithesRegisterPageComponent implements OnInit {
       competence: ['', Validators.compose([
         Validators.required,
       ])],
-      resume: ['']
+      resume: [''],
+      photo: ['', Validators.compose([
+      ])],
     });
   }
 
@@ -160,7 +143,7 @@ export class TithesRegisterPageComponent implements OnInit {
       code = this.formSearchTreasury.value.code;
 
     var modelToForm: ResultViewModel = await this.handler.getById(code);
-
+    
     this.clearForm();
     
     if (modelToForm.errors!.length > 0) {
@@ -180,7 +163,7 @@ export class TithesRegisterPageComponent implements OnInit {
   private fillFormWithModel(model: Tithes, code: number) {
     var dayConvert = new Date(model.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`;
-
+    
     if(model.photo != null && model.photo.length > 5) {
       this.imageBusy = true;
       this.imageUrl = this.cloudService.getUrlImageTithesStorage(model.photo);
@@ -188,11 +171,14 @@ export class TithesRegisterPageComponent implements OnInit {
     }else{
       this.imageUrl = this.cloudService.getImageStore("common", "no-file");
     }
-
+    
     this.formSearchTreasury.controls['code'].setValue(code);
     this.formTreasury.controls['memberId'].setValue(model.memberId);
     this.formTreasury.controls['day'].setValue(formatDate(model.day, 'yyyy-MM-dd', 'en'));
-    this.formTreasury.controls['competence'].setValue(model.competence.replace('/','-'));
+    var comp = model.competence.replace('/','-');
+    var compSplit = comp.split("-");
+    var comAnoMes = compSplit[1]+"-"+compSplit[0];
+    this.formTreasury.controls['competence'].setValue(comAnoMes);
     this.formTreasury.controls['description'].setValue(model.description);
     this.formTreasury.controls['totalAmount'].setValue(model.totalAmount);
     this.formTreasury.controls['offeringKindId'].setValue(model.offeringKindId);
@@ -203,15 +189,14 @@ export class TithesRegisterPageComponent implements OnInit {
   }
 
   protected async clearForm() {
-    this.msgErros = [];
-    this.msgSuccesss = [];
-    this.msgImport = "";
     this.handler.clear();
+    this.clearCommonObj();
 
     this.formTreasury.reset();
     this.formSearchTreasury.reset();
 
     this.typeSave = "create";
+    this.imageUrl = "";
   }
 
   protected async save() {
@@ -258,12 +243,6 @@ export class TithesRegisterPageComponent implements OnInit {
 
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
-  }
-
-  public setExcel(event: any): void {
-    this.clearForm();
-
-    this.selectedFileExcel = event.target.files[0];
   }
 
   public readExcel(): void {
@@ -352,11 +331,4 @@ export class TithesRegisterPageComponent implements OnInit {
         this.msgErros.push(imageMethod.getErro())
       });
   }
-
-  protected showHideImage(){
-    
-    this.hiddenImage = !this.hiddenImage;
-    
-  }
-
 }
