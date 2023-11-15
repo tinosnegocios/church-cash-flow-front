@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ResultViewModel } from "../models/resultViewModel.models";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { BaseHandler } from "./baseHandler";
 import { PostService } from "../services/post.services";
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserLogin } from 'src/app/models/UserLogin.models';
+import { UserLogin } from 'src/app/models/churchEntitieModels/UserLogin.models';
 import { AuthService } from 'src/app/services/auth.services';
 import { LoginService } from 'src/app/services/login.services';
 

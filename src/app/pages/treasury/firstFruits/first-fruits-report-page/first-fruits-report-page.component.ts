@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DashBoardService } from 'src/app/services/dashboard.service';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
-import { FirstFruits } from 'src/app/models/firstFruits.model';
+import { FirstFruits } from 'src/app/models/churchEntitieModels/firstFruits.model';
 import { FirstFruitsHandler } from 'src/app/handlers/firstFruitsHandler';
 
 @Component({

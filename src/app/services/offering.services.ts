@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { BaseService } from "./base.services";
 import { DashBoardService } from "./dashboard.service";
-import { ResultViewModel } from "../models/resultViewModel.models";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { AuthService } from "./auth.services";
 import { Injectable } from "@angular/core";
-import { Offering } from "../models/offering.models";
+import { Offering } from "../models/churchEntitieModels/offering.models";
 import { EMPTY, Observable, catchError, lastValueFrom, map, of } from "rxjs";
 
 @Injectable({

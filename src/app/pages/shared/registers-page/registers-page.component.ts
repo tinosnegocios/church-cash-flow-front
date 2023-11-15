@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ModelToken } from 'src/app/models/ModelToken.models';
+import { ModelToken } from 'src/app/models/churchEntitieModels/ModelToken.models';
 import { AuthService } from 'src/app/services/auth.services';
 
 @Component({

@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { BaseService } from "./base.services";
 import { AuthService } from "./auth.services";
-import { ResultViewModel } from "../models/resultViewModel.models";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { Observable, map } from "rxjs";
 import { DashBoardService } from "./dashboard.service";
 

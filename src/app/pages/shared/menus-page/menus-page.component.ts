@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ModelToken } from 'src/app/models/ModelToken.models';
+import { ModelToken } from 'src/app/models/churchEntitieModels/ModelToken.models';
 import { AuthService } from 'src/app/services/auth.services';
 
 @Component({

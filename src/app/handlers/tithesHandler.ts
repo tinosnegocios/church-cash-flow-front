@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { TithesService } from "../services/tithes.service";
-import { ResultViewModel } from "../models/resultViewModel.models";
-import { Tithes } from "../models/Tithes.models";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
+import { Tithes } from "../models/churchEntitieModels/Tithes.models";
 import { BaseHandler } from "./baseHandler";
 import { TithesEditModel } from "../models/EditModels/TithesEdit.model";
 

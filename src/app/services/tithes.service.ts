@@ -1,10 +1,10 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { BaseService } from "./base.services";
 import { DashBoardService } from "./dashboard.service";
-import { ResultViewModel } from "../models/resultViewModel.models";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { AuthService } from "./auth.services";
 import { Injectable } from "@angular/core";
-import { Tithes } from "../models/Tithes.models";
+import { Tithes } from "../models/churchEntitieModels/Tithes.models";
 import { Observable, catchError, of } from "rxjs";
 
 @Injectable({

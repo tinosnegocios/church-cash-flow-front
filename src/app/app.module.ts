@@ -8,7 +8,7 @@ import { DashboardPageComponent } from './pages/dashboard-page/dashboard-page.co
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ModelToken } from './models/ModelToken.models';
+import { ModelToken } from './models/churchEntitieModels/ModelToken.models';
 import { LoadingPageComponent } from './pages/shared/loading-page/loading-page.component';
 import { MenusPageComponent } from './pages/shared/menus-page/menus-page.component';
 import { HeadFrameComponent } from './pages/shared/head-frame/head-frame.component';

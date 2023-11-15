@@ -7,7 +7,7 @@ import { OutFlowHandler } from 'src/app/handlers/outflowHandler';
 import { OutflowEditModel } from 'src/app/models/EditModels/OutFlowEdit.Models';
 import { OutFlowKindReadModel } from 'src/app/models/ReadModels/OutFlowKindRead.model';
 import { OutFlowReadModel } from 'src/app/models/ReadModels/OutflowRead.model';
-import { ResultViewModel } from 'src/app/models/resultViewModel.models';
+import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
 import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 import { CloudService } from 'src/app/services/cloud.services';
 import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';

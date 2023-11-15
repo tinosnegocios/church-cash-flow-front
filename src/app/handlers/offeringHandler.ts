@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { Offering } from "../models/offering.models";
+import { Offering } from "../models/churchEntitieModels/offering.models";
 import { OfferingService } from "../services/offering.services";
-import { ResultViewModel } from "../models/resultViewModel.models";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { BaseHandler } from "./baseHandler";
 import { OfferingEditModel } from "../models/EditModels/OfferingEdit.model";
 

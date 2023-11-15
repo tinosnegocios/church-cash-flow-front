@@ -9,7 +9,7 @@ import { MemberEditModel } from 'src/app/models/EditModels/MemberEdit.models';
 import { MemberOutEditDto } from 'src/app/models/EditModels/MemberOutEdit.models';
 import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 import { PostReadModel } from 'src/app/models/ReadModels/PostRead.models';
-import { ResultViewModel } from 'src/app/models/resultViewModel.models';
+import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
 import { CloudService } from 'src/app/services/cloud.services';
 import { ImageMethods } from 'src/app/utils/ImagesMethods.utils';
 

@@ -1,6 +1,6 @@
 import { read } from "xlsx";
-import { EntitieResultApi } from "../Entitie.models";
-import { Offering } from "../offering.models";
+import { EntitieResultApi } from "../churchEntitieModels/Entitie.models";
+import { Offering } from "../churchEntitieModels/offering.models";
 
 export class OfferingEditModel extends EntitieResultApi {
     Day: string = "";

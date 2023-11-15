@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { ResultViewModel } from "../models/resultViewModel.models";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { AuthService } from "./auth.services";
 import { Observable, catchError, of } from "rxjs";
 import { configAplication } from "../config/configAplication";

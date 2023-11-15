@@ -1,8 +1,8 @@
 import { read } from "xlsx";
-import { EntitieResultApi } from "../Entitie.models";
-import { Offering } from "../offering.models";
-import { Tithes } from "../Tithes.models";
-import { FirstFruits } from "../firstFruits.model";
+import { EntitieResultApi } from "../churchEntitieModels/Entitie.models";
+import { Offering } from "../churchEntitieModels/offering.models";
+import { Tithes } from "../churchEntitieModels/Tithes.models";
+import { FirstFruits } from "../churchEntitieModels/firstFruits.model";
 
 export class FirstFruitsEditModel extends EntitieResultApi {
     Day: string = "";
