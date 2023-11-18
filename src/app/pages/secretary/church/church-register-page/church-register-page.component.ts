@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { AddressEditModel } from 'src/app/models/EditModels/Address.model';
-import { ChurchAddress } from 'src/app/models/EditModels/ChurchAddress.model';
 import { ChurchEditModel } from 'src/app/models/EditModels/churchEdit.model';
 import { SearchCep } from 'src/app/utils/searchCep.utils';
 
@@ -13,29 +13,34 @@ export class ChurchRegisterPageComponent implements OnInit {
   protected formRegister!: FormGroup;
   protected formSearch!: FormGroup;
 
+  protected msgErros: string[] = [];
+  protected msgSuccesss: string[] = [];
+
+  protected searchBusy: boolean = false;
+
   protected typeSave = "create";
   
-  constructor(private fbuilder: FormBuilder) {
+  constructor(private fbuilder: FormBuilder, private handler: ChurchHadler) {
     this.formSearch = this.fbuilder.group({
       code: ['', Validators.compose([
         Validators.required
       ])],
     });
     this.formRegister = this.fbuilder.group({
-      name: ['', Validators.compose([
+      name: ['ceo carmo', Validators.compose([
         Validators.required,
         Validators.maxLength(100),
         Validators.minLength(4),
       ])],
-      acronym: ['', Validators.compose([
+      acronym: ['cmr', Validators.compose([
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(4),
       ])],
-      dateRegister: ['', Validators.compose([
+      inaugurationDate: ['2023-11-15', Validators.compose([
         Validators.required,
       ])],
-      dateInauguration: ['', Validators.compose([
+      registerDate: ['2023-11-15', Validators.compose([
         Validators.required,
       ])],
       firstPastorId: ['', Validators.compose([
@@ -56,43 +61,43 @@ export class ChurchRegisterPageComponent implements OnInit {
       secondSecretaryId: ['', Validators.compose([
         Validators.required,
       ])],
-      cep: ['', Validators.compose([
+      zipCode: ['37470000', Validators.compose([
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(14)
       ])],
-      country: ['', Validators.compose([
+      country: ['brasil', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      state: ['', Validators.compose([
+      state: ['minas gerais', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      city: ['', Validators.compose([
+      city: ['carmo de minas', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      district: ['', Validators.compose([
+      district: ['centro', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      street: ['', Validators.compose([
+      street: ['rua projetada', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      additional: ['', Validators.compose([
+      additional: ['2 andar', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      number: ['', Validators.compose([
+      number: ['101', Validators.compose([
         Validators.required
       ])]
     });    
   }
 
   ngOnInit(): void {
-    
+    this.typeSave == "create"
   }  
 
   protected dashboard(){
@@ -101,19 +106,20 @@ export class ChurchRegisterPageComponent implements OnInit {
 
   protected async save(){
     const data = this.formRegister.value;
-    console.log(data);
 
     var churchEdit = new ChurchEditModel();
     var addressEdit = new AddressEditModel();
 
     churchEdit.name = this.formRegister.value.name;
     churchEdit.acronym = this.formRegister.value.acronym;
-    churchEdit.firstPastorId = this.formRegister.value.firstPastorId;
-    churchEdit.secondPastorId = this.formRegister.value.secondPastorId;
-    churchEdit.firstSecretaryId = this.formRegister.value.firstSecretaryId;
-    churchEdit.SecondSecretaryId = this.formRegister.value.SecondSecretaryId;
-    churchEdit.firstTreasurerId = this.formRegister.value.firstTreasurerId;
-    churchEdit.secondTreasurerId = this.formRegister.value.secondTreasurerId;
+    churchEdit.firstPastorId = this.formRegister.value.firstPastorId != "" ? this.formRegister.value.firstPastorId : 0;
+    churchEdit.secondPastorId = this.formRegister.value.secondPastorId != "" ? this.formRegister.value.secondPastorId : 0;
+    churchEdit.firstSecretaryId = this.formRegister.value.firstSecretaryId != "" ? this.formRegister.value.firstSecretaryId : 0;
+    churchEdit.secondSecretaryId = this.formRegister.value.secondSecretaryId != "" ? this.formRegister.value.secondSecretaryId : 0;
+    churchEdit.firstTreasurerId = this.formRegister.value.firstTreasurerId != "" ? this.formRegister.value.firstTreasurerId : 0;
+    churchEdit.secondTreasurerId = this.formRegister.value.secondTreasurerId != "" ? this.formRegister.value.secondTreasurerId : 0;
+    churchEdit.inaugurationDate = this.formRegister.value.inaugurationDate;
+    churchEdit.registerDate = this.formRegister.value.registerDate;
 
     addressEdit.country = this.formRegister.value.country;
     addressEdit.state = this.formRegister.value.state;
@@ -122,31 +128,37 @@ export class ChurchRegisterPageComponent implements OnInit {
     addressEdit.district = this.formRegister.value.district;
     addressEdit.street = this.formRegister.value.street;
     addressEdit.additional = this.formRegister.value.additional;
-    addressEdit.number = this.formRegister.value.number;
-
-    const churchAdd = new ChurchAddress(churchEdit, addressEdit);    
+    addressEdit.number = parseInt(this.formRegister.value.number);
 
     if(this.typeSave == "create"){
-      await this.create(churchAdd);
+      await this.create(churchEdit, addressEdit);
     }else if(this.typeSave == "update"){
-      await this.update(churchAdd);
+      await this.update();
     }
 
   }
 
-  protected async create(churchEdit: ChurchAddress) {
-    console.log(churchEdit);
+  protected async create(churchEdit: ChurchEditModel, addressEdit: AddressEditModel) {
+    await this.handler.create(churchEdit, addressEdit)
+    .then((result) => {
+    })
+    .catch((error) => {
+      this.msgErros.push("Ocorreu um erro no cadastro. Tente novamente");
+    });
+
+    this.msgErros = this.handler.getMsgErro();
+    this.msgSuccesss = this.handler.getMsgSuccess();
   }
-  protected async update(churchEdit: ChurchAddress) {
-    console.log(churchEdit);
+  protected async update() {
+    
   }
 
   protected clear(){
-
+    this.dashboard();
   }
 
   protected async searchAddressCep(){
-    var cep = this.formRegister.value.cep;
+    var cep = this.formRegister.value.zipCode;
     const getpCep = await new SearchCep().search(cep);
     
     if(getpCep == null)

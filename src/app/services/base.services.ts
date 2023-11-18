@@ -12,12 +12,12 @@ export abstract class BaseService {
     this.url = configAplication.getApiHosy();
    }
 
-  public async create(offering: any): Promise<ResultViewModel | null> {
+  public async create(model: any): Promise<ResultViewModel | null> {
     var auth = new AuthService();
     const token = auth.getToken();
 
     var churchId = (auth.getModelFromToken()).churchId;
-    offering.churchId = churchId;
+    model.churchId = churchId;
 
     const httpHeaders = new HttpHeaders()
       .set("Content-Type", "application/json; charset=utf-8")
@@ -27,7 +27,7 @@ export abstract class BaseService {
     var msgErro: string[];
 
     const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
-      this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, offering, { headers: httpHeaders })
+      this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, model, { headers: httpHeaders })
         .pipe(
           catchError((error: any): Observable<ResultViewModel> => {
             msgErro = error.error.erros;

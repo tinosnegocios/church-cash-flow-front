@@ -1,15 +1,15 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
-import { BaseService } from "./base.services";
 import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { AuthService } from "./auth.services";
 import { Injectable } from "@angular/core";
 import { DashBoardService } from "./dashboard.service";
+import { BaseChurchService } from "./baseChurch.services";
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class ChurchService extends BaseService {
+export class ChurchService extends BaseChurchService {
   dashBoardServices: DashBoardService;
   
   constructor(http: HttpClient, dashBoardServices: DashBoardService) {

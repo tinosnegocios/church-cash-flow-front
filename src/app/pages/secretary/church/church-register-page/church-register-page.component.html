@@ -2,7 +2,29 @@
 
     <!--msg erro and loading spinner-->
     <div class="col-12 col-lg-6">
+        <div *ngIf="searchBusy" class="spinner-grow" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
 
+        <div *ngFor="let msgSuccess of msgSuccesss">
+            <div class="row g-2">
+                <div class="alert alert-outline-success d-flex align-items-center" role="alert">
+                    <span class="fas fa-check-circle text-success fs-3 me-3"></span>
+                    <p class="mb-0 flex-1">{{msgSuccess}}</p>
+
+                    <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngFor="let msgError of msgErros">
+            <div class="alert alert-outline-danger d-flex align-items-center" role="alert">
+                <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
+                <p class="mb-0 flex-1">{{msgError}}</p>
+
+                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
     </div>
 
     <form class="mb-3" [formGroup]="formSearch">
@@ -63,13 +85,13 @@
                         <div class="col-3">
                             <h4 class="mb-3">Data cadastro</h4>
                             <input class="form-control" type="date" placeholder="dd/mm/yyyy"
-                                formControlName="dateRegister">
+                                formControlName="registerDate">
                         </div>
 
                         <div class="col-3">
                             <h4 class="mb-3">Data inauguração</h4>
                             <input class="form-control" type="date" placeholder="dd/mm/yyyy"
-                                formControlName="dateInauguration">
+                                formControlName="inaugurationDate">
                         </div>
                     </div>
 
@@ -142,7 +164,7 @@
                     <div class="row mb-5">
                         <div class="col-2">
                             <h4 class="mb-3">CEP</h4>
-                            <input class="form-control" placeholder="99999-999" type="text" formControlName="cep" (blur)="searchAddressCep()">
+                            <input class="form-control" placeholder="99999-999" type="text" formControlName="zipCode" (blur)="searchAddressCep()">
                         </div>
 
                         <div class="col-3">
