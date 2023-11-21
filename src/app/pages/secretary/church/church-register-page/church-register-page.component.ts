@@ -1,9 +1,13 @@
+import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { AddressEditModel } from 'src/app/models/EditModels/Address.model';
 import { ChurchEditModel } from 'src/app/models/EditModels/churchEdit.model';
+import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
+import { StringUtil } from 'src/app/models/utils/String.utils';
 import { SearchCep } from 'src/app/utils/searchCep.utils';
+import { read } from 'xlsx';
 
 @Component({
   selector: 'app-church-register-page',
@@ -104,6 +108,54 @@ export class ChurchRegisterPageComponent implements OnInit {
 
   }
 
+  protected async search(){
+    const idChurch = this.formSearch.value.code;
+    const stringUtil = new StringUtil();
+    if(! stringUtil.isNumeric(idChurch))
+      return;
+
+    this.searchBusy = true;
+    var modelToForm = await this.handler.getChurchById(idChurch);
+    
+    this.clear();
+    
+    if (modelToForm.errors!.length > 0) {
+      this.searchBusy = false;
+      this.msgErros.push("Member not found");
+      return;
+    }
+    const readModel: ChurchReadModel = modelToForm.data;
+    this.fillFormWithModel(readModel);
+
+    this.searchBusy = false;
+    this.typeSave = "update";
+    this.formSearch.controls['code'].setValue(idChurch);
+  }
+
+  private fillFormWithModel(readModel: ChurchReadModel){
+    console.log(readModel);
+
+    this.formRegister.controls['name'].setValue(readModel.name);
+    this.formRegister.controls['acronym'].setValue(readModel.acronym);
+    this.formRegister.controls['inaugurationDate'].setValue(formatDate(readModel.inaugurationDate, 'yyyy-MM-dd', 'en'));
+    this.formRegister.controls['registerDate'].setValue(formatDate(readModel.registerDate, 'yyyy-MM-dd', 'en'));
+    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
+    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
+    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
+    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
+    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
+    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
+
+    this.formRegister.controls['zipCode'].setValue(readModel.address!.zipCode);
+    this.formRegister.controls['additional'].setValue(readModel.address!.additional);
+    this.formRegister.controls['city'].setValue(readModel.address!.city);
+    this.formRegister.controls['country'].setValue(readModel.address!.country);
+    this.formRegister.controls['district'].setValue(readModel.address!.district);
+    this.formRegister.controls['number'].setValue(readModel.address!.number);
+    this.formRegister.controls['state'].setValue(readModel.address!.state);
+    this.formRegister.controls['street'].setValue(readModel.address!.street);
+  }
+
   protected async save(){
     const data = this.formRegister.value;
 
@@ -120,6 +172,7 @@ export class ChurchRegisterPageComponent implements OnInit {
     churchEdit.secondTreasurerId = this.formRegister.value.secondTreasurerId != "" ? this.formRegister.value.secondTreasurerId : 0;
     churchEdit.inaugurationDate = this.formRegister.value.inaugurationDate;
     churchEdit.registerDate = this.formRegister.value.registerDate;
+    console.log(churchEdit);
 
     addressEdit.country = this.formRegister.value.country;
     addressEdit.state = this.formRegister.value.state;
@@ -154,7 +207,14 @@ export class ChurchRegisterPageComponent implements OnInit {
   }
 
   protected clear(){
-    this.dashboard();
+    this.msgErros = [];
+    this.msgSuccesss = [];
+    this.handler.clear();
+    this.formSearch.reset();
+    this.formRegister.reset();    
+    this.typeSave = "create";
+
+    //this.memberPhotoUrl = this.cloudService.getImageStore("common", "anonymou-user");
   }
 
   protected async searchAddressCep(){

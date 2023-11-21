@@ -19,7 +19,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(private loginService: LoginService, private fbuilder: FormBuilder, private router: Router) {
     this.formLogin = this.fbuilder.group({
-      code: ['071CD9',Validators.compose([
+      code: ['C82E86',Validators.compose([
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(6)

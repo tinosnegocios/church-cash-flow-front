@@ -20,6 +20,12 @@ export class ChurchHadler extends BaseHandler {
         this.service = service;
     }
 
+    public async getChurchById(code: string): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getChurchById(code);
+        
+        return result;
+    }
+
     public async getByChurch(): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.getMembers();
         return result;
@@ -71,7 +77,6 @@ export class ChurchHadler extends BaseHandler {
     }
     validateAddressEdit(model: AddressEditModel): boolean {
         var stringValidate = new StringUtil();
-        console.log(model);
         if(!stringValidate.isNumeric(model.zipCode.toString()) || model.country.trim().length <= 3 || 
         model.state.trim().length <= 1 || model.city.trim().length <= 3 || model.district.trim().length <= 3 ||
         model.street.trim().length <= 3 || !stringValidate.isNumeric(model.number.toString()) ){

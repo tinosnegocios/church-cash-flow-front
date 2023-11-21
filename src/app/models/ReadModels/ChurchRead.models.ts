@@ -10,6 +10,8 @@ export class ChurchReadModel extends EntitieResultApi {
     secondSecretary: string = "";
     firstPastor: string = "";
     secondPastor: string = "";
+    inaugurationDate: string = "";
+    registerDate: string = "";
 
     firstTreasurerId: number = 0;
     secondTreasurerId: number = 0;

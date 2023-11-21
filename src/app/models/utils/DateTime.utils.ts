@@ -10,4 +10,6 @@ export class DateTimeUtil {
 
         return !isNaN(date.getTime()) && date.toString() !== 'Invalid Date';
     }
+
+    
 }
