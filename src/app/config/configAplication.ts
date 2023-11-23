@@ -1,5 +1,5 @@
 //import configData from './settings/settings-prd.json';
-import configData from './settings/settings-dev.json';
+import configData from './settings/enviroments/settings-dev.json';
 
 export class configAplication {
   private static config: any;

@@ -31,6 +31,11 @@ export class ChurchHadler extends BaseHandler {
         return result;
     }
 
+    public async getByChurchByIdPass(idChurch: string): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getMembersByChurchByIdPass(idChurch);
+        return result;
+    }
+
     public async getMembersByChurch(): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.getMembersByChurchByMonth();
         return result;

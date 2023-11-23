@@ -99,8 +99,11 @@
                         <div class="col-2">
                             <div class="mb-6">
                                 <h4 class="mb-3">1ª Pastor</h4>
-                                <select class="form-control" formControlName="firstPastorId">
+                                <select class="form-select mb-3" aria-label="category" formControlName="firstPastorId">
                                     <option value=""></option>
+                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                        {{ entry[0] }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -108,8 +111,11 @@
                         <div class="col-2">
                             <div class="mb-6">
                                 <h4 class="mb-3">2ª Pastor</h4>
-                                <select class="form-control" formControlName="secondPastorId">
+                                <select class="form-select mb-3" aria-label="category" formControlName="secondPastorId">
                                     <option value=""></option>
+                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                        {{ entry[0] }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -117,8 +123,11 @@
                         <div class="col-2">
                             <div class="mb-6">
                                 <h4 class="mb-3">1ª Tesoureiro</h4>
-                                <select class="form-control" formControlName="firstTreasurerId">
+                                <select class="form-select mb-3" aria-label="category" formControlName="firstTreasurerId">
                                     <option value=""></option>
+                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                        {{ entry[0] }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -126,8 +135,11 @@
                         <div class="col-2">
                             <div class="mb-6">
                                 <h4 class="mb-3">2ª Tesoureiro</h4>
-                                <select class="form-control" formControlName="secondTreasurerId">
+                                <select class="form-select mb-3" aria-label="category" formControlName="secondTreasurerId">
                                     <option value=""></option>
+                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                        {{ entry[0] }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -135,8 +147,11 @@
                         <div class="col-2">
                             <div class="mb-6">
                                 <h4 class="mb-3">1ª Secretario</h4>
-                                <select class="form-control" formControlName="firstSecretaryId">
+                                <select class="form-select mb-3" aria-label="category" formControlName="firstSecretaryId">
                                     <option value=""></option>
+                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                        {{ entry[0] }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -144,8 +159,11 @@
                         <div class="col-2">
                             <div class="mb-6">
                                 <h4 class="mb-3">2ª Secretario</h4>
-                                <select class="form-control" formControlName="secondSecretaryId">
+                                <select class="form-select mb-3" aria-label="category" formControlName="secondSecretaryId">
                                     <option value=""></option>
+                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                        {{ entry[0] }}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -164,13 +182,17 @@
                     <div class="row mb-5">
                         <div class="col-2">
                             <h4 class="mb-3">CEP</h4>
-                            <input class="form-control" placeholder="99999-999" type="text" formControlName="zipCode" (blur)="searchAddressCep()">
+                            <input class="form-control" placeholder="99999-999" type="text" formControlName="zipCode"
+                                (blur)="searchAddressCep()">
                         </div>
 
                         <div class="col-3">
                             <h4 class="mb-3">Pais</h4>
-                            <select class="form-control" name="" id="" formControlName="country">
-                                <option value="brasil">Brasil</option>
+                            <select class="form-select mb-3" aria-label="category" formControlName="country">
+                                <option value=""></option>
+                                <option *ngFor="let entry of countryToSelect" [value]="entry[1]">
+                                    {{ entry[0] }}
+                                </option>
                             </select>
                         </div>
 

@@ -7,7 +7,9 @@ import { ChurchEditModel } from 'src/app/models/EditModels/churchEdit.model';
 import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
 import { StringUtil } from 'src/app/models/utils/String.utils';
 import { SearchCep } from 'src/app/utils/searchCep.utils';
-import { read } from 'xlsx';
+import countries from '../../../../config/settings/models/countryChurch.json';
+import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
+import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
 
 @Component({
   selector: 'app-church-register-page',
@@ -19,10 +21,15 @@ export class ChurchRegisterPageComponent implements OnInit {
 
   protected msgErros: string[] = [];
   protected msgSuccesss: string[] = [];
+  protected countryToSelect!: [string, string][];
+  protected memberToSelect!: [string, string][];
 
+  protected members!: ResultViewModel['data'];
+  
   protected searchBusy: boolean = false;
 
   protected typeSave = "create";
+  private idSearch = "";
   
   constructor(private fbuilder: FormBuilder, private handler: ChurchHadler) {
     this.formSearch = this.fbuilder.group({
@@ -70,7 +77,7 @@ export class ChurchRegisterPageComponent implements OnInit {
         Validators.minLength(8),
         Validators.maxLength(14)
       ])],
-      country: ['brasil', Validators.compose([
+      country: ['1', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
@@ -102,13 +109,43 @@ export class ChurchRegisterPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.typeSave == "create"
+
+    this.dashboard();
   }  
 
   protected dashboard(){
+    this.fillCountry();
+  }
 
+  protected fillCountry(){    
+    const countriesObject = countries.countries[0];
+    countries.countries.forEach((value) => {
+      var s: [string, string][] = Object.entries(value);
+      this.countryToSelect = s;
+    });
+  }
+
+  protected async loadMembers() {
+    try {
+      const dados = await this.handler.getByChurchByIdPass(this.idSearch);
+      this.members = dados.data;
+
+      var meuObjeto: Record<string, string> = {};
+      this.members.forEach((x: MemberReadModel) => {
+        var key = x.name;
+        var value = x.id;
+
+        meuObjeto[key] = `${value}`;
+      });
+
+      this.memberToSelect = Object.entries(meuObjeto);
+    } catch (error) {
+      console.log('error to get members:', error);
+    }
   }
 
   protected async search(){
+    this.idSearch = "";
     const idChurch = this.formSearch.value.code;
     const stringUtil = new StringUtil();
     if(! stringUtil.isNumeric(idChurch))
@@ -118,13 +155,15 @@ export class ChurchRegisterPageComponent implements OnInit {
     var modelToForm = await this.handler.getChurchById(idChurch);
     
     this.clear();
-    
+
+    this.idSearch = idChurch;
     if (modelToForm.errors!.length > 0) {
       this.searchBusy = false;
       this.msgErros.push("Member not found");
       return;
     }
     const readModel: ChurchReadModel = modelToForm.data;
+    await this.loadMembers();
     this.fillFormWithModel(readModel);
 
     this.searchBusy = false;
@@ -133,23 +172,23 @@ export class ChurchRegisterPageComponent implements OnInit {
   }
 
   private fillFormWithModel(readModel: ChurchReadModel){
-    console.log(readModel);
-
     this.formRegister.controls['name'].setValue(readModel.name);
     this.formRegister.controls['acronym'].setValue(readModel.acronym);
     this.formRegister.controls['inaugurationDate'].setValue(formatDate(readModel.inaugurationDate, 'yyyy-MM-dd', 'en'));
     this.formRegister.controls['registerDate'].setValue(formatDate(readModel.registerDate, 'yyyy-MM-dd', 'en'));
-    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
+    this.formRegister.controls['firstPastorId'].setValue(readModel.firstPastorId);
     //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
     //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
     //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
     //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
     //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
 
+    // console.log(readModel.address?.country);
+    // console.log(this.countryToSelect.findIndex(key => key[0] == readModel.address?.country))
     this.formRegister.controls['zipCode'].setValue(readModel.address!.zipCode);
     this.formRegister.controls['additional'].setValue(readModel.address!.additional);
     this.formRegister.controls['city'].setValue(readModel.address!.city);
-    this.formRegister.controls['country'].setValue(readModel.address!.country);
+    this.formRegister.controls['country'].setValue(this.countryToSelect.findIndex(key => key[0] == readModel.address?.country) + 1);
     this.formRegister.controls['district'].setValue(readModel.address!.district);
     this.formRegister.controls['number'].setValue(readModel.address!.number);
     this.formRegister.controls['state'].setValue(readModel.address!.state);
@@ -174,7 +213,7 @@ export class ChurchRegisterPageComponent implements OnInit {
     churchEdit.registerDate = this.formRegister.value.registerDate;
     console.log(churchEdit);
 
-    addressEdit.country = this.formRegister.value.country;
+    addressEdit.country = this.countryToSelect.find(k => k[1] === this.formRegister.value.country.toString())![0];
     addressEdit.state = this.formRegister.value.state;
     addressEdit.city = this.formRegister.value.city;
     addressEdit.zipCode = this.formRegister.value.zipCode;
@@ -213,7 +252,7 @@ export class ChurchRegisterPageComponent implements OnInit {
     this.formSearch.reset();
     this.formRegister.reset();    
     this.typeSave = "create";
-
+    this.idSearch = "";
     //this.memberPhotoUrl = this.cloudService.getImageStore("common", "anonymou-user");
   }
 
