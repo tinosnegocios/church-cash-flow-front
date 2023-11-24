@@ -4,6 +4,7 @@ import { AuthService } from "./auth.services";
 import { Injectable } from "@angular/core";
 import { DashBoardService } from "./dashboard.service";
 import { BaseChurchService } from "./baseChurch.services";
+import { Observable, catchError, of } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -119,4 +120,36 @@ export class ChurchService extends BaseChurchService {
     });
   }
 
+  public delete(id: number): Promise<ResultViewModel | null> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    var result: ResultViewModel;
+    var msgErro: string[];
+
+    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
+      this.http.delete<ResultViewModel>(`${this.url}/v1/${this.modelName}/${id}`, { headers: httpHeaders })
+        .pipe(
+          catchError((error: any): Observable<ResultViewModel> => {
+            msgErro = error.error.erros;
+            return of<ResultViewModel>(error.error);
+          })
+        )
+        .subscribe(
+          (data: ResultViewModel) => {
+            resolve(data);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
+
+    return returnPromise;
+  }
+  
 }

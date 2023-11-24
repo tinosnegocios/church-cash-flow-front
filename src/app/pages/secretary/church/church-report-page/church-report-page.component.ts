@@ -78,7 +78,18 @@ export class ChurchReportPageComponent implements OnInit {
   }
 
   protected delete(){
-    
+    if(this.idHandle > 0){
+      var result = this.handler.delete(this.idHandle)
+      .then((result) => {
+        //console.log(result);
+        this.dashBoard();
+        this.msgErrosOffering = this.handler.getMsgErro();
+        this.msgSuccesssOffering = this.handler.getMsgSuccess();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
   }
 
   protected exportarExcel(){
@@ -96,6 +107,8 @@ export class ChurchReportPageComponent implements OnInit {
 
   protected clear(){
     this.idHandle = 0;
+    this.msgErrosOffering = [];
+    this.msgSuccesssOffering = [];
   }
 
 }

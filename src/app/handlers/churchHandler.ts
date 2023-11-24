@@ -100,6 +100,20 @@ export class ChurchHadler extends BaseHandler {
         }
     }
 
+    public async delete(id: number) {
+        var result = await  this.service.delete(id);
+  
+        if (result!.errors != null && result!.errors.length > 0) {
+          result!.errors.forEach(x => {
+              this.setMsgErro(x);
+          })
+          return false;
+          } else {
+              this.setMsgSuccess("igreja excluída");
+              return true;
+          }
+    }
+
     validateChurchEdit(model: ChurchEditModel): boolean{
         var dateValidate = new DateTimeUtil();
         
@@ -129,6 +143,7 @@ export class ChurchHadler extends BaseHandler {
 
         return true;
     }
+
     validateAddressEdit(model: AddressEditModel): boolean {
         var stringValidate = new StringUtil();
         if(!stringValidate.isNumeric(model.zipCode.toString()) || model.country.trim().length <= 3 || 
