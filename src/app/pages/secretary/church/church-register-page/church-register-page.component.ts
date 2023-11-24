@@ -10,6 +10,7 @@ import { SearchCep } from 'src/app/utils/searchCep.utils';
 import countries from '../../../../config/settings/models/countryChurch.json';
 import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
 import { MemberReadModel } from 'src/app/models/ReadModels/MemberRead.models';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-church-register-page',
@@ -31,27 +32,27 @@ export class ChurchRegisterPageComponent implements OnInit {
   protected typeSave = "create";
   private idSearch = "";
   
-  constructor(private fbuilder: FormBuilder, private handler: ChurchHadler) {
+  constructor(private fbuilder: FormBuilder, private handler: ChurchHadler, private route: ActivatedRoute) {
     this.formSearch = this.fbuilder.group({
       code: ['', Validators.compose([
         Validators.required
       ])],
     });
     this.formRegister = this.fbuilder.group({
-      name: ['ceo carmo', Validators.compose([
+      name: ['', Validators.compose([
         Validators.required,
         Validators.maxLength(100),
         Validators.minLength(4),
       ])],
-      acronym: ['cmr', Validators.compose([
+      acronym: ['', Validators.compose([
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(4),
       ])],
-      inaugurationDate: ['2023-11-15', Validators.compose([
+      inaugurationDate: ['', Validators.compose([
         Validators.required,
       ])],
-      registerDate: ['2023-11-15', Validators.compose([
+      registerDate: ['', Validators.compose([
         Validators.required,
       ])],
       firstPastorId: ['', Validators.compose([
@@ -72,42 +73,47 @@ export class ChurchRegisterPageComponent implements OnInit {
       secondSecretaryId: ['', Validators.compose([
         Validators.required,
       ])],
-      zipCode: ['37470000', Validators.compose([
+      zipCode: ['', Validators.compose([
         Validators.required,
         Validators.minLength(8),
         Validators.maxLength(14)
       ])],
-      country: ['1', Validators.compose([
+      country: ['', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      state: ['minas gerais', Validators.compose([
+      state: ['', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      city: ['carmo de minas', Validators.compose([
+      city: ['', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      district: ['centro', Validators.compose([
+      district: ['', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      street: ['rua projetada', Validators.compose([
+      street: ['', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      additional: ['2 andar', Validators.compose([
+      additional: ['', Validators.compose([
         Validators.required,
         Validators.minLength(3)
       ])],
-      number: ['101', Validators.compose([
+      number: ['', Validators.compose([
         Validators.required
       ])]
     });    
   }
 
   ngOnInit(): void {
+    this.route.queryParams
+    .subscribe(params => {
+      this.idSearch = params['id'];
+    });
+
     this.typeSave == "create"
 
     this.dashboard();
@@ -115,6 +121,11 @@ export class ChurchRegisterPageComponent implements OnInit {
 
   protected dashboard(){
     this.fillCountry();
+
+    if(this.idSearch != "" && this.idSearch.length > 0){
+      this.typeSave = "update"
+      this.search(this.idSearch);
+    }
   }
 
   protected fillCountry(){    
@@ -144,9 +155,12 @@ export class ChurchRegisterPageComponent implements OnInit {
     }
   }
 
-  protected async search(){
+  protected async search(idChurch: string = ""){
     this.idSearch = "";
-    const idChurch = this.formSearch.value.code;
+    
+    if (idChurch.length <= 0)
+      idChurch = this.formSearch.value.code;
+
     this.clear();
 
     const stringUtil = new StringUtil();
