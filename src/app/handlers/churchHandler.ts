@@ -39,7 +39,12 @@ export class ChurchHadler extends BaseHandler {
     public async getMembersByChurch(): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.getMembersByChurchByMonth();
         return result;
-    } 
+    }
+    
+    async getChurchByPeriod(initialDate: string, finalDate: string) : Promise<ResultViewModel>  {
+        var result: ResultViewModel = await this.service.getChurchByPeriod(initialDate, finalDate);
+        return result;
+    }
 
     public async create(churchEdit: ChurchEditModel, addressEdit: AddressEditModel) {
         
