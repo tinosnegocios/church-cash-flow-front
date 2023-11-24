@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { formatDate } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
 import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
@@ -8,7 +9,7 @@ import { ExcelMethods } from 'src/app/utils/excelMethods.utils';
   selector: 'app-church-report-page',
   templateUrl: './church-report-page.component.html'
 })
-export class ChurchReportPageComponent {  
+export class ChurchReportPageComponent implements OnInit {  
   protected busy : boolean = false;
   protected msgErrosOffering: string[] = [];
   protected msgSuccesssOffering: string[] = [];
@@ -19,7 +20,26 @@ export class ChurchReportPageComponent {
   protected formLimit!: FormGroup;
 
   constructor(private handler: ChurchHadler, private fbuilder: FormBuilder) {
-        
+    this.formLimit = this.fbuilder.group({
+      initialDate: ['', Validators.compose([
+        Validators.required,
+      ])],
+      finalDate: ['', Validators.compose([
+        Validators.required,
+      ])]
+    });  
+  }
+
+  async ngOnInit() {
+      var today = new Date();
+      var todayMinus = new Date(today);
+      var d = today.getDate();
+      todayMinus.setDate(today.getDate() - (today.getDate() + (365 * 50) ) );
+      
+      this.formLimit.controls['initialDate'].setValue(formatDate(todayMinus, 'yyyy-MM-dd', 'en'));
+      this.formLimit.controls['finalDate'].setValue(formatDate(today, 'yyyy-MM-dd', 'en'));
+    
+      await this.dashBoard();
   }
 
   public async dashBoard()
@@ -37,7 +57,7 @@ export class ChurchReportPageComponent {
       this.readChurch$ = [];
     }else{
       this.readChurch$ = result.data;
-
+      
       this.readChurch$.forEach(x => {
         var daySplit = x.inaugurationDate.split("-");
         var dayStr = `${daySplit[2].replace('T00:00:00', '')}/${daySplit[1]}/${daySplit[0]}`;

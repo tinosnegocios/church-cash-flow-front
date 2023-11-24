@@ -31,10 +31,7 @@
 
         <div class="row g-5 mb-4">
 
-            <ul class="nav nav-links mb-3 mb-lg-2 mx-n3">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">total<span
-                            class="text-700 fw-semi-bold">(10)</span></a></li>
-            </ul>
+            <span class="text-700 fw-semi-bold">Total {{readChurch$.length}}</span>
 
             <div class="col-12 col-lg-6">
                 <form class="position-relative" [formGroup]="formLimit" data-bs-toggle="search"
@@ -94,7 +91,7 @@
             <tbody class="list" id="table-latest-review-body">
 
                 <tr *ngFor="let model of readChurch$">
-                    <td>{{model.name}}</td>
+                    <td>{{model.id}}</td>
                     <td class="">
                         {{model.name}}
                     </td>
@@ -151,28 +148,30 @@
     </div>
 
 
-    <div class="modal fade" id="staticBackdrop" tabindex="-1" data-bs-backdrop="static" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal fade" id="staticBackdrop" tabindex="-1" data-bs-backdrop="static"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header bg-danger">
-              <h5 class="modal-title text-white" id="staticBackdropLabel">Exclusão de oferta</h5>
-              <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span
-                  class="fas fa-times fs--1 text-white"></span></button>
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h5 class="modal-title text-white" id="staticBackdropLabel">Exclusão de oferta</h5>
+                    <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span
+                            class="fas fa-times fs--1 text-white"></span></button>
+                </div>
+                <div class="modal-body">
+                    <p class="text-700 lh-lg mb-0">Deseja realmente deletar o membro selecionado?
+                    </p>
+                    <p class="text-700 lh-lg mb-0">{{nameHandler}}-{{idHandle}}
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-danger" data-bs-dismiss="modal" (click)="delete()"
+                        type="button">Deletar</button>
+                    <button class="btn btn-outline-primary" type="button" (click)="clear()"
+                        data-bs-dismiss="modal">Cancelar</button>
+                </div>
             </div>
-            <div class="modal-body">
-              <p class="text-700 lh-lg mb-0">Deseja realmente deletar o membro selecionado?
-              </p>
-              <p class="text-700 lh-lg mb-0">{{nameHandler}}-{{idHandle}}
-              </p>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-danger" data-bs-dismiss="modal" (click)="delete()"
-                type="button">Deletar</button>
-              <button class="btn btn-outline-primary" type="button" (click)="clear()" data-bs-dismiss="modal">Cancelar</button>
-            </div>
-          </div>
         </div>
-      </div>
+    </div>
 
 
     <!-- ===============================================-->

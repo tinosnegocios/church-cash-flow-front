@@ -108,7 +108,7 @@ export class ChurchService extends BaseChurchService {
       .set("Content-Type", "application/json; charset=utf-8")
       .set("Authorization", `Bearer ${JSON.parse(token)}`);
 
-    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}?initialDate=${initialDate}&finalDate=${finalDate}`, { headers: httpHeaders }).toPromise();
+    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/period?initialDate=${initialDate}&finalDate=${finalDate}`, { headers: httpHeaders }).toPromise();
 
     return returnObservable.then(result => {
       if (result) {
