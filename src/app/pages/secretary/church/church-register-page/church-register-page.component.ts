@@ -147,23 +147,25 @@ export class ChurchRegisterPageComponent implements OnInit {
   protected async search(){
     this.idSearch = "";
     const idChurch = this.formSearch.value.code;
+    this.clear();
+
     const stringUtil = new StringUtil();
     if(! stringUtil.isNumeric(idChurch))
       return;
 
     this.searchBusy = true;
     var modelToForm = await this.handler.getChurchById(idChurch);
-    
-    this.clear();
 
     this.idSearch = idChurch;
+    await this.loadMembers();
+    
     if (modelToForm.errors!.length > 0) {
       this.searchBusy = false;
       this.msgErros.push("Member not found");
       return;
     }
     const readModel: ChurchReadModel = modelToForm.data;
-    await this.loadMembers();
+    
     this.fillFormWithModel(readModel);
 
     this.searchBusy = false;
@@ -176,7 +178,7 @@ export class ChurchRegisterPageComponent implements OnInit {
     this.formRegister.controls['acronym'].setValue(readModel.acronym);
     this.formRegister.controls['inaugurationDate'].setValue(formatDate(readModel.inaugurationDate, 'yyyy-MM-dd', 'en'));
     this.formRegister.controls['registerDate'].setValue(formatDate(readModel.registerDate, 'yyyy-MM-dd', 'en'));
-    this.formRegister.controls['firstPastorId'].setValue(readModel.firstPastorId);
+    this.formRegister.controls['firstPastorId'].setValue((readModel.firstPastorId.toString()));
     //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
     //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
     //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
@@ -196,22 +198,19 @@ export class ChurchRegisterPageComponent implements OnInit {
   }
 
   protected async save(){
-    const data = this.formRegister.value;
-
     var churchEdit = new ChurchEditModel();
     var addressEdit = new AddressEditModel();
-
+    
     churchEdit.name = this.formRegister.value.name;
     churchEdit.acronym = this.formRegister.value.acronym;
-    churchEdit.firstPastorId = this.formRegister.value.firstPastorId != "" ? this.formRegister.value.firstPastorId : 0;
-    churchEdit.secondPastorId = this.formRegister.value.secondPastorId != "" ? this.formRegister.value.secondPastorId : 0;
-    churchEdit.firstSecretaryId = this.formRegister.value.firstSecretaryId != "" ? this.formRegister.value.firstSecretaryId : 0;
-    churchEdit.secondSecretaryId = this.formRegister.value.secondSecretaryId != "" ? this.formRegister.value.secondSecretaryId : 0;
-    churchEdit.firstTreasurerId = this.formRegister.value.firstTreasurerId != "" ? this.formRegister.value.firstTreasurerId : 0;
-    churchEdit.secondTreasurerId = this.formRegister.value.secondTreasurerId != "" ? this.formRegister.value.secondTreasurerId : 0;
+    churchEdit.firstPastorId = (this.formRegister.value.firstPastorId != "" && this.formRegister.value.firstPastorId != null) ? this.formRegister.value.firstPastorId : 0;
+    churchEdit.secondPastorId = (this.formRegister.value.secondPastorId != "" && this.formRegister.value.secondPastorId != null) ? this.formRegister.value.secondPastorId : 0;
+    churchEdit.firstSecretaryId = (this.formRegister.value.firstSecretaryId != "" && this.formRegister.value.firstSecretaryId != null) ? this.formRegister.value.firstSecretaryId : 0;
+    churchEdit.secondSecretaryId = (this.formRegister.value.secondSecretaryId != "" && this.formRegister.value.secondSecretaryId != null) ? this.formRegister.value.secondSecretaryId : 0;
+    churchEdit.firstTreasurerId = (this.formRegister.value.firstTreasurerId != "" && this.formRegister.value.firstTreasurerId != null) ? this.formRegister.value.firstTreasurerId : 0;
+    churchEdit.secondTreasurerId = (this.formRegister.value.secondTreasurerId != "" && this.formRegister.value.secondTreasurerId != null) ? this.formRegister.value.secondTreasurerId : 0;
     churchEdit.inaugurationDate = this.formRegister.value.inaugurationDate;
     churchEdit.registerDate = this.formRegister.value.registerDate;
-    console.log(churchEdit);
 
     addressEdit.country = this.countryToSelect.find(k => k[1] === this.formRegister.value.country.toString())![0];
     addressEdit.state = this.formRegister.value.state;
@@ -225,7 +224,7 @@ export class ChurchRegisterPageComponent implements OnInit {
     if(this.typeSave == "create"){
       await this.create(churchEdit, addressEdit);
     }else if(this.typeSave == "update"){
-      await this.update();
+      await this.update(churchEdit, addressEdit);
     }
 
   }
@@ -241,8 +240,16 @@ export class ChurchRegisterPageComponent implements OnInit {
     this.msgErros = this.handler.getMsgErro();
     this.msgSuccesss = this.handler.getMsgSuccess();
   }
-  protected async update() {
-    
+  protected async update(churchEdit: ChurchEditModel, addressEdit: AddressEditModel) {
+    await this.handler.update(this.idSearch, churchEdit, addressEdit)
+    .then((result) => {
+    })
+    .catch((error) => {
+      this.msgErros.push("Ocorreu um erro no cadastro. Tente novamente");
+    });
+
+    this.msgErros = this.handler.getMsgErro();
+    this.msgSuccesss = this.handler.getMsgSuccess();
   }
 
   protected clear(){
@@ -253,6 +260,7 @@ export class ChurchRegisterPageComponent implements OnInit {
     this.formRegister.reset();    
     this.typeSave = "create";
     this.idSearch = "";
+    this.searchBusy = false;
     //this.memberPhotoUrl = this.cloudService.getImageStore("common", "anonymou-user");
   }
 

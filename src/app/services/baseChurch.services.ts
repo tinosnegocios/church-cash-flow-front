@@ -43,4 +43,36 @@ export abstract class BaseChurchService {
 
     return returnPromise;
   }
+
+  public async update(idChurch: string, model: any): Promise<ResultViewModel | null> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    var result: ResultViewModel;
+    var msgErro: string[];
+
+    const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
+      this.http.put<ResultViewModel>(`${this.url}/v1/${this.modelName}/${idChurch}`, model, { headers: httpHeaders })
+        .pipe(
+          catchError((error: any): Observable<ResultViewModel> => {
+            msgErro = error.error.erros;
+            return of<ResultViewModel>(error.error);
+          })
+        )
+        .subscribe(
+          (data: ResultViewModel) => {
+            resolve(data);
+          },
+          (error: any) => {
+            reject(error);
+          }
+        );
+    });
+
+    return returnPromise;
+  }
 }

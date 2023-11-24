@@ -69,6 +69,32 @@ export class ChurchHadler extends BaseHandler {
         }
     }
 
+    public async update(idChurch: string, churchEdit: ChurchEditModel, addressEdit: AddressEditModel) {
+        if (!this.validateChurchEdit(churchEdit))
+            return false;
+
+        if (!this.validateAddressEdit(addressEdit))
+            return false;
+
+        const createChurch = {
+            editChurchDto: churchEdit,
+            editAddressDto: addressEdit
+        };
+
+        var result = await this.service.update(idChurch, createChurch);
+
+        if (result!.errors!.some(value => true)) {
+            result!.errors!.forEach(x => {
+                this.setMsgErro(x);
+            })
+            return false;
+        } else {
+            var resultData: ChurchReadModel = result!.data;
+            this.setMsgSuccess(`Igreja ${churchEdit.name} - salva com sucesso`);
+            return true;
+        }
+    }
+
     validateChurchEdit(model: ChurchEditModel): boolean{
         var dateValidate = new DateTimeUtil();
         
@@ -76,6 +102,24 @@ export class ChurchHadler extends BaseHandler {
             !dateValidate.validateDate(model.registerDate) || !dateValidate.validateDate(model.inaugurationDate) ){
                 this.setMsgErro("campos da Igreja inválidos");
                 return false;
+        }
+
+        var idsMembersPost = [];
+        idsMembersPost.push(model.firstPastorId);
+        idsMembersPost.push(model.secondPastorId);
+        idsMembersPost.push(model.firstSecretaryId);
+        idsMembersPost.push(model.secondSecretaryId);
+        idsMembersPost.push(model.firstTreasurerId);
+        idsMembersPost.push(model.secondTreasurerId);
+
+        const set = new Set();
+
+        for (const valor of idsMembersPost) {
+            if (set.has(valor) && valor != 0) {
+                this.msgError.push("Um membro não pode ocupar mais de um cargo como pastor, tesoureiro e secretaria");
+                return false; 
+            }
+            set.add(valor);
         }
 
         return true;
@@ -91,5 +135,4 @@ export class ChurchHadler extends BaseHandler {
 
         return true;
     }
-
 }
