@@ -19,7 +19,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(private loginService: LoginService, private fbuilder: FormBuilder, private router: Router) {
     this.formLogin = this.fbuilder.group({
-      code: ['C82E86',Validators.compose([
+      code: ['517C76',Validators.compose([
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(6)
@@ -46,20 +46,20 @@ export class LoginPageComponent implements OnInit {
 
     var userLogin = new UserLogin(this.formLogin.value.code,this.formLogin.value.passwordHash);
     this.remember = this.formLogin.value.remember;
-
+    const self = this;
     this.loginService
     .logIn(userLogin)
-    .subscribe(
-      (result: any) => {
-        this.makeLogin(result);
-        this.busy = false;
+    .subscribe({
+      next(result) {
+        self.makeLogin(result);
+        self.busy = false;
       },
-      (error) => {
-        console.log(error);
-        this.treatErro();
-        this.busy = false;
-        this.errorLogin = true;
+      error(err) {
+        self.treatErro();
+        self.busy = false;
+        self.errorLogin = true;
       }
+    }
     );
   }
 

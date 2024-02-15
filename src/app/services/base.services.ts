@@ -34,14 +34,14 @@ export abstract class BaseService {
             return of<ResultViewModel>(error.error);
           })
         )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
+        .subscribe({
+          next(value) {
+            resolve(value);
           },
-          (error: any) => {
-            reject(error);
+          error(err) {
+            reject(err);
           }
-        );
+        });
     });
 
     return returnPromise;
@@ -68,14 +68,14 @@ export abstract class BaseService {
             return of<ResultViewModel>(error.error);
           })
         )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
+        .subscribe({
+          next(value) {
+            resolve(value);
           },
-          (error: any) => {
-            reject(error);
+          error(err) {
+            reject(err);
           }
-        );
+        });
     });
 
     return returnPromise;
@@ -100,14 +100,14 @@ export abstract class BaseService {
             return of<ResultViewModel>(error.error);
           })
         )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
+        .subscribe({
+          next(value) {
+            resolve(value);
           },
-          (error: any) => {
-            reject(error);
+          error(err) {
+            reject(err);
           }
-        );
+        });
     });
 
     return returnPromise;
