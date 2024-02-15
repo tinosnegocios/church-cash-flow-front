@@ -7,8 +7,8 @@
           "region": "us-eats-1",
           "bucketS3": {
             "images": {
-              "name": "church-manager-dev",
-              "url":"https://church-manager-dev.s3.us-east-1.amazonaws.com/image",
+              "name": "churchmanager-dev",
+              "url":"https://churchmanager-dev.s3.us-east-1.amazonaws.com/image",
               "imageTypePattern": "jpg",
               "membersPath": "members",
               "offeringPath": "offerings",
