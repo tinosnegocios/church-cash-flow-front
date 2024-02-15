@@ -23,7 +23,7 @@ export class ChurchRegisterPageComponent implements OnInit {
   protected msgErros: string[] = [];
   protected msgSuccesss: string[] = [];
   protected countryToSelect!: [string, string][];
-  protected memberToSelect!: [string, string][];
+  protected memberToSelect$!: [string, string][];
 
   protected members!: ResultViewModel['data'];
   
@@ -149,7 +149,7 @@ export class ChurchRegisterPageComponent implements OnInit {
         meuObjeto[key] = `${value}`;
       });
 
-      this.memberToSelect = Object.entries(meuObjeto);
+      this.memberToSelect$ = Object.entries(meuObjeto);
     } catch (error) {
       console.log('error to get members:', error);
     }
@@ -168,39 +168,39 @@ export class ChurchRegisterPageComponent implements OnInit {
       return;
 
     this.searchBusy = true;
-    var modelToForm = await this.handler.getChurchById(idChurch);
-
     this.idSearch = idChurch;
-    await this.loadMembers();
+
+    var modelToForm = await this.handler.getChurchById(idChurch);
     
     if (modelToForm.errors!.length > 0) {
       this.searchBusy = false;
-      this.msgErros.push("Member not found");
+      this.msgErros.push("Church not found");
       return;
     }
+    
+    await this.loadMembers();
+
     const readModel: ChurchReadModel = modelToForm.data;
     
-    this.fillFormWithModel(readModel);
+    await this.fillFormWithModel(readModel);
 
     this.searchBusy = false;
     this.typeSave = "update";
     this.formSearch.controls['code'].setValue(idChurch);
   }
 
-  private fillFormWithModel(readModel: ChurchReadModel){
+  private async fillFormWithModel(readModel: ChurchReadModel){
     this.formRegister.controls['name'].setValue(readModel.name);
     this.formRegister.controls['acronym'].setValue(readModel.acronym);
     this.formRegister.controls['inaugurationDate'].setValue(formatDate(readModel.inaugurationDate, 'yyyy-MM-dd', 'en'));
     this.formRegister.controls['registerDate'].setValue(formatDate(readModel.registerDate, 'yyyy-MM-dd', 'en'));
     this.formRegister.controls['firstPastorId'].setValue((readModel.firstPastorId.toString()));
-    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
-    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
-    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
-    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
-    //this.formRegister.controls['firstPastor'].setValue(readModel.firstPastor);
+    this.formRegister.controls['secondPastorId'].setValue(readModel.secondPastorId);
+    this.formRegister.controls['firstTreasurerId'].setValue(readModel.firstTreasurerId);
+    this.formRegister.controls['secondTreasurerId'].setValue(readModel.secondTreasurerId);
+    this.formRegister.controls['firstSecretaryId'].setValue(readModel.firstSecretaryId);
+    this.formRegister.controls['firstSecretaryId'].setValue(2);
 
-    // console.log(readModel.address?.country);
-    // console.log(this.countryToSelect.findIndex(key => key[0] == readModel.address?.country))
     this.formRegister.controls['zipCode'].setValue(readModel.address!.zipCode);
     this.formRegister.controls['additional'].setValue(readModel.address!.additional);
     this.formRegister.controls['city'].setValue(readModel.address!.city);

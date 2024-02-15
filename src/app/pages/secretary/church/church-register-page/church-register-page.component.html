@@ -101,7 +101,7 @@
                                 <h4 class="mb-3">1ª Pastor</h4>
                                 <select class="form-select mb-3" aria-label="category" formControlName="firstPastorId">
                                     <option value=""></option>
-                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                    <option *ngFor="let entry of memberToSelect$" [value]="entry[1]">
                                         {{ entry[0] }}
                                     </option>
                                 </select>
@@ -113,7 +113,7 @@
                                 <h4 class="mb-3">2ª Pastor</h4>
                                 <select class="form-select mb-3" aria-label="category" formControlName="secondPastorId">
                                     <option value=""></option>
-                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                    <option *ngFor="let entry of memberToSelect$" [value]="entry[1]">
                                         {{ entry[0] }}
                                     </option>
                                 </select>
@@ -125,7 +125,7 @@
                                 <h4 class="mb-3">1ª Tesoureiro</h4>
                                 <select class="form-select mb-3" aria-label="category" formControlName="firstTreasurerId">
                                     <option value=""></option>
-                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                    <option *ngFor="let entry of memberToSelect$" [value]="entry[1]">
                                         {{ entry[0] }}
                                     </option>
                                 </select>
@@ -137,7 +137,7 @@
                                 <h4 class="mb-3">2ª Tesoureiro</h4>
                                 <select class="form-select mb-3" aria-label="category" formControlName="secondTreasurerId">
                                     <option value=""></option>
-                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                    <option *ngFor="let entry of memberToSelect$" [value]="entry[1]">
                                         {{ entry[0] }}
                                     </option>
                                 </select>
@@ -149,7 +149,7 @@
                                 <h4 class="mb-3">1ª Secretario</h4>
                                 <select class="form-select mb-3" aria-label="category" formControlName="firstSecretaryId">
                                     <option value=""></option>
-                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                    <option *ngFor="let entry of memberToSelect$" [value]="entry[1]">
                                         {{ entry[0] }}
                                     </option>
                                 </select>
@@ -161,7 +161,7 @@
                                 <h4 class="mb-3">2ª Secretario</h4>
                                 <select class="form-select mb-3" aria-label="category" formControlName="secondSecretaryId">
                                     <option value=""></option>
-                                    <option *ngFor="let entry of memberToSelect" [value]="entry[1]">
+                                    <option *ngFor="let entry of memberToSelect$" [value]="entry[1]">
                                         {{ entry[0] }}
                                     </option>
                                 </select>
