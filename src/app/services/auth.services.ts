@@ -46,7 +46,7 @@ export class AuthService {
     public setSessionToken(token : string) : void {
         const dataToken = JSON.stringify(token);
 
-        sessionStorage.setItem(`${this.strStoragemName}.token`, dataToken);
+        localStorage.setItem(`${this.strStoragemName}.token`, dataToken);
     }
     
     public getToken() : string {
@@ -55,7 +55,7 @@ export class AuthService {
         if(token == null || token.length <= 0) {
             token = this.getSessionToken();
         }
-        console.log(token);
+        
         if(token == null || token.length == 0) {
             return "";
         }else{
@@ -69,9 +69,4 @@ export class AuthService {
             }
         }
     }
-
-
-
-
-
 }
