@@ -99,7 +99,7 @@ export class MemberRegisterPageComponent implements OnInit {
     await this.clear();
     await this.loadPosts();
 
-    if(this.codeSearch != ""){
+    if(this.codeSearch != "" && !this.codeSearch == undefined ){
       this.typeSave = "update"
       this.searchByCode(this.codeSearch);
     }
@@ -137,7 +137,7 @@ export class MemberRegisterPageComponent implements OnInit {
 
     if(model.photo != null && model.photo.length > 5) {
       this.filebusy = true;
-      this.memberPhotoUrl = this.cloudService.getUrlImageMembersStorage(model.code);
+      this.memberPhotoUrl = await this.cloudService.getUrlImageMembersStorage(model.code);
       this.filebusy = false;
     }
 
