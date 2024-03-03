@@ -27,6 +27,7 @@ import { OutflowRegisterPageComponent } from './pages/treasury/outflow/outflow-r
 import { OutflowReportPageComponent } from './pages/treasury/outflow/outflow-report-page/outflow-report-page.component';
 import { ChurchRegisterPageComponent } from './pages/secretary/church/church-register-page/church-register-page.component';
 import { ChurchReportPageComponent } from './pages/secretary/church/church-report-page/church-report-page.component';
+import { MeetingRegisterPageComponent } from './pages/secretary/meeting/meeting-register-page/meeting-register-page.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +49,8 @@ import { ChurchReportPageComponent } from './pages/secretary/church/church-repor
     OutflowRegisterPageComponent,
     OutflowReportPageComponent,
     ChurchRegisterPageComponent,
-    ChurchReportPageComponent
+    ChurchReportPageComponent,
+    MeetingRegisterPageComponent
   ],
   imports: [
     BrowserModule,
