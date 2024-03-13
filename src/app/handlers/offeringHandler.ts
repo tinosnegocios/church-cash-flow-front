@@ -11,6 +11,13 @@ import { OfferingEditModel } from "../models/EditModels/OfferingEdit.model";
 
 export class OfferingHandler extends BaseHandler {
     
+    private service: OfferingService;
+
+    constructor(offeringService: OfferingService) {
+        super();
+        this.service = offeringService;
+    }
+
     public async delete(id: number) {
       var result = await  this.service.delete(id);
 
@@ -23,13 +30,6 @@ export class OfferingHandler extends BaseHandler {
             this.setMsgSuccess("oferta excluída com sucesso");
             return true;
         }
-    }
-
-    private service: OfferingService;
-
-    constructor(offeringService: OfferingService) {
-        super();
-        this.service = offeringService;
     }
 
     public async create(offering: OfferingEditModel): Promise<Boolean> {
