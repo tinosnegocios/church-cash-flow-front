@@ -13,6 +13,7 @@ import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/regi
 export class MeetingRegisterPageComponent extends RegistersPageComponent {
   public formSearch!: FormGroup;
   public formPrincipal!: FormGroup;
+  private meetingKindCode: string = "";
 
   constructor(private fbuilder: FormBuilder, private handler: MeetingHandler) {
     super();
@@ -44,19 +45,36 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
     this.clearForm();
   }
 
+  protected async save(): Promise<void>{
+    this.searchBusy = true;
+
+    var meetingKind: MeetingKindEditModel = this.formPrincipal.value;
+       
+    if(this.typeSave == "create"){
+      await this.handler.create(meetingKind);
+    }else if(this.typeSave == "update"){
+      await this.handler.update(meetingKind, this.meetingKindCode);
+    }
+
+    this.msgSuccesss = this.handler.getMsgSuccess();
+    this.msgErros = this.handler.getMsgErro();
+    this.searchBusy = false;
+  }
+
   protected async searchByCode(code: string = "") {
     this.searchBusy = true;
     
     if (code.length <= 0)
       code = this.formSearch.value.code;
 
+    this.meetingKindCode = code;
     var modelToForm: ResultViewModel = await this.handler.getByCode(code);
 
     this.clearForm();
     
     if (modelToForm.errors!.length > 0) {
       this.searchBusy = false;
-      this.msgErros.push("Member not found");
+      this.msgErros.push("Culto não encontrado");
       return;
     }
 
@@ -65,7 +83,7 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
     this.typeSave = "update";
     var objModel: MeetingKindReadModel = modelToForm.data;
 
-    //this.fillFormWithModel(objModel, code);
+    this.fillFormWithModel(objModel);
 
     //this.memberIsValid = objModel.active;
     this.searchBusy = false;
@@ -73,13 +91,9 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
     this.formSearch.controls['code'].setValue(code);
   }
 
-  protected async save(): Promise<void>{
-    console.log(this.formPrincipal.value);
-
-    var meetingKind: MeetingKindEditModel = this.formPrincipal.value;
-    this.handler.create(meetingKind);
-    this.msgSuccesss = this.handler.getMsgSuccess();
-    this.msgErros = this.handler.getMsgErro();
+  private fillFormWithModel(model: MeetingKindReadModel): void {
+    this.formPrincipal.controls['name'].setValue(model.name);
+    this.formPrincipal.controls['description'].setValue(model.description);
   }
 
 }

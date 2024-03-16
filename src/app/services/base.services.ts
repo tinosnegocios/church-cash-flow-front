@@ -12,7 +12,7 @@ export abstract class BaseService {
     this.url = configAplication.getApiHosy();
    }
 
-  public async create(model: any): Promise<ResultViewModel | null> {
+  public async create(model: any): Promise<ResultViewModel> {
     var auth = new AuthService();
     const token = auth.getToken();
 
@@ -47,7 +47,7 @@ export abstract class BaseService {
     return returnPromise;
   }
 
-  public async update(model: any, modelId: string): Promise<ResultViewModel | null> {
+  public async update(model: any, modelId: string): Promise<ResultViewModel> {
     var auth = new AuthService();
     const token = auth.getToken();
 
