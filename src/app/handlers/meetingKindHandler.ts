@@ -9,7 +9,6 @@ import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.m
 })
 
 export class MeetingHandler extends BaseHandler {
-
     private service: MeetingKindService;
 
     constructor(service: MeetingKindService) {
@@ -37,6 +36,20 @@ export class MeetingHandler extends BaseHandler {
             return false;
         } else {
             this.setMsgSuccess("Tipo de culto salvo com sucesso");
+            return true;
+        }
+    }
+
+    async delete(idHandle: number): Promise<boolean> {
+        var result = await this.service.delete(idHandle);
+
+        if (result!.errors != null && result!.errors.length > 0) {
+            result!.errors.forEach(x => {
+                this.setMsgErro(x);
+            })
+            return false;
+        } else {
+            this.setMsgSuccess("culto excluído com sucesso");
             return true;
         }
     }
