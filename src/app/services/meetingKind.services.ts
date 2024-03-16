@@ -30,7 +30,7 @@ export class MeetingKindService extends BaseService {
 
         return returnObservable.then(result => {
             if (result) {
-              return result.data;
+              return result;
             } else {
               throw new Error('Result is undefined.');
             }
@@ -40,8 +40,6 @@ export class MeetingKindService extends BaseService {
     public override searchByCodeByChurch(code: string): ResultViewModel | PromiseLike<ResultViewModel> {
       var auth = new AuthService();
       const token = auth.getToken();
-  
-      var churchId = (auth.getModelFromToken()).churchId;
   
       const httpHeaders = new HttpHeaders()
         .set("Content-Type", "application/json; charset=utf-8")
@@ -56,5 +54,5 @@ export class MeetingKindService extends BaseService {
           throw new Error('Result is undefined.');
         }
       });
-  }
+    }
 }

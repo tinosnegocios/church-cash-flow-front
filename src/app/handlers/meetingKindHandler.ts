@@ -3,7 +3,6 @@ import { MeetingKindEditModel } from "../models/EditModels/MeetingKind.model";
 import { MeetingKindService } from "../services/meetingKind.services";
 import { BaseHandler } from "./baseHandler";
 import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
-import { concatWith } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -44,6 +43,11 @@ export class MeetingHandler extends BaseHandler {
 
     public async getByCode(code: string): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.searchByCodeByChurch(code);
+        return result;
+    }
+
+    public async getAllMeeting(): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getMeetingKind();
         return result;
     }
 
