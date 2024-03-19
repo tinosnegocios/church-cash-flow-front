@@ -29,6 +29,7 @@ import { ChurchReportPageComponent } from './pages/secretary/church/church-repor
 import { MeetingRegisterPageComponent } from './pages/secretary/meeting/meeting-register-page/meeting-register-page.component';
 import { MeetingHandler } from './handlers/meetingKindHandler';
 import { MeetingReportPageComponent } from './pages/secretary/meeting/meeting-report-page/meeting-report-page.component';
+import { PostRegisterPageComponent } from './pages/secretary/posts/post-register-page/post-register-page.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { MeetingReportPageComponent } from './pages/secretary/meeting/meeting-re
     ChurchRegisterPageComponent,
     ChurchReportPageComponent,
     MeetingRegisterPageComponent,
-    MeetingReportPageComponent
+    MeetingReportPageComponent,
+    PostRegisterPageComponent
   ],
   imports: [
     BrowserModule,
