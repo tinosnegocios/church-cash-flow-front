@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 
 @Injectable({
     providedIn: 'root'
@@ -26,4 +27,15 @@ export class BaseHandler {
         this.msgSuccess = [];
     }
 
+    protected async resultTreatment(result: ResultViewModel): Promise<Boolean> {
+        if (result!.errors != null && result!.errors.length > 0) {
+            result!.errors.forEach(x => {
+                this.setMsgErro(x);
+            })
+            return false;
+        } else {
+            this.setMsgSuccess("Tipo de culto salvo com sucesso");
+            return true;
+        }
+    }
 }
