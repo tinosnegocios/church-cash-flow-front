@@ -12,12 +12,12 @@ export abstract class BaseService {
     this.url = configAplication.getApiHosy();
    }
 
-  public async create(offering: any): Promise<ResultViewModel | null> {
+  public async create(model: any): Promise<ResultViewModel> {
     var auth = new AuthService();
     const token = auth.getToken();
 
     var churchId = (auth.getModelFromToken()).churchId;
-    offering.churchId = churchId;
+    model.churchId = churchId;
 
     const httpHeaders = new HttpHeaders()
       .set("Content-Type", "application/json; charset=utf-8")
@@ -27,27 +27,27 @@ export abstract class BaseService {
     var msgErro: string[];
 
     const returnPromise = new Promise<ResultViewModel>((resolve, reject) => {
-      this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, offering, { headers: httpHeaders })
+      this.http.post<ResultViewModel>(`${this.url}/v1/${this.modelName}`, model, { headers: httpHeaders })
         .pipe(
           catchError((error: any): Observable<ResultViewModel> => {
             msgErro = error.error.erros;
             return of<ResultViewModel>(error.error);
           })
         )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
+        .subscribe({
+          next(value) {
+            resolve(value);
           },
-          (error: any) => {
-            reject(error);
+          error(err) {
+            reject(err);
           }
-        );
+        });
     });
 
     return returnPromise;
   }
 
-  public async update(model: any, modelId: string): Promise<ResultViewModel | null> {
+  public async update(model: any, modelId: string): Promise<ResultViewModel> {
     var auth = new AuthService();
     const token = auth.getToken();
 
@@ -68,14 +68,14 @@ export abstract class BaseService {
             return of<ResultViewModel>(error.error);
           })
         )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
+        .subscribe({
+          next(value) {
+            resolve(value);
           },
-          (error: any) => {
-            reject(error);
+          error(err) {
+            reject(err);
           }
-        );
+        });
     });
 
     return returnPromise;
@@ -100,14 +100,14 @@ export abstract class BaseService {
             return of<ResultViewModel>(error.error);
           })
         )
-        .subscribe(
-          (data: ResultViewModel) => {
-            resolve(data);
+        .subscribe({
+          next(value) {
+            resolve(value);
           },
-          (error: any) => {
-            reject(error);
+          error(err) {
+            reject(err);
           }
-        );
+        });
     });
 
     return returnPromise;
@@ -122,6 +122,27 @@ export abstract class BaseService {
       .set("Authorization", `Bearer ${JSON.parse(token)}`);
 
     const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/${id}`, { headers: httpHeaders }).toPromise();
+
+    return returnObservable.then(result => {
+      if (result) {
+        return result;
+      } else {
+        throw new Error('Result is undefined.');
+      }
+    });
+  }
+
+  public searchByCodeByChurch(code: string): ResultViewModel | PromiseLike<ResultViewModel> {
+    var auth = new AuthService();
+    const token = auth.getToken();
+
+    var churchId = (auth.getModelFromToken()).churchId;
+
+    const httpHeaders = new HttpHeaders()
+      .set("Content-Type", "application/json; charset=utf-8")
+      .set("Authorization", `Bearer ${JSON.parse(token)}`);
+
+    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/${churchId}/${code}`, { headers: httpHeaders }).toPromise();
 
     return returnObservable.then(result => {
       if (result) {

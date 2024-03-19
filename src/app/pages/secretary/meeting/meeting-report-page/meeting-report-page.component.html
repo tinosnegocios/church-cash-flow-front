@@ -7,7 +7,7 @@
     <div class="mb-9" *ngIf="!busy">
 
         <div class="col-auto">
-            <h3>Membros <a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt fs-3"></span></a> </h3>
+            <h3>Cultos <a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt fs-3"></span></a> </h3>
         </div>
 
         <div *ngFor="let msgSuccess of msgSuccesssOffering">
@@ -31,29 +31,10 @@
 
         <div class="row g-5 mb-4">
 
-            <span class="text-700 fw-semi-bold">Total {{readChurch$.length}}</span>
+            <span class="text-700 fw-semi-bold">Total ({{readModel$.length}})</span>
 
             <div class="col-12 col-lg-6">
-                <form class="position-relative" [formGroup]="formLimit" data-bs-toggle="search"
-                    data-bs-display="static">
-
-                    <div class="row">
-                        <div class="col-12 col-lg-3">
-                            <h4 class="">Data inicial</h4>
-                            <input class="form-control" type="date" formControlName="initialDate">
-                        </div>
-
-                        <div class="col-12 col-lg-3">
-                            <h4 class="">Data final</h4>
-                            <input class="form-control" type="date" formControlName="finalDate">
-                        </div>
-
-                        <div class="col-12 col-lg-2">
-                            <h4 class="">.</h4>
-                            <button class="btn btn-outline-info" type="button" (click)="dashBoard()">Buscar</button>
-                        </div>
-                    </div>
-                </form>
+                
             </div>
 
             <div class="col-12 col-lg-3">
@@ -77,45 +58,22 @@
                 <tr>
                     <th style="width:50px;">Cód</th>
                     <th scope="col" style="width:350px;" data-sort="product">Nome</th>
-                    <th scope="col" data-sort="time" style="width:100px;">Sigla</th>
-                    <th scope="col" data-sort="price" style="width:150px;">Data inauguração</th>
-                    <th scope="col" data-sort="category" style="width:200px;">Data registro</th>
-                    <th scope="col" data-sort="tags" style="width:100px;">cidade</th>
-                    <th scope="col" data-sort="tags" style="width:100px;">estado</th>
-                    <th scope="col" data-sort="tags" style="width:100px;">pais</th>
-                    <th scope="col" data-sort="tags" style="width:100px;">Pastor</th>
+                    <th scope="col" data-sort="time" style="width:100px;">Descrição</th>
                     <th scope="col" style="width:100px;">ação</th>
                 </tr>
             </thead>
 
             <tbody class="list" id="table-latest-review-body">
-
-                <tr *ngFor="let model of readChurch$">
-                    <td>{{model.id}}</td>
+                <tr *ngFor="let model of readModel$">
                     <td class="">
+                        {{model.id}}
+                    </td>
+                    <td style="width:20%" class="">
                         {{model.name}}
                     </td>
-                    <td class="">
-                        {{model.acronym}}
-                    </td>
-                    <td class="">
-                        {{model.inaugurationDate}}
-                    </td>
-                    <td class="">
-                        {{model.registerDate}}
-                    </td>
-                    <td class="">
-                        {{model.address!.city}}
-                    </td>
-                    <td class="">
-                        {{model.address!.state}}
-                    </td>
-                    <td class="">
-                        {{model.address!.country}}
-                    </td>
-                    <td class="">
-                        {{model.firstPastor}}
-                    </td>
+                    <td style="width:70%" class="">
+                        {{model.description}}
+                    </td>     
                     <td class="">
                         <div class="font-sans-serif btn-reveal-trigger position-static">
                             <button
@@ -132,16 +90,12 @@
                             </button>
 
                             <div class="dropdown-menu dropdown-menu-end py-2">
-                                <a class="dropdown-item" [routerLink]="['/church-register']"
-                                    [queryParams]="{id:model.id}">Editar</a>
-                                <div class="dropdown-divider">
-                                </div>
                                 <a class="dropdown-item text-danger" data-bs-toggle="modal"
                                     data-bs-target="#staticBackdrop" (click)="setIdToDelete(model.id, model.name)"
                                     href="#!">Excluir</a>
                             </div>
                         </div>
-                    </td>
+                    </td>           
                 </tr>
             </tbody>
         </table>
@@ -153,28 +107,23 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-danger">
-                    <h5 class="modal-title text-white" id="staticBackdropLabel">Exclusão de oferta</h5>
+                    <h5 class="modal-title text-white" id="staticBackdropLabel">Exclusão de culto</h5>
                     <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span
                             class="fas fa-times fs--1 text-white"></span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="text-700 lh-lg mb-0">Deseja realmente deletar o membro selecionado?
+                    <p class="text-700 lh-lg mb-0">Deseja realmente deletar o culto selecionado?
                     </p>
-                    <p class="text-700 lh-lg mb-0">{{nameHandler}}-{{idHandle}}
+                    <p class="text-700 lh-lg mb-0">
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-danger" data-bs-dismiss="modal" (click)="delete()"
-                        type="button">Deletar</button>
-                    <button class="btn btn-outline-primary" type="button" (click)="clear()"
-                        data-bs-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-danger" data-bs-dismiss="modal"
+                        type="button" (click)="delete()">Deletar</button>
+                    <button class="btn btn-outline-primary" type="button"
+                        data-bs-dismiss="modal" (click)="clear()">Cancelar</button>
                 </div>
             </div>
         </div>
     </div>
-
-
-    <!-- ===============================================-->
-    <!--    End of Main Content-->
-    <!-- ===============================================-->
 </div>

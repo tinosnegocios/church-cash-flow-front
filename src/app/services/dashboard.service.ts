@@ -5,18 +5,18 @@ import { Injectable } from "@angular/core";
 })
 
 export class DashBoardService {
-    private itemDashMonthName = "sessionChurchFlowDashBoardName";
+    private itemDashMonthName = "storageChurchFlowDashBoardName";
 
     getDashBoardMonth() : string {
-        var yearMonth = sessionStorage.getItem(this.itemDashMonthName);
+        var yearMonth = localStorage.getItem(this.itemDashMonthName);
         if(yearMonth == null)
-            yearMonth = `${new Date().getFullYear()}${new Date().getMonth().toString().padStart(2, '0') + 1}`;
-
+            yearMonth = `${new Date().getFullYear()}${(new Date().getMonth() + 1).toString().padStart(2, '0')}`;
+        
         return yearMonth.toString();
     }
 
     setDashBoardMonth(yearMonth : string) {
-        sessionStorage.removeItem(this.itemDashMonthName);
-        sessionStorage.setItem(this.itemDashMonthName, yearMonth);
+        localStorage.removeItem(this.itemDashMonthName);
+        localStorage.setItem(this.itemDashMonthName, yearMonth);
     }
 }

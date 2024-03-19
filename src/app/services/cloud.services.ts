@@ -6,7 +6,7 @@ import { configAplication } from "../config/configAplication";
   })
   
 export class CloudService {
-    public getUrlImageMembersStorage(imageName:string) : string {
+    public async getUrlImageMembersStorage(imageName:string) : Promise<string> {
         var urlBucket = configAplication.getObjCloudConfig().aws.bucketS3.images.url;
         var path = configAplication.getObjCloudConfig().aws.bucketS3.images.membersPath;
         var extensionImage = configAplication.getObjCloudConfig().aws.bucketS3.images.imageTypePattern;
@@ -38,6 +38,7 @@ export class CloudService {
         var extensionImage = configAplication.getObjCloudConfig().aws.bucketS3.images.imageTypePattern;
         var url = `${urlBucket}/${path}/${imageName}.${extensionImage}`;
                 
+        console.log(`${urlBucket}/${path}/${imageName}.${extensionImage}`);
         return `${urlBucket}/${path}/${imageName}.${extensionImage}`;
 
     }

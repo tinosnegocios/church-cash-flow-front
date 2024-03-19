@@ -3,7 +3,7 @@ import { ModelToken } from "../models/churchEntitieModels/ModelToken.models";
 
 export class AuthService {
 
-    private strStoragemName = "church.covflw";
+    private strStoragemName = "church.flow";
 
     private getSessionToken() : string {
         const dataToken = sessionStorage.getItem(`${this.strStoragemName}.token`);
@@ -46,16 +46,16 @@ export class AuthService {
     public setSessionToken(token : string) : void {
         const dataToken = JSON.stringify(token);
 
-        sessionStorage.setItem(`${this.strStoragemName}.token`, dataToken);
+        localStorage.setItem(`${this.strStoragemName}.token`, dataToken);
     }
     
     public getToken() : string {
         var token = this.getLocalToken();
-
+        
         if(token == null || token.length <= 0) {
             token = this.getSessionToken();
         }
-
+        
         if(token == null || token.length == 0) {
             return "";
         }else{
@@ -69,9 +69,4 @@ export class AuthService {
             }
         }
     }
-
-
-
-
-
 }

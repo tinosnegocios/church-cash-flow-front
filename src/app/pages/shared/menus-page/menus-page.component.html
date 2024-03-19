@@ -97,7 +97,7 @@
                   </li>
 
                   <li class="nav-item">
-                    <a class="nav-link" href="apps/crm/deal-details.html" data-bs-toggle=""
+                    <a class="nav-link" [routerLink]="['/meeting-register']" data-bs-toggle=""
                       aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Culto</span>
                       </div>
@@ -173,7 +173,7 @@
                     </a>
                     <!-- more inner pages-->
                   </li>
-                  <li class="nav-item"><a class="nav-link" href="apps/crm/deal-details.html" data-bs-toggle=""
+                  <li class="nav-item"><a class="nav-link" [routerLink]="['/meeting-report']" data-bs-toggle=""
                       aria-expanded="false">
                       <div class="d-flex align-items-center"><span class="nav-link-text">Culto</span>
                       </div>
@@ -556,6 +556,7 @@
                     <img class="rounded-circle " src="assets/img/team/72x72/57.webp" alt="" />
                   </div>
                   <h6 class="mt-2 text-black">{{modelToken.unique_name}}</h6>
+                  <h6 class="mt-2 text-black">{{modelToken.churchName}}</h6>
                 </div>
               </div>
               <div class="overflow-auto scrollbar" style="height: 10rem;">

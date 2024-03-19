@@ -38,7 +38,8 @@ export class MemberRegisterPageComponent implements OnInit {
   protected memberPhotoUrl : string = "";
   protected codeSearch : string = "";
 
-  constructor(private fbuilder: FormBuilder, private handler: MemberHandler, private postHandler: PostHandler, private cloudService: CloudService, private route: ActivatedRoute) {
+  constructor(private fbuilder: FormBuilder, private handler: MemberHandler, private postHandler: PostHandler, 
+    private cloudService: CloudService, private route: ActivatedRoute) {
     this.formMember = this.fbuilder.group({
       name: ['', Validators.compose([
         Validators.required, ,
@@ -98,7 +99,7 @@ export class MemberRegisterPageComponent implements OnInit {
     await this.clear();
     await this.loadPosts();
 
-    if(this.codeSearch != "" && this.codeSearch.length > 0){
+    if(this.codeSearch != "" && !this.codeSearch == undefined ){
       this.typeSave = "update"
       this.searchByCode(this.codeSearch);
     }
@@ -136,7 +137,7 @@ export class MemberRegisterPageComponent implements OnInit {
 
     if(model.photo != null && model.photo.length > 5) {
       this.filebusy = true;
-      this.memberPhotoUrl = this.cloudService.getUrlImageMembersStorage(model.code);
+      this.memberPhotoUrl = await this.cloudService.getUrlImageMembersStorage(model.code);
       this.filebusy = false;
     }
 
@@ -253,7 +254,6 @@ export class MemberRegisterPageComponent implements OnInit {
     this.searchBusy = true;
 
     var member: MemberEditModel = this.formMember.value;
-    console.log(this.base64Image);
     member.base64Image = this.base64Image;
 
     if(member.dateBaptism.length <= 0){

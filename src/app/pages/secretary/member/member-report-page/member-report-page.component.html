@@ -31,11 +31,8 @@
 
         <div class="row g-5 mb-4">
 
-            <ul class="nav nav-links mb-3 mb-lg-2 mx-n3">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">total<span
-                            class="text-700 fw-semi-bold">({{readMembers$.length}})</span></a></li>
-            </ul>
-
+                <span class="text-700 fw-semi-bold">Total {{readMembers$.length}}</span>
+        
             <div class="col-12 col-lg-6">
                 <form class="position-relative" [formGroup]="formLimit" data-bs-toggle="search"
                     data-bs-display="static">
@@ -143,7 +140,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header bg-danger">
-              <h5 class="modal-title text-white" id="staticBackdropLabel">Exclusão de oferta</h5>
+              <h5 class="modal-title text-white" id="staticBackdropLabel">Exclusão de membro</h5>
               <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span
                   class="fas fa-times fs--1 text-white"></span></button>
             </div>

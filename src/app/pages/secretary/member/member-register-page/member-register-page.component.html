@@ -36,7 +36,7 @@
                     <div class="col-12 col-lg-6">
                         <h4 class="mb-3">Busca por código</h4>
                         <input class="form-control mb-5" formControlName="code" type="text"
-                            placeholder="código da oferta" />
+                            placeholder="código do membro" />
                     </div>
                     <div class="col-12 col-lg-6">
                         <h4 class="mb-3"><a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt "></span></a>
@@ -267,7 +267,7 @@
 
                                 <div *ngIf="!filebusy">
                                     <input class="form-control mb-xl-3" formControlName="photo" (change)="loadImage($event)"
-                                    type="file" accept=".jpg, .jpeg" />
+                                    type="file" accept=".jpg, .jpeg, .png" />
                                 </div>
 
                                 <div *ngIf="filebusy">
