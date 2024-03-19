@@ -48,7 +48,7 @@ export class PostHandler extends BaseHandler {
     }
 
     public async getByCode(code: string): Promise<ResultViewModel> {
-        var result: ResultViewModel = await this.service.searchByCodeByChurch(code);
+        var result: ResultViewModel = await this.service.searchByCodeGeneral(code);
         return result;
     }
 }

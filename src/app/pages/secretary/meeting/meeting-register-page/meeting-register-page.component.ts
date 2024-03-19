@@ -40,9 +40,6 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
     this.typeSave = "create";
   }
 
-  protected formSearchTreasury!: FormGroup;
-
-
   public dashBoard(): void{
     this.clearForm();
   }
@@ -58,6 +55,8 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
       await this.handler.update(meetingKind, this.meetingKindCode);
     }
 
+    this.clearForm();
+    
     this.msgSuccesss = this.handler.getMsgSuccess();
     this.msgErros = this.handler.getMsgErro();
     this.searchBusy = false;
@@ -87,7 +86,6 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
 
     this.fillFormWithModel(objModel);
 
-    //this.memberIsValid = objModel.active;
     this.searchBusy = false;
     this.typeSave = "update";
     this.formSearch.controls['code'].setValue(code);
