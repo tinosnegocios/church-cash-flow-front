@@ -36,6 +36,8 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
   protected override clearForm(): void {
     this.clearCommonObj();
     this.formPrincipal.reset();
+    this.formSearch.reset();
+    this.typeSave = "create";
   }
 
   protected formSearchTreasury!: FormGroup;
