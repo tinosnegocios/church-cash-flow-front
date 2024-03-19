@@ -28,18 +28,6 @@ export class MeetingHandler extends BaseHandler {
         return await this.resultTreatment(result);
     }
 
-    private async resultTreatment(result: ResultViewModel): Promise<Boolean> {
-        if (result!.errors != null && result!.errors.length > 0) {
-            result!.errors.forEach(x => {
-                this.setMsgErro(x);
-            })
-            return false;
-        } else {
-            this.setMsgSuccess("Tipo de culto salvo com sucesso");
-            return true;
-        }
-    }
-
     async delete(idHandle: number): Promise<boolean> {
         var result = await this.service.delete(idHandle);
 
@@ -49,13 +37,13 @@ export class MeetingHandler extends BaseHandler {
             })
             return false;
         } else {
-            this.setMsgSuccess("culto excluído com sucesso");
+            this.setMsgSuccess("Culto excluído com sucesso");
             return true;
         }
     }
 
     public async getByCode(code: string): Promise<ResultViewModel> {
-        var result: ResultViewModel = await this.service.searchByCodeByChurch(code);
+        var result: ResultViewModel = await this.service.searchByCodeGeneral(code);
         return result;
     }
 

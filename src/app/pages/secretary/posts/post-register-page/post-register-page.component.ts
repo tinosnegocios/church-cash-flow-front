@@ -1,22 +1,23 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MeetingHandler } from 'src/app/handlers/meetingKindHandler';
-import { MeetingKindEditModel } from 'src/app/models/EditModels/MeetingKind.model';
-import { MeetingKindReadModel } from 'src/app/models/ReadModels/MeetingKindRead.model';
+import { PostHandler } from 'src/app/handlers/PostHandler';
+import { PostEditModel } from 'src/app/models/EditModels/PostEdit.model';
+import { PostReadModel } from 'src/app/models/ReadModels/PostRead.models';
 import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
 import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 
 @Component({
-  selector: 'app-meeting-register-page',
-  templateUrl: './meeting-register-page.component.html'
+  selector: 'app-post-register-page',
+  templateUrl: './post-register-page.component.html'
 })
-export class MeetingRegisterPageComponent extends RegistersPageComponent {
+export class PostRegisterPageComponent extends RegistersPageComponent {
   public formSearch!: FormGroup;
   public formPrincipal!: FormGroup;
-  private meetingKindCode: string = "";
+  private modelCode: string = "";
 
-  constructor(private fbuilder: FormBuilder, private handler: MeetingHandler) {
+  constructor(private fbuilder: FormBuilder, private handler: PostHandler) {
     super();
+    
     this.formSearch = this.fbuilder.group({
       code: ['', Validators.compose([
         Validators.required
@@ -31,8 +32,9 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
         Validators.required
       ])],
     });
-  }
 
+  }
+  
   protected override clearForm(): void {
     this.clearCommonObj();
     this.formPrincipal.reset();
@@ -47,16 +49,16 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
   protected async save(): Promise<void>{
     this.searchBusy = true;
 
-    var meetingKind: MeetingKindEditModel = this.formPrincipal.value;
+    var meetingKind: PostEditModel = this.formPrincipal.value;
        
     if(this.typeSave == "create"){
       await this.handler.create(meetingKind);
     }else if(this.typeSave == "update"){
-      await this.handler.update(meetingKind, this.meetingKindCode);
+      await this.handler.update(meetingKind, this.modelCode);
     }
 
     this.clearForm();
-    
+
     this.msgSuccesss = this.handler.getMsgSuccess();
     this.msgErros = this.handler.getMsgErro();
     this.searchBusy = false;
@@ -68,7 +70,7 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
     if (code.length <= 0)
       code = this.formSearch.value.code;
 
-    this.meetingKindCode = code;
+    this.modelCode = code;
     var modelToForm: ResultViewModel = await this.handler.getByCode(code);
 
     this.clearForm();
@@ -82,7 +84,7 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
     console.log(modelToForm);
 
     this.typeSave = "update";
-    var objModel: MeetingKindReadModel = modelToForm.data;
+    var objModel: PostReadModel = modelToForm.data;
 
     this.fillFormWithModel(objModel);
 
@@ -91,9 +93,8 @@ export class MeetingRegisterPageComponent extends RegistersPageComponent {
     this.formSearch.controls['code'].setValue(code);
   }
 
-  private fillFormWithModel(model: MeetingKindReadModel): void {
+  private fillFormWithModel(model: PostReadModel): void {
     this.formPrincipal.controls['name'].setValue(model.name);
     this.formPrincipal.controls['description'].setValue(model.description);
   }
-
 }
