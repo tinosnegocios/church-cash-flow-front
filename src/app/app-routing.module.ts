@@ -18,6 +18,7 @@ import { ChurchReportPageComponent } from './pages/secretary/church/church-repor
 import { MeetingRegisterPageComponent } from './pages/secretary/meeting/meeting-register-page/meeting-register-page.component';
 import { MeetingReportPageComponent } from './pages/secretary/meeting/meeting-report-page/meeting-report-page.component';
 import { PostRegisterPageComponent } from './pages/secretary/posts/post-register-page/post-register-page.component';
+import { PostReportPageComponent } from './pages/secretary/posts/post-report-page/post-report-page.component';
 
 const routes: Routes = [
   {
@@ -121,6 +122,12 @@ const routes: Routes = [
     component: HeadFrameComponent,
     children: [
       { path: '', component: PostRegisterPageComponent }
+    ]
+   },{
+    path: 'post-report',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: PostReportPageComponent }
     ]
    }
 ];
