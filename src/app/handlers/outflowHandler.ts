@@ -54,6 +54,16 @@ export class OutFlowHandler extends BaseHandler {
         return result;
     }
 
+    public async getOfferingLimit(limit: number): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getOutFlowLimit(limit);
+        return result;
+    }
+
+    public async getOfferingByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getOutFlowByPeriod(initialDate, finalDate);
+        return result;
+    }
+
     public async getById(id: number): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.getById(id);
         return result;

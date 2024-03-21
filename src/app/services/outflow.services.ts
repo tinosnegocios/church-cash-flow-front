@@ -10,6 +10,12 @@ import { DashBoardService } from "./dashboard.service";
 })
 
 export class OutflowService extends BaseService {
+    getOutFlowByPeriod(initialDate: string, finalDate: string): ResultViewModel | PromiseLike<ResultViewModel> {
+        throw new Error("Method not implemented.");
+    }
+    getOutFlowLimit(limit: number): ResultViewModel | PromiseLike<ResultViewModel> {
+        throw new Error("Method not implemented.");
+    }
     dashBoardServices: DashBoardService;
 
     constructor(http: HttpClient, dashBoardServices: DashBoardService) {
