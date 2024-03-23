@@ -64,26 +64,4 @@ export class TithesService extends BaseService {
     });
   }
 
-  getByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
-    var auth = new AuthService();
-    const token = auth.getToken();
-
-    var churchId = (auth.getModelFromToken()).churchId;
-
-    const httpHeaders = new HttpHeaders()
-      .set("Content-Type", "application/json; charset=utf-8")
-      .set("Authorization", `Bearer ${JSON.parse(token)}`);
-
-    const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/${this.modelName}/period/${churchId}/?initialDate=${initialDate}&finalDate=${finalDate}`, { headers: httpHeaders }).toPromise();
-
-    return returnObservable.then(result => {
-      if (result) {
-        return result;
-      } else {
-        console.log('nao deu');
-        throw new Error('Result is undefined.');
-      }
-    });
-  }
-
 }

@@ -129,7 +129,8 @@ export class offeringRegisterPageComponent extends RegistersPageComponent implem
   protected async loadMeetingKind(){
     try {
       const dados = await this.meetingKindService.getMeetingKind();
-      this.meetingKind = dados;
+      
+      this.meetingKind = dados.data;
       const meuObjeto: Record<string, string> = {};
 
       this.meetingKind.forEach((x: MeetingKind) => {

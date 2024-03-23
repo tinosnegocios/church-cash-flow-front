@@ -2,7 +2,6 @@ import { formatDate } from '@angular/common';
 import { Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { configAplication } from 'src/app/config/configAplication';
 import { PostHandler } from 'src/app/handlers/PostHandler';
 import { MemberHandler } from 'src/app/handlers/memberHandler';
 import { MemberEditModel } from 'src/app/models/EditModels/MemberEdit.models';

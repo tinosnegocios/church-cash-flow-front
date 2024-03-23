@@ -66,9 +66,7 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
       outflowKindId: ['', Validators.compose([
         Validators.required,
       ])],
-      resume: [''],
-      photo: ['', Validators.compose([
-      ])],
+      resume: ['']
     });
     this.formOutflow.controls['totalAmount'].disable();
     this.formOutflow.controls['authorized'].disable();
@@ -128,7 +126,6 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
     this.formSearch.reset();
 
     this.typeSave = "create";
-    this.imageUrl = "";
   }
 
   protected async save() {
@@ -202,14 +199,6 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
     var dayConvert = new Date(model.day);
     var dayStr = `${dayConvert.getDate().toString().padStart(2, '0')}/${dayConvert.getMonth().toString().padStart(2, '0')}/${dayConvert.getFullYear()}`;
     
-    if(model.photo != null && model.photo.length > 5) {
-      this.imageBusy = true;
-      this.imageUrl = this.cloudService.getUrlImageOutFlowStorage(model.photo);
-      this.imageBusy = false;
-    }else{
-      this.imageUrl = this.cloudService.getImageStore("common", "no-file");
-    }
-    
     this.formSearch.controls['code'].setValue(code);2
     this.formOutflow.controls['day'].setValue(formatDate(model.day, 'yyyy-MM-dd', 'en'));
     var comp = model.competence.replace('/','-');
@@ -258,30 +247,5 @@ export class OutflowRegisterPageComponent extends RegistersPageComponent{
 
       this.formOutflow.controls['resume'].setValue(resume);
     }
-  }
-
-  protected loadImage(event: any) {
-    this.msgErros = [];
-    this.msgSuccesss = [];
-
-    const file = event.target.files[0];
-
-    var imageMethod = new ImageMethods(2 * 1024 * 1024,);
-    var base64 = imageMethod.convertToBase64(file)
-      .then((base64) => {
-        if(base64 == "")  {
-          this.formOutflow.controls["photo"].setValue(null);
-          this.msgErros.push(imageMethod.getErro())
-        }else{
-          this.base64Image = base64;
-        }
-        
-      })
-      .catch((erro) => {
-        console.log("Erro no carregamento da imagem");
-        this.formOutflow.controls["photo"].setValue(null);
-        this.msgErros.push(imageMethod.getErro())
-      });
-  }
-  
+  }  
 }

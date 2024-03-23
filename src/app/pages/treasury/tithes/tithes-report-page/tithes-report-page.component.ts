@@ -25,6 +25,7 @@ export class TithesReportPageComponent implements OnInit {
   protected msgSuccesssOffering: string[] = [];
 
   public DashMonth!:  [string, string][];  
+  protected amountTotalReport: number = 0;
 
   constructor(private handler: TithesHandler, private router: Router, private dashBoardService: DashBoardService, private fbuilder: FormBuilder) {
     this.formLimit = this.fbuilder.group({
@@ -71,6 +72,8 @@ export class TithesReportPageComponent implements OnInit {
         var dayStr = `${daySplit[2].replace('T00:00:00', '')}/${daySplit[1]}/${daySplit[0]}`;
         x.day = dayStr;
       });
+
+      this.amountTotalReport = this.tithes$.reduce((acumulador, objeto) => acumulador + objeto.totalAmount, 0);
     }
 
     this.busy = false;
