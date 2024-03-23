@@ -8,6 +8,7 @@
 
     <div class="col-auto">
       <h3>Despesas <a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt fs-3"></span></a> </h3>
+      
     </div>
 
     <div *ngFor="let msgSuccess of msgSuccesss">
@@ -26,7 +27,6 @@
       </div>
     </div>
 
-    <!--form limit-->
     <div class="row g-5 mb-4">
 
       <span class="text-700 fw-semi-bold">Total {{models$.length}}</span>
@@ -54,7 +54,7 @@
       </div>
 
       <div class="col-12 col-lg-3">
-
+        Total de {{amountTotalReport | currency:'BRL'}}
       </div>
 
       <div class="col-12 col-lg-3">

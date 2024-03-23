@@ -12,6 +12,7 @@ import { ReportPageComponent } from 'src/app/pages/shared/report-page/report-pag
 export class OutflowReportPageComponent extends ReportPageComponent implements OnInit {
   protected models$!: OutFlowReadModel[];
   protected formLimit!: FormGroup;
+  protected amountTotalReport: number = 0;
 
   constructor(private handler: OutFlowHandler, private fbuilder: FormBuilder) {
     super();
@@ -58,6 +59,8 @@ export class OutflowReportPageComponent extends ReportPageComponent implements O
         var dayStr = `${daySplit[2].replace('T00:00:00', '')}/${daySplit[1]}/${daySplit[0]}`;
         x.day = dayStr;
       });
+
+      this.amountTotalReport = this.models$.reduce((acumulador, objeto) => acumulador + objeto.totalAmount, 0);
     }
 
     this.busy = false;
