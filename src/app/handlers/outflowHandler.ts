@@ -9,6 +9,7 @@ import { OutflowEditModel } from "../models/EditModels/OutFlowEdit.Models";
 })
 
 export class OutFlowHandler extends BaseHandler {
+
     private service: OutflowService;
 
     constructor(service: OutflowService) {
@@ -18,7 +19,7 @@ export class OutFlowHandler extends BaseHandler {
 
     public async create(handler: OutflowEditModel): Promise<Boolean> {
         var result = await this.service.create(handler);
-        
+
         if (result!.errors != null && result!.errors.length > 0) {
             result!.errors.forEach(x => {
                 this.setMsgErro(x);
@@ -34,10 +35,10 @@ export class OutFlowHandler extends BaseHandler {
         if (!model || modelId == "") {
             this.setMsgErro("data invalid!")
             return false;
-        }     
+        }
 
         var result = await this.service.update(model, modelId);
-        
+
         if (result!.errors!.length > 0) {
             result!.errors!.forEach(x => {
                 this.setMsgErro(x);
@@ -54,19 +55,28 @@ export class OutFlowHandler extends BaseHandler {
         return result;
     }
 
-    public async getOfferingLimit(limit: number): Promise<ResultViewModel> {
-        var result: ResultViewModel = await this.service.getOutFlowLimit(limit);
-        return result;
-    }
-
     public async getOfferingByPeriod(initialDate: string, finalDate: string): Promise<ResultViewModel> {
-        var result: ResultViewModel = await this.service.getOutFlowByPeriod(initialDate, finalDate);
+        var result: ResultViewModel = await this.service.getByPeriod(initialDate, finalDate);
         return result;
     }
 
     public async getById(id: number): Promise<ResultViewModel> {
         var result: ResultViewModel = await this.service.getById(id);
         return result;
+    }
+
+    public async delete(id: number) {
+        var result = await this.service.delete(id);
+
+        if (result!.errors != null && result!.errors.length > 0) {
+            result!.errors.forEach(x => {
+                this.setMsgErro(x);
+            })
+            return false;
+        } else {
+            this.setMsgSuccess("despesa excluída com sucesso");
+            return true;
+        }
     }
 
 }

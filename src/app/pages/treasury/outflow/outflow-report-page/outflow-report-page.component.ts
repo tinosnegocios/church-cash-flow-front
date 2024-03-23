@@ -47,7 +47,7 @@ export class OutflowReportPageComponent extends ReportPageComponent implements O
     var finalDate = this.formLimit.value.finalDate;
 
     var result = await this.handler.getOfferingByPeriod(initialDate, finalDate);
-
+    
     if (result.errors != null && result.errors.length > 0) {
       this.models$ = [];
     } else {
@@ -61,5 +61,25 @@ export class OutflowReportPageComponent extends ReportPageComponent implements O
     }
 
     this.busy = false;
+  }
+
+  public setIdToDelete(eventId: any, eventDescription: string){
+    this.idHandle = eventId
+    this.descriptionHandle = eventDescription;
+  }
+
+  public deleteModel(){
+    if(this.idHandle > 0){
+      var result = this.handler.delete(this.idHandle)
+      .then((result) => {
+        this.dashBoard();
+        this.msgErros = this.handler.getMsgErro();
+        this.msgSuccesss = this.handler.getMsgSuccess();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+    
   }
 }
