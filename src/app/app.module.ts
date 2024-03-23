@@ -31,6 +31,7 @@ import { MeetingHandler } from './handlers/meetingKindHandler';
 import { MeetingReportPageComponent } from './pages/secretary/meeting/meeting-report-page/meeting-report-page.component';
 import { PostRegisterPageComponent } from './pages/secretary/posts/post-register-page/post-register-page.component';
 import { PostReportPageComponent } from './pages/secretary/posts/post-report-page/post-report-page.component';
+import { ReportPageComponent } from './pages/shared/report-page/report-page.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { PostReportPageComponent } from './pages/secretary/posts/post-report-pag
     MeetingRegisterPageComponent,
     MeetingReportPageComponent,
     PostRegisterPageComponent,
-    PostReportPageComponent
+    PostReportPageComponent,
+    ReportPageComponent
   ],
   imports: [
     BrowserModule,

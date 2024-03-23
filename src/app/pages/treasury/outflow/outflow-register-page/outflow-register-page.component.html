@@ -63,7 +63,6 @@
     </form>
 
     <form class="mb-3" [formGroup]="formOutflow" (change)="showResume()">
-
         <div class="row g-3 flex-between-end mb-5">
 
             <div class="col-auto">
@@ -74,16 +73,9 @@
                 <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" (click)="clearForm()"
                     type="button">Limpar/Cancelar</button>
 
-                <button class="btn btn-phoenix-secondary btn-lg me-1 mb-1" (click)="showHideImage()" type="button">
-                    <a class="btn btn-sm btn-phoenix-primary code-btn ms-2" data-bs-toggle="collapse"
-                        href="#show-image-model" role="button" aria-controls="show-image-model" aria-expanded="false">
-                        <span class="me-2" data-feather="code"></span>View code</a>Ver imagem
-                </button>
-
                 <button class="btn btn-primary btn-lg me-1 mb-1" [disabled]="formOutflow.invalid" (click)="save()"
                     type="submit"><span class="far fa-save fs-1"></span>Salvar</button>
             </div>
-
 
             <div class="row g-5">
 
@@ -163,36 +155,7 @@
                             </div>
                         </div>
 
-                        <div class="row g-5">
-                            <div class="row g-5">
-                                <div class="col-12">
-                                    <div class="mb-6">
-                                        <div class="col-12">
-                                            <h4 class="mb-3">Imagem</h4>
-
-                                            <div *ngIf="!imageBusy">
-                                                <input class="form-control mb-xl-3" formControlName="photo"
-                                                    (change)="loadImage($event)" type="file" accept=".jpg, .jpeg" />
-                                            </div>
-
-                                            <div *ngIf="imageBusy">
-                                                <app-loading-file></app-loading-file>
-                                            </div>
-
-                                        </div>
-
-                                        <div [hidden]="hiddenImage">
-                                            <img src={{imageUrl}} class="rounded float-right" width="420" height="420"
-                                                alt="...">
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
-
 
                     <div class="col-12 col-xl-4">
                         <div class="row g-2">
@@ -337,7 +300,6 @@
             </div>
 
         </div>
-
     </form>
 
 

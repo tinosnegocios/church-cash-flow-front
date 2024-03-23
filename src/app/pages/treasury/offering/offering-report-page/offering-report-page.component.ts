@@ -25,7 +25,7 @@ export class OfferingReportPageComponent implements OnInit {
 
   public DashMonth!:  [string, string][];
   public dashMonthSelected: string | undefined;
-  
+  protected amountTotalReport: number = 0;  
 
   constructor(private handler: OfferingHandler, private router: Router, private dashBoardService: DashBoardService, private fbuilder: FormBuilder) {
     this.formLimit = this.fbuilder.group({
@@ -72,6 +72,8 @@ export class OfferingReportPageComponent implements OnInit {
         var dayStr = `${daySplit[2].replace('T00:00:00', '')}/${daySplit[1]}/${daySplit[0]}`;
         x.day = dayStr;
       });
+
+      this.amountTotalReport = this.offerings$.reduce((acumulador, objeto) => acumulador + objeto.totalAmount, 0);
     }
     
     this.busy = false;
