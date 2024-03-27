@@ -19,6 +19,7 @@ import { MeetingRegisterPageComponent } from './pages/secretary/meeting/meeting-
 import { MeetingReportPageComponent } from './pages/secretary/meeting/meeting-report-page/meeting-report-page.component';
 import { PostRegisterPageComponent } from './pages/secretary/posts/post-register-page/post-register-page.component';
 import { PostReportPageComponent } from './pages/secretary/posts/post-report-page/post-report-page.component';
+import { SecretaryLocalRegisterPageComponent } from './pages/secretary/secretary/secretary-local-register-page/secretary-local-register-page.component';
 
 const routes: Routes = [
   {
@@ -128,6 +129,12 @@ const routes: Routes = [
     component: HeadFrameComponent,
     children: [
       { path: '', component: PostReportPageComponent }
+    ]
+   },{
+    path: 'secretary-local-register',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: SecretaryLocalRegisterPageComponent }
     ]
    }
 ];
