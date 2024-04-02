@@ -1,17 +1,22 @@
-import { Component } from '@angular/core';
+import { formatDate } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ChurchHadler } from 'src/app/handlers/churchHandler';
+import { userHandler } from 'src/app/handlers/userHandler';
+import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
 import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 
 @Component({
   selector: 'app-secretary-local-register-page',
   templateUrl: './secretary-local-register-page.component.html'
 })
-export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent {
+export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent implements OnInit {
   protected formRegister!: FormGroup;
   protected formSearch!: FormGroup;
 
+  protected churchList: ChurchReadModel[] = [];
   
-  constructor(private fbuilder: FormBuilder) {
+  constructor(private fbuilder: FormBuilder, private handler: userHandler, private churchHandler: ChurchHadler) {
     super();
     this.formSearch = this.fbuilder.group({
       code: ['', Validators.compose([
@@ -36,6 +41,10 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
       ])],
     });
   }
+  ngOnInit(): void {
+    this.clear();
+    this.dashBoard();
+  }
 
   protected override clearForm(): void {
     throw new Error('Method not implemented.');
@@ -52,8 +61,14 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
     console.log('salvando');
   }
 
-  protected dashboard() {
+  protected async dashBoard() {
+    var churchs = await this.churchHandler.getChurchByPeriod(
+      formatDate(new Date(1900,1,1), 'yyyy-MM-dd', 'en'), formatDate(new Date(), 'yyyy-MM-dd', 'en')
+      ).then(result => {
+        this.churchList = result.data
+      });
 
+    console.log(this.churchList);
   }
 
   protected search() {
