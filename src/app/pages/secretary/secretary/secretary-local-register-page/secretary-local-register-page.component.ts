@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { userHandler } from 'src/app/handlers/userHandler';
+import { UserEditModel } from 'src/app/models/EditModels/user.mode';
 import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
 import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 
@@ -13,9 +14,9 @@ import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/regi
 export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent implements OnInit {
   protected formRegister!: FormGroup;
   protected formSearch!: FormGroup;
-
+  private passWord: string = "";
   protected churchList: ChurchReadModel[] = [];
-  
+    
   constructor(private fbuilder: FormBuilder, private handler: userHandler, private churchHandler: ChurchHadler) {
     super();
     this.formSearch = this.fbuilder.group({
@@ -30,9 +31,6 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
       password: ['', Validators.compose([
         Validators.required
       ])],
-      passwordConfirm: ['', Validators.compose([
-        Validators.required
-      ])],
       churchId: ['', Validators.compose([
         Validators.required
       ])],
@@ -41,6 +39,7 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
       ])],
     });
   }
+
   ngOnInit(): void {
     this.clear();
     this.dashBoard();
@@ -54,11 +53,18 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
     this.clearCommonObj();
   }
 
-  protected save() {
-    if(! this.checkPassWord())
-      return;
+  protected async save() {
+    if(this.passWord !== this.formRegister.controls['password'].value){
+      this.msgErros.push("Senha inválida");
+    }
+    console.log(this.formRegister.value);
+    var userEdit = new UserEditModel();
+    userEdit.name = this.formRegister.controls['name'].value;
+    userEdit.churchId = this.formRegister.controls['churchId'].value;
+    userEdit.roleIds = this.formRegister.controls['roleIds'].value;
+    userEdit.password = this.formRegister.controls['password'].value;
 
-    console.log('salvando');
+    var result = await this.handler.create(userEdit);
   }
 
   protected async dashBoard() {
@@ -75,33 +81,15 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
 
   }
 
-  private checkPassWord(): boolean{
-    this.clear();
-    var pass = this.formRegister.value.password.toString().toUpperCase();
-    var confirmPass = this.formRegister.value.passwordConfirm.toString().toUpperCase();
-
-    if(pass !== confirmPass){
-      this.msgErros.push("Senhas não conferem");
-      console.log(this.msgErros)
-      return false;
-    }
-
-    return true;
-  }
-
   protected generatePassword(){
+    this.passWord = "";
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=';
-    let senha = '';
     for (let i = 0; i < 8; i++) {
         const indice = Math.floor(Math.random() * caracteres.length);
-        senha += caracteres.charAt(indice);
+        this.passWord += caracteres.charAt(indice);
     }
 
-    this.formRegister.controls['password'].setValue(senha);
-  }
-
-  protected changPasswordType() {
-    //this.formRegister.controls['password'].
+    this.formRegister.controls['password'].setValue(this.passWord);
   }
 
 }
