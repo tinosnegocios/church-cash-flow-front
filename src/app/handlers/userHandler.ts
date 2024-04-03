@@ -16,8 +16,7 @@ export class userHandler extends BaseHandler {
     }
 
     public async create(handler: UserEditModel): Promise<Boolean> {
-        if(! this.checkUser(handler)){
-            console.log("Preencha todos os campos corretamente");
+        if(! await this.checkUser(handler)){
             this.setMsgErro("Preencha todos os campos corretamente");
             return false;
         }
@@ -36,7 +35,7 @@ export class userHandler extends BaseHandler {
         }
     }
 
-    private checkUser(model: UserEditModel): boolean{
+    private async checkUser(model: UserEditModel): Promise<boolean>{
         if(model.churchId <= 0 || model.churchId == null)
             return false;
         if(model.name.trim() == "")

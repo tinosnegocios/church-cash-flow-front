@@ -57,14 +57,16 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
     if(this.passWord !== this.formRegister.controls['password'].value){
       this.msgErros.push("Senha inválida");
     }
-    console.log(this.formRegister.value);
+    
     var userEdit = new UserEditModel();
     userEdit.name = this.formRegister.controls['name'].value;
-    userEdit.churchId = this.formRegister.controls['churchId'].value;
-    userEdit.roleIds = this.formRegister.controls['roleIds'].value;
+    userEdit.churchId = parseInt(this.formRegister.controls['churchId'].value);
+    userEdit.roleIds.push(parseInt(this.formRegister.controls['roleIds'].value));
     userEdit.password = this.formRegister.controls['password'].value;
-
+    console.log(parseInt(this.formRegister.controls['churchId'].value));
+    console.log(userEdit);
     var result = await this.handler.create(userEdit);
+    this.msgErros = this.handler.getMsgErro();
   }
 
   protected async dashBoard() {
