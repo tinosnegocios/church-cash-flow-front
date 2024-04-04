@@ -10,10 +10,10 @@ import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewMo
 import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 
 @Component({
-  selector: 'app-secretary-local-register-page',
-  templateUrl: './secretary-local-register-page.component.html'
+  selector: 'app-secretary-register-page',
+  templateUrl: './secretary-register-page.component.html'
 })
-export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent implements OnInit {
+export class SecretaryRegisterPageComponent extends RegistersPageComponent implements OnInit {
   private passWord: string = "";
 
   protected churchs!: ResultViewModel['data'];
