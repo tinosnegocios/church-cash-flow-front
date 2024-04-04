@@ -20,6 +20,7 @@ import { MeetingReportPageComponent } from './pages/secretary/meeting/meeting-re
 import { PostRegisterPageComponent } from './pages/secretary/posts/post-register-page/post-register-page.component';
 import { PostReportPageComponent } from './pages/secretary/posts/post-report-page/post-report-page.component';
 import { SecretaryRegisterPageComponent } from './pages/secretary/secretary/secretary-register-page/secretary-register-page.component';
+import { SecretaryReportPageComponent } from './pages/secretary/secretary/secretary-report-page/secretary-report-page.component';
 
 const routes: Routes = [
   {
@@ -135,6 +136,12 @@ const routes: Routes = [
     component: HeadFrameComponent,
     children: [
       { path: '', component: SecretaryRegisterPageComponent }
+    ]
+   },{
+    path: 'secretary-report',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: SecretaryReportPageComponent }
     ]
    }
 ];
