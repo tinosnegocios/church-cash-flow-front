@@ -15,7 +15,6 @@ import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/regi
 })
 export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent implements OnInit {
   private passWord: string = "";
-  private typeMethod: string = "";
 
   protected churchs!: ResultViewModel['data'];
   protected formRegister!: FormGroup;
@@ -53,16 +52,22 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
 
   protected override clearForm(): void {
     this.formRegister.reset();
+    this.formSearch.reset();
   }
 
   protected clear() {
     this.clearCommonObj();
     this.handler.clear();
     this.clearForm();
-    this.typeMethod = "crate";
+    this.typeSave = "create";
   }
 
   protected async save() {
+    if(this.typeSave != "create"){
+      this.msgErros.push("Não é possivel editar secretario. Exclua e crie um novo");
+      return;
+    }
+
     if (this.passWord !== this.formRegister.controls['password'].value) {
       this.msgErros.push("Senha inválida");
       return;
@@ -83,6 +88,7 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
 
   protected async dashBoard() {
     await this.loadChurchs();
+    this.typeSave = "create";
   }
 
   private async loadChurchs() {
@@ -109,16 +115,22 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
   }
 
   protected async search() {
+    //this.clear();
+
     this.codeFormSearch = this.formSearch.controls['codeSearch'].value;
     var result = await this.handler.getById(parseInt(this.codeFormSearch));
-    console.log(result.data);
     this.fillForm(result.data)
+    this.typeSave = "update";
   }
 
   private fillForm(user: UserReadModel){
+    console.log(user.userRoles[0] == "L-SCT");
     this.formRegister.controls['name'].setValue(user.name);
-    this.formRegister.controls['churchId'].setValue(1);
-    this.formRegister.controls['churchId'].setValue(1);
+    this.formRegister.controls['churchId'].setValue(user.churchId);
+    if(user.userRoles[0] == "L-SCT")
+      this.formRegister.controls['roleIds'].setValue(1);
+    if(user.userRoles[0] == "M-SCT")
+      this.formRegister.controls['roleIds'].setValue(3);
     this.formRegister.controls['password'].setValue("hmmm espertinho kkkk");
   }
 
