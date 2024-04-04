@@ -5,6 +5,7 @@ import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { userHandler } from 'src/app/handlers/userHandler';
 import { UserEditModel } from 'src/app/models/EditModels/user.mode';
 import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
+import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
 import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 
 @Component({
@@ -12,11 +13,13 @@ import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/regi
   templateUrl: './secretary-local-register-page.component.html'
 })
 export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent implements OnInit {
+  private passWord: string = "";
+
+  protected churchs!: ResultViewModel['data'];
   protected formRegister!: FormGroup;
   protected formSearch!: FormGroup;
-  private passWord: string = "";
-  protected churchList: ChurchReadModel[] = [];
-    
+  protected churchToSelect!: [string, string][]
+
   constructor(private fbuilder: FormBuilder, private handler: userHandler, private churchHandler: ChurchHadler) {
     super();
     this.formSearch = this.fbuilder.group({
@@ -51,44 +54,65 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
 
   protected clear() {
     this.clearCommonObj();
+    this.handler.clear();
   }
 
   protected async save() {
-    if(this.passWord !== this.formRegister.controls['password'].value){
+    if (this.passWord !== this.formRegister.controls['password'].value) {
       this.msgErros.push("Senha inválida");
+      return;
     }
-    
+
     var userEdit = new UserEditModel();
     userEdit.name = this.formRegister.controls['name'].value;
-    userEdit.churchId = parseInt(this.formRegister.controls['churchId'].value);
+    userEdit.churchId = (parseInt(this.formRegister.controls['churchId'].value));
     userEdit.roleIds.push(parseInt(this.formRegister.controls['roleIds'].value));
-    userEdit.password = this.formRegister.controls['password'].value;
-    console.log(parseInt(this.formRegister.controls['churchId'].value));
-    console.log(userEdit);
+    userEdit.passwordHash = this.formRegister.controls['password'].value;
+
     var result = await this.handler.create(userEdit);
     this.msgErros = this.handler.getMsgErro();
+    this.msgSuccesss = this.handler.getMsgSuccess();
+
+    this.handler.clear();
   }
 
   protected async dashBoard() {
-    var churchs = await this.churchHandler.getChurchByPeriod(
-      formatDate(new Date(1900,1,1), 'yyyy-MM-dd', 'en'), formatDate(new Date(), 'yyyy-MM-dd', 'en')
-      ).then(result => {
-        this.churchList = result.data
+    await this.loadChurchs();
+  }
+
+  private async loadChurchs() {
+    try {
+      const dados = await this.churchHandler.getChurchByPeriod(
+        formatDate(new Date(1900, 1, 1), 'yyyy-MM-dd', 'en'),
+        formatDate(new Date(), 'yyyy-MM-dd', 'en')
+      );
+      this.churchs = dados.data;
+
+      var meuObjeto: Record<string, string> = {};
+      this.churchs.forEach((x: ChurchReadModel) => {
+        var key = x.name;
+        var value = x.id;
+
+        meuObjeto[key] = `${value}`;
       });
 
-    console.log(this.churchList);
+      this.churchToSelect = Object.entries(meuObjeto);
+
+    } catch (error) {
+      console.log('error to get churchs:', error);
+    }
   }
 
   protected search() {
 
   }
 
-  protected generatePassword(){
+  protected generatePassword() {
     this.passWord = "";
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()-_+=';
     for (let i = 0; i < 8; i++) {
-        const indice = Math.floor(Math.random() * caracteres.length);
-        this.passWord += caracteres.charAt(indice);
+      const indice = Math.floor(Math.random() * caracteres.length);
+      this.passWord += caracteres.charAt(indice);
     }
 
     this.formRegister.controls['password'].setValue(this.passWord);

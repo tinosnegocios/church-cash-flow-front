@@ -46,7 +46,7 @@ export class TithesRegisterPageComponent extends RegistersPageComponent implemen
 
     this.formTreasury = this.fbuilder.group({
       memberId: ['', Validators.compose([
-        Validators.required, ,
+        Validators.required,
       ])],
       day: ['', Validators.compose([
         Validators.required,

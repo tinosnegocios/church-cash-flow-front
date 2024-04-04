@@ -21,11 +21,10 @@ export class userHandler extends BaseHandler {
             return false;
         }
 
-        console.log('salvando');
         var result = await this.service.create(handler);
-
-        if (result!.errors != null && result!.errors.length > 0) {
-            result!.errors.forEach(x => {
+        if (result!.errors!.length > 0) {
+            result!.errors!.forEach(x => {
+                console.log(x)
                 this.setMsgErro(x);
             })
             return false;
@@ -40,9 +39,12 @@ export class userHandler extends BaseHandler {
             return false;
         if(model.name.trim() == "")
             return false;
-        if(model.roleIds == null)
+        if(model.roleIds.length <= 0 ||  model.roleIds == null)
             return false;
-        if(model.password.trim() == "")
+        if(model.passwordHash.trim() == "")
+            return false;
+        
+        if(model.roleIds.some(element => element <= 0))
             return false;
 
         return true;
