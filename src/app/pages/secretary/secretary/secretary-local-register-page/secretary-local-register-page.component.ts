@@ -49,12 +49,13 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
   }
 
   protected override clearForm(): void {
-    throw new Error('Method not implemented.');
+    this.formRegister.reset();
   }
 
   protected clear() {
     this.clearCommonObj();
     this.handler.clear();
+    this.clearForm();
   }
 
   protected async save() {
