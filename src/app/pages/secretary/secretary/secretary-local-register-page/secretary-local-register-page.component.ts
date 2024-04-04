@@ -5,6 +5,7 @@ import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { userHandler } from 'src/app/handlers/userHandler';
 import { UserEditModel } from 'src/app/models/EditModels/user.mode';
 import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
+import { UserReadModel } from 'src/app/models/ReadModels/UserRead.model';
 import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
 import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/registers-page.component';
 
@@ -14,16 +15,18 @@ import { RegistersPageComponent } from 'src/app/pages/shared/registers-page/regi
 })
 export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent implements OnInit {
   private passWord: string = "";
+  private typeMethod: string = "";
 
   protected churchs!: ResultViewModel['data'];
   protected formRegister!: FormGroup;
   protected formSearch!: FormGroup;
   protected churchToSelect!: [string, string][]
-
+  protected codeFormSearch: string = "";
+  
   constructor(private fbuilder: FormBuilder, private handler: userHandler, private churchHandler: ChurchHadler) {
     super();
     this.formSearch = this.fbuilder.group({
-      code: ['', Validators.compose([
+      codeSearch: ['', Validators.compose([
         Validators.required
       ])],
     });
@@ -56,6 +59,7 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
     this.clearCommonObj();
     this.handler.clear();
     this.clearForm();
+    this.typeMethod = "crate";
   }
 
   protected async save() {
@@ -104,8 +108,18 @@ export class SecretaryLocalRegisterPageComponent extends RegistersPageComponent 
     }
   }
 
-  protected search() {
+  protected async search() {
+    this.codeFormSearch = this.formSearch.controls['codeSearch'].value;
+    var result = await this.handler.getById(parseInt(this.codeFormSearch));
+    console.log(result.data);
+    this.fillForm(result.data)
+  }
 
+  private fillForm(user: UserReadModel){
+    this.formRegister.controls['name'].setValue(user.name);
+    this.formRegister.controls['churchId'].setValue(1);
+    this.formRegister.controls['churchId'].setValue(1);
+    this.formRegister.controls['password'].setValue("hmmm espertinho kkkk");
   }
 
   protected generatePassword() {

@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { BaseHandler } from "./baseHandler";
 import { UserEditModel } from "../models/EditModels/user.mode";
 import { UserServices } from "../services/user.services";
+import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 
 @Injectable({
     providedIn: 'root'
@@ -24,7 +25,6 @@ export class userHandler extends BaseHandler {
         var result = await this.service.create(handler);
         if (result!.errors!.length > 0) {
             result!.errors!.forEach(x => {
-                console.log(x)
                 this.setMsgErro(x);
             })
             return false;
@@ -32,6 +32,11 @@ export class userHandler extends BaseHandler {
             this.setMsgSuccess("usuário salvo com sucesso");
             return true;
         }
+    }
+
+    public async getById(id: number): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getById(id);
+        return result;
     }
 
     private async checkUser(model: UserEditModel): Promise<boolean>{
