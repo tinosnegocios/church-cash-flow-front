@@ -39,6 +39,23 @@ export class userHandler extends BaseHandler {
         return result;
     }
 
+    public async getAll(): Promise<ResultViewModel> {
+        var result: ResultViewModel = await this.service.getAll();
+        return result;
+    }
+
+
+    public async deleteById(id: number): Promise<boolean> {
+        var result = await this.service.delete(id);
+        if(result != null && (result.errors!.length > 0)){
+            this.msgError.push("Erro ao deletar secretário");
+            return false;
+        }
+        
+        this.msgSuccess.push("Secretário deletado com sucesso");
+        return true;
+    }
+
     private async checkUser(model: UserEditModel): Promise<boolean>{
         if(model.churchId <= 0 || model.churchId == null)
             return false;

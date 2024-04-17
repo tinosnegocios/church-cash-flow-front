@@ -1,6 +1,10 @@
-# Church
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.4.
+## Titulo
+Parte FrontEnd de caixa de igreja. Gerenciamento de caixa, membros e relatorio. #descontinuado.
+
+- Angular V.16
+
+
 
 ## Development server
 
