@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { userHandler } from 'src/app/handlers/userHandler';
@@ -33,7 +32,6 @@ export class SecretaryReportPageComponent extends ReportPageComponent implements
   protected async dashBoard() {
     var result = await this.handler.getAll();
     this.models$ = result.data;
-    console.log(result);
   }
 
   public setIdToDelete(eventId: any, eventDescription: string){
@@ -53,7 +51,6 @@ export class SecretaryReportPageComponent extends ReportPageComponent implements
         console.log(error);
       });
     }
-    
   }
 
 }
