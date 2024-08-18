@@ -19,7 +19,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(private loginService: LoginService, private fbuilder: FormBuilder, private router: Router) {
     this.formLogin = this.fbuilder.group({
-      code: ['515C6E',Validators.compose([
+      code: ['326F8B',Validators.compose([
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(6)
@@ -55,6 +55,9 @@ export class LoginPageComponent implements OnInit {
         self.busy = false;
       },
       error(err) {
+        if(err.statusText === "Unknown Error") {
+          console.log("Failed to connect to the server. Please, contact the support!");
+        }
         self.treatErro();
         self.busy = false;
         self.errorLogin = true;
@@ -64,7 +67,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   private treatErro() : void {
-    console.log("Error. Check yours credentials!");
+    console.log("Error. Check yours credentials!x");
   }
 
   private makeLogin(result : any) : void{
