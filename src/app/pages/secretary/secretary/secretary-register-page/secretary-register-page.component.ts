@@ -64,6 +64,7 @@ export class SecretaryRegisterPageComponent extends RegistersPageComponent imple
     this.handler.clear();
     this.clearForm();
     this.typeSave = "create";
+    this.RoleIdSelected = [];
   }
 
   protected async save() {
