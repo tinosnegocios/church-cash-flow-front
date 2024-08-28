@@ -30,8 +30,10 @@ export class SecretaryReportPageComponent extends ReportPageComponent implements
   }
 
   protected async dashBoard() {
+    this.busy = true;
     var result = await this.handler.getAll();
     this.models$ = result.data;
+    this.busy = false;
   }
 
   public setIdToDelete(eventId: any, eventDescription: string){
