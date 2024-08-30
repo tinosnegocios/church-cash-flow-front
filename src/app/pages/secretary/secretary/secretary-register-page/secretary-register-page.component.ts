@@ -1,6 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { userHandler } from 'src/app/handlers/userHandler';
 import { UserEditModel } from 'src/app/models/EditModels/user.mode';
@@ -23,8 +24,9 @@ export class SecretaryRegisterPageComponent extends RegistersPageComponent imple
   protected codeFormSearch: string = "";
   protected RoleIdSelected: number[] = [];
   protected RoleToSelect!: [string, number][];
-
-  constructor(private fbuilder: FormBuilder, private handler: userHandler, private churchHandler: ChurchHadler) {
+  private idSearch = "";
+  
+  constructor(private fbuilder: FormBuilder, private handler: userHandler, private churchHandler: ChurchHadler, private route: ActivatedRoute) {
     super();
     this.formSearch = this.fbuilder.group({
       codeSearch: ['', Validators.compose([
@@ -49,9 +51,14 @@ export class SecretaryRegisterPageComponent extends RegistersPageComponent imple
   }
 
   ngOnInit(): void {
+    this.route.queryParams
+    .subscribe(params => {
+      this.idSearch = params['id'];
+    });
+      
     this.clear();
-    this.dashBoard();
     this.loadPosts();
+    this.dashBoard();
   }
 
   protected override clearForm(): void {
@@ -93,8 +100,8 @@ export class SecretaryRegisterPageComponent extends RegistersPageComponent imple
   }
 
   protected async dashBoard() {
-    await this.loadChurchs();
     this.typeSave = "create";
+    await this.loadChurchs();
   }
 
   private async loadChurchs() {
@@ -115,21 +122,31 @@ export class SecretaryRegisterPageComponent extends RegistersPageComponent imple
 
       this.churchToSelect = Object.entries(meuObjeto);
 
+      if(this.idSearch != "" && this.idSearch.length > 0){
+        this.typeSave = "update"
+        this.search(this.idSearch);
+        
+        return;
+      }
     } catch (error) {
       console.log('error to get churchs:', error);
     }
   }
 
-  protected async search() {
-    //this.clear();
-
-    this.codeFormSearch = this.formSearch.controls['codeSearch'].value;
+  protected async search(codeSearch: string = "") {
+    if(codeSearch == ""){
+      this.codeFormSearch = this.formSearch.controls['codeSearch'].value;
+    }else{
+      this.codeFormSearch = codeSearch;
+    }
+    
     var result = await this.handler.getById(parseInt(this.codeFormSearch));
     this.fillForm(result.data)
     this.typeSave = "update";
   }
 
   private fillForm(user: UserReadModel) {
+    console.log(this.RoleToSelect);
     console.log(user.userRoles[0] == "L-SCT");
     this.formRegister.controls['name'].setValue(user.name);
     this.formRegister.controls['churchId'].setValue(user.churchId);
@@ -137,7 +154,7 @@ export class SecretaryRegisterPageComponent extends RegistersPageComponent imple
       this.formRegister.controls['roleIds'].setValue(1);
     if (user.userRoles[0] == "M-SCT")
       this.formRegister.controls['roleIds'].setValue(3);
-    this.formRegister.controls['password'].setValue("hmmm espertinho kkkk");
+    this.formRegister.controls['email'].setValue(user.email);
   }
 
   protected generatePassword() {
