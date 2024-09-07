@@ -1,1 +1,77 @@
-<p>close-monthly-register-page works!</p>
+<div class="content">
+
+    <form class="mb-3" [formGroup]="formSearchChurch">
+        <div class="row g-5">
+            <div class="col-12 col-lg-6">
+                <div class="row g-2">
+                    <div class="col-12 col-lg-6">
+                        <h4 class="mb-3">Busca por igreja</h4>
+                        <select class="form-control" formControlName="churchId">
+                            <option value=""></option>
+                            <option *ngFor="let entry of churchToSelect" [value]="entry[1]">
+                                {{ entry[0] }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <h4 class="mb-3"><a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt"></span></a></h4>
+                        <button class="btn btn-primary mb-2 mb-sm-0" type="submit" (click)="loadReport()"
+                            >Buscar</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+
+                <div *ngIf="busy" class="spinner-grow" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+
+                <div *ngFor="let msgSuccess of msgSuccesss">
+                    <div class="row g-2">
+                        <div class="alert alert-outline-success d-flex align-items-center" role="alert">
+                            <span class="fas fa-check-circle text-success fs-3 me-3"></span>
+                            <p class="mb-0 flex-1">{{msgSuccess}}</p>
+
+                            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngFor="let msgError of msgErros">
+                    <div class="alert alert-outline-danger d-flex align-items-center" role="alert">
+                        <span class="fas fa-times-circle text-danger fs-3 me-3"></span>
+                        <p class="mb-0 flex-1">{{msgError}}</p>
+
+                        <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-hover table-striped table-sm fs--1 mb-0" id="excel-table">
+            <thead>
+                <tr>
+                    <th scope="col">Igreja</th>
+                    <th scope="col" style="width:350px;" data-sort="product">Periodo</th>
+                    <th scope="col" data-sort="time" style="width:100px;">Status</th>
+                    <th scope="col" data-sort="category" style="width:200px;">Opções</th>
+                </tr>
+            </thead>
+
+            <tbody class="list" id="table-latest-review-body">
+
+                <tr>
+                    <td>CEO Carmos de minas</td>
+                    <td>09/2024</td>
+                    <td>Fechado</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+
+</div>
