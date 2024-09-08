@@ -4,7 +4,7 @@
         <div class="row g-5">
             <div class="col-12 col-lg-6">
                 <div class="row g-2">
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12 col-lg-5">
                         <h4 class="mb-3">Busca por igreja</h4>
                         <select class="form-control" formControlName="churchId">
                             <option value=""></option>
@@ -13,7 +13,16 @@
                             </option>
                         </select>
                     </div>
-                    <div class="col-12 col-lg-6">
+                    <div class="col-12 col-lg-3">
+                        <h4 class="mb-3">Ano</h4>
+                        <select class="form-control" formControlName="year">
+                            <option value=""></option>
+                            <option *ngFor="let entry of yearsToSearch" [selected]="entry === currentYear">
+                                {{ entry }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-3">
                         <h4 class="mb-3"><a href="#" (click)="dashBoard()"><span class="fas fa-undo-alt"></span></a></h4>
                         <button class="btn btn-primary mb-2 mb-sm-0" type="submit" (click)="loadReport()"
                             >Buscar</button>
