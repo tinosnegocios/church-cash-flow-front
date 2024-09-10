@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { CloseMonthlyHandler } from 'src/app/handlers/closeMonthlyHandler';
+import { CloseMonthly } from 'src/app/models/churchEntitieModels/CloseMonthly.models';
 import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
 import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
 
@@ -20,6 +21,7 @@ export class CloseMonthlyRegisterPageComponent {
 
   protected churchToSelect!: [string, string][]
   protected churchs!: ResultViewModel['data'];
+  protected closeMonthly$!: CloseMonthly[];
 
   protected formSearchChurch!: FormGroup;
 
@@ -42,8 +44,6 @@ export class CloseMonthlyRegisterPageComponent {
     this.msgErros = [];
     this.msgSuccesss = [];
     this.formSearchChurch.reset();
-
-    console.log('dashBoard');
 
     await this.loadChurchs();
     this.loadYears();
@@ -80,17 +80,17 @@ export class CloseMonthlyRegisterPageComponent {
     }
   }
 
-  protected loadReport() {
+  protected async loadReport() {
     this.msgErros = [];
+    this.closeMonthly$ = [];
 
     var church = this.formSearchChurch.controls['churchId'].value;
-    var year = this.formSearchChurch.controls['year'].value;
-    console.log(year);
-    console.log(church);
+    var year = this.formSearchChurch.controls['year'].value ?? this.currentYear;
 
-    this.msgErros.push('Selecione uma igreja');
-
-    var resultHandler = this.handler.getAllByYear(year);
-    console.log(resultHandler);
+    this.handler.getAllByYear(year).subscribe(result => {
+      if(result.data != null && result.errors!.length == 0) {
+        this.closeMonthly$ = result.data;
+      }
+    });
   }
 }

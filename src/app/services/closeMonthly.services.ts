@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { DashBoardService } from "./dashboard.service";
 import { AuthService } from "./auth.services";
 import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
+import { Observable } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -18,22 +19,15 @@ export class CloseMonthlyService extends BaseService {
         this.modelName = "monthly-closing";
     }
 
-    public async GetAllByYear(year: number): Promise<ResultViewModel> {
+    public  GetAllByYear(year: number): Observable<ResultViewModel> {
         var auth = new AuthService();
         const token = auth.getToken();
 
         const httpHeaders = new HttpHeaders()
+            .set("Cache-control", "no-cache")
             .set("Content-Type", "application/json; charset=utf-8")
             .set("Authorization", `Bearer ${JSON.parse(token)}`);
 
-        const returnObservable = this.http.get<ResultViewModel>(`${this.url}/v1/get-${this.modelName}/${year}`, { headers: httpHeaders }).toPromise();
-
-        return returnObservable.then(result => {
-            if (result) {
-                return result.data;
-            } else {
-                throw new Error('Fail to get close monthly.');
-            }
-        });
+        return this.http.get<ResultViewModel>(`${this.url}/v1/get-${this.modelName}/${year}`, { headers: httpHeaders });
     }
 }

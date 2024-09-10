@@ -72,11 +72,15 @@
             </thead>
 
             <tbody class="list" id="table-latest-review-body">
-
-                <tr>
-                    <td>CEO Carmos de minas</td>
-                    <td>09/2024</td>
-                    <td>Fechado</td>
+                
+                <tr *ngFor="let model of closeMonthly$">
+                    <td>{{model.church}}</td>
+                    <td>{{model.yeahMonth}}</td>
+                    <td>{{model.block ? "fechado" : "aberto"}}</td>
+                    <td>
+                        <button class="btn btn-primary" [disabled]="model.block">Fechar</button>
+                        <button class="btn btn-danger" [disabled]="!model.block">Abrir</button>
+                    </td>
                 </tr>
             </tbody>
         </table>
