@@ -3,12 +3,13 @@ import { BaseHandler } from "./baseHandler";
 import { CloseMonthlyService } from "../services/closeMonthly.services";
 import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { Observable } from "rxjs";
+import { CloseMonthlyEdit } from "../models/EditModels/CloseMonthlyEdit.model";
 
 @Injectable({
     providedIn: 'root'
 })
 
-export class CloseMonthlyHandler extends BaseHandler{
+export class CloseMonthlyHandler extends BaseHandler {
     private service: CloseMonthlyService;
 
     constructor(closeMonthlyService: CloseMonthlyService) {
@@ -16,8 +17,26 @@ export class CloseMonthlyHandler extends BaseHandler{
         this.service = closeMonthlyService;
     }
 
-    public getAllByYear(year: number): Observable<ResultViewModel> {
-        return this.service.GetAllByYear(year);
+    public getAllByYear(churchId: number, year: number): Observable<ResultViewModel> {
+        return this.service.GetAllByYear(churchId, year);
     }
-      
+
+    public async create(model: CloseMonthlyEdit): Promise<Boolean> {
+        var result = await this.service.create(model);
+
+        if (result!.errors != null && result!.errors.length > 0) {
+            result!.errors.forEach(x => {
+                this.setMsgErro(x);
+            })
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public async openMonth(idModel: number): Promise<Boolean> {
+        var result = await this.service.delete(idModel);
+
+        return true;
+    }
 }

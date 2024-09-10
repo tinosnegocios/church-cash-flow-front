@@ -5,6 +5,7 @@ import { DashBoardService } from "./dashboard.service";
 import { AuthService } from "./auth.services";
 import { ResultViewModel } from "../models/churchEntitieModels/resultViewModel.models";
 import { Observable } from "rxjs";
+import { CloseMonthlyEdit } from "../models/EditModels/CloseMonthlyEdit.model";
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class CloseMonthlyService extends BaseService {
         this.modelName = "monthly-closing";
     }
 
-    public  GetAllByYear(year: number): Observable<ResultViewModel> {
+    public  GetAllByYear(churchId: number, year: number): Observable<ResultViewModel> {
         var auth = new AuthService();
         const token = auth.getToken();
 
@@ -28,6 +29,6 @@ export class CloseMonthlyService extends BaseService {
             .set("Content-Type", "application/json; charset=utf-8")
             .set("Authorization", `Bearer ${JSON.parse(token)}`);
 
-        return this.http.get<ResultViewModel>(`${this.url}/v1/get-${this.modelName}/${year}`, { headers: httpHeaders });
+        return this.http.get<ResultViewModel>(`${this.url}/v1/get-${this.modelName}/${churchId}/${year}`, { headers: httpHeaders });
     }
 }

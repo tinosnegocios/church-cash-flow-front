@@ -5,6 +5,7 @@ import { ChurchHadler } from 'src/app/handlers/churchHandler';
 import { CloseMonthlyHandler } from 'src/app/handlers/closeMonthlyHandler';
 import { CloseMonthly } from 'src/app/models/churchEntitieModels/CloseMonthly.models';
 import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
+import { CloseMonthlyEdit } from 'src/app/models/EditModels/CloseMonthlyEdit.model';
 import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
 
 @Component({
@@ -16,7 +17,7 @@ export class CloseMonthlyRegisterPageComponent {
   protected msgSuccesss: string[] = [];
   protected msgErros: string[] = [];
   protected yearsToSearch: number[] = [];
-  protected currentYear: number = new Date().getFullYear(); //PEGAR ANO CARREGADO NO DASHBOARD
+  protected currentYear: number = new Date().getFullYear();
   protected busy: boolean = false;
 
   protected churchToSelect!: [string, string][]
@@ -48,7 +49,7 @@ export class CloseMonthlyRegisterPageComponent {
     await this.loadChurchs();
     this.loadYears();
 
-    this.loadReport();
+    await this.loadReport();
   }
 
   private async loadYears() {
@@ -84,13 +85,63 @@ export class CloseMonthlyRegisterPageComponent {
     this.msgErros = [];
     this.closeMonthly$ = [];
 
-    var church = this.formSearchChurch.controls['churchId'].value;
+    var church = this.formSearchChurch.controls['churchId'].value ?? '';
     var year = this.formSearchChurch.controls['year'].value ?? this.currentYear;
 
-    this.handler.getAllByYear(year).subscribe(result => {
-      if(result.data != null && result.errors!.length == 0) {
-        this.closeMonthly$ = result.data;
+    if (church == '' || year == "") {
+      return;
+    }
+
+    for (let index = 1; index <= 12; index++) {
+      var churchMonthly = new CloseMonthly();
+      churchMonthly.churchId = parseInt(church);
+      churchMonthly.church = this.churchToSelect.find(x => x[1] === church)![0]
+      churchMonthly.yeahMonth = `${index.toString().padStart(2, '0')}/${year}`;
+      churchMonthly.block = false;
+      this.closeMonthly$.push(churchMonthly);
+    }
+
+    this.handler.getAllByYear(church, year).subscribe(result => {
+      if (result.data != null && result.errors!.length == 0) {
+        this.closeMonthly$.forEach((x: CloseMonthly) => {
+          const month = result.data.find((item: CloseMonthly) => item.yeahMonth === x.yeahMonth);
+          if (month) {
+            x.block = month.block;
+            x.id = month.id;
+          }
+        });
       }
     });
+  }
+
+  protected async closeMonth(idModel: number) {
+    this.busy = true;
+
+    const churchToClose = this.closeMonthly$.find(month => month.id === idModel);
+    console.log('churchToClose:', churchToClose);
+        
+    if (churchToClose) {
+      const period = `${churchToClose!.yeahMonth.toString().substring(3,churchToClose!.yeahMonth.toString().length)}${churchToClose!.yeahMonth.toString().substring(0,2)}`;
+      var editCloseMonthly = new CloseMonthlyEdit();
+      editCloseMonthly.ChurchId = churchToClose.churchId;
+      editCloseMonthly.Block = true;
+      editCloseMonthly.YearMonth = Number(period);
+      await this.handler.create(editCloseMonthly);
+
+      await this.loadReport();
+    }
+
+    this.busy = false;
+  }
+
+  protected async openMonth(idModel: number) {
+    this.busy = true;
+    console.log('idModel:', idModel);
+    if(idModel > 0) {
+      await this.handler.openMonth(idModel);
+      await this.loadReport();
+    }
+
+    this.busy = false;
   }
 }
