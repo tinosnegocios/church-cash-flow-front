@@ -22,7 +22,7 @@ export class CloseMonthlyHandler extends BaseHandler {
     }
 
     public async create(model: CloseMonthlyEdit): Promise<Boolean> {
-        var result = await this.service.create(model);
+        var result = await this.service.blockMonth(model);
 
         if (result!.errors != null && result!.errors.length > 0) {
             result!.errors.forEach(x => {

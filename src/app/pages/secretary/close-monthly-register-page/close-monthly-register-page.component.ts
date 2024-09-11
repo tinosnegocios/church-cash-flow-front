@@ -118,14 +118,14 @@ export class CloseMonthlyRegisterPageComponent {
     this.busy = true;
 
     const churchToClose = this.closeMonthly$.find(month => month.id === idModel);
-    console.log('churchToClose:', churchToClose);
-        
+            
     if (churchToClose) {
       const period = `${churchToClose!.yeahMonth.toString().substring(3,churchToClose!.yeahMonth.toString().length)}${churchToClose!.yeahMonth.toString().substring(0,2)}`;
       var editCloseMonthly = new CloseMonthlyEdit();
       editCloseMonthly.ChurchId = churchToClose.churchId;
       editCloseMonthly.Block = true;
       editCloseMonthly.YearMonth = Number(period);
+      console.log(editCloseMonthly);
       await this.handler.create(editCloseMonthly);
 
       await this.loadReport();
