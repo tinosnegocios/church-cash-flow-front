@@ -114,22 +114,15 @@ export class CloseMonthlyRegisterPageComponent {
     });
   }
 
-  protected async closeMonth(idModel: number) {
+  protected async closeMonth(periodModel: string) {
     this.busy = true;
-
-    const churchToClose = this.closeMonthly$.find(month => month.id === idModel);
-            
-    if (churchToClose) {
-      const period = `${churchToClose!.yeahMonth.toString().substring(3,churchToClose!.yeahMonth.toString().length)}${churchToClose!.yeahMonth.toString().substring(0,2)}`;
-      var editCloseMonthly = new CloseMonthlyEdit();
-      editCloseMonthly.ChurchId = churchToClose.churchId;
-      editCloseMonthly.Block = true;
-      editCloseMonthly.YearMonth = Number(period);
-      console.log(editCloseMonthly);
-      await this.handler.create(editCloseMonthly);
-
-      await this.loadReport();
-    }
+    const period = `${periodModel.substring(3,periodModel.length)}${periodModel.substring(0,2)}`;
+    var editCloseMonthly = new CloseMonthlyEdit();
+    editCloseMonthly.ChurchId = this.formSearchChurch.controls['churchId'].value;
+    editCloseMonthly.Block = true;
+    editCloseMonthly.YearMonth = Number(period);
+    await this.handler.create(editCloseMonthly);
+    await this.loadReport();
 
     this.busy = false;
   }
@@ -137,7 +130,7 @@ export class CloseMonthlyRegisterPageComponent {
   protected async openMonth(idModel: number) {
     this.busy = true;
     console.log('idModel:', idModel);
-    if(idModel > 0) {
+    if (idModel > 0) {
       await this.handler.openMonth(idModel);
       await this.loadReport();
     }

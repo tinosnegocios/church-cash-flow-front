@@ -78,7 +78,7 @@
                     <td>{{model.yeahMonth}}</td>
                     <td>{{model.block ? "fechado" : "aberto"}}</td>
                     <td>
-                        <button class="btn btn-primary" (click)="closeMonth(model.id)" [disabled]="model.block">Fechar</button>
+                        <button class="btn btn-primary" (click)="closeMonth(model.yeahMonth)" [disabled]="model.block">Fechar</button>
                         <button class="btn btn-danger" (click)="openMonth(model.id)" [disabled]="!model.block">Abrir</button>
                     </td>
                 </tr>
