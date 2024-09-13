@@ -34,6 +34,7 @@ import { PostReportPageComponent } from './pages/secretary/posts/post-report-pag
 import { ReportPageComponent } from './pages/shared/report-page/report-page.component';
 import { SecretaryRegisterPageComponent } from './pages/secretary/secretary/secretary-register-page/secretary-register-page.component';
 import { SecretaryReportPageComponent } from './pages/secretary/secretary/secretary-report-page/secretary-report-page.component';
+import { CloseMonthlyRegisterPageComponent } from './pages/secretary/close-monthly-register-page/close-monthly-register-page.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { SecretaryReportPageComponent } from './pages/secretary/secretary/secret
     PostReportPageComponent,
     ReportPageComponent,
     SecretaryRegisterPageComponent,
-    SecretaryReportPageComponent
+    SecretaryReportPageComponent,
+    CloseMonthlyRegisterPageComponent
   ],
   imports: [
     BrowserModule,

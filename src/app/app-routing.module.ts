@@ -21,6 +21,7 @@ import { PostRegisterPageComponent } from './pages/secretary/posts/post-register
 import { PostReportPageComponent } from './pages/secretary/posts/post-report-page/post-report-page.component';
 import { SecretaryRegisterPageComponent } from './pages/secretary/secretary/secretary-register-page/secretary-register-page.component';
 import { SecretaryReportPageComponent } from './pages/secretary/secretary/secretary-report-page/secretary-report-page.component';
+import { CloseMonthlyRegisterPageComponent } from './pages/secretary/close-monthly-register-page/close-monthly-register-page.component';
 
 const routes: Routes = [
   {
@@ -142,6 +143,12 @@ const routes: Routes = [
     component: HeadFrameComponent,
     children: [
       { path: '', component: SecretaryReportPageComponent }
+    ]
+   },{
+    path: 'close-monthly',
+    component: HeadFrameComponent,
+    children: [
+      { path: '', component: CloseMonthlyRegisterPageComponent }
     ]
    }
 ];
