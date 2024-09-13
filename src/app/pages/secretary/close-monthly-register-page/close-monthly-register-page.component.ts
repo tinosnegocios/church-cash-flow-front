@@ -92,12 +92,13 @@ export class CloseMonthlyRegisterPageComponent {
       return;
     }
 
+    this.busy = true;
     for (let index = 1; index <= 12; index++) {
       var churchMonthly = new CloseMonthly();
       churchMonthly.churchId = parseInt(church);
       churchMonthly.church = this.churchToSelect.find(x => x[1] === church)![0]
       churchMonthly.yeahMonth = `${index.toString().padStart(2, '0')}/${year}`;
-      churchMonthly.block = false;
+      churchMonthly.active = false;
       this.closeMonthly$.push(churchMonthly);
     }
 
@@ -106,23 +107,32 @@ export class CloseMonthlyRegisterPageComponent {
         this.closeMonthly$.forEach((x: CloseMonthly) => {
           const month = result.data.find((item: CloseMonthly) => item.yeahMonth === x.yeahMonth);
           if (month) {
-            x.block = month.block;
+            x.active = month.active;
             x.id = month.id;
           }
         });
       }
     });
+
+    this.busy = false;
   }
 
   protected async closeMonth(periodModel: string) {
+    this.msgErros = [];
+    this.msgSuccesss = [];
+
     this.busy = true;
     const period = `${periodModel.substring(3,periodModel.length)}${periodModel.substring(0,2)}`;
     var editCloseMonthly = new CloseMonthlyEdit();
     editCloseMonthly.ChurchId = this.formSearchChurch.controls['churchId'].value;
-    editCloseMonthly.Block = true;
+    editCloseMonthly.active = true;
     editCloseMonthly.YearMonth = Number(period);
-    await this.handler.create(editCloseMonthly);
-    await this.loadReport();
+    const result = await this.handler.create(editCloseMonthly);
+    if(!result){
+      this.msgErros = this.handler.getMsgErro();
+    }else{
+      await this.loadReport();
+    }
 
     this.busy = false;
   }

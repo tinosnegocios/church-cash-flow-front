@@ -71,15 +71,15 @@
                 </tr>
             </thead>
 
-            <tbody class="list" id="table-latest-review-body">
+            <tbody *ngIf="!busy" class="list" id="table-latest-review-body">
                 
                 <tr *ngFor="let model of closeMonthly$">
                     <td>{{model.church}}</td>
                     <td>{{model.yeahMonth}}</td>
-                    <td>{{model.block ? "fechado" : "aberto"}}</td>
+                    <td>{{model.active ? "fechado" : "aberto"}}</td>
                     <td>
-                        <button class="btn btn-primary" (click)="closeMonth(model.yeahMonth)" [disabled]="model.block">Fechar</button>
-                        <button class="btn btn-danger" (click)="openMonth(model.id)" [disabled]="!model.block">Abrir</button>
+                        <button class="btn btn-primary" (click)="closeMonth(model.yeahMonth)" [disabled]="model.active">Fechar</button>
+                        <button class="btn btn-danger" (click)="openMonth(model.id)" [disabled]="!model.active">Abrir</button>
                     </td>
                 </tr>
             </tbody>

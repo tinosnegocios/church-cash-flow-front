@@ -18,12 +18,14 @@ export class CloseMonthlyHandler extends BaseHandler {
     }
 
     public getAllByYear(churchId: number, year: number): Observable<ResultViewModel> {
+        this.clear();
         return this.service.GetAllByYear(churchId, year);
     }
 
     public async create(model: CloseMonthlyEdit): Promise<Boolean> {
         var result = await this.service.blockMonth(model);
-
+        this.clear();
+        
         if (result!.errors != null && result!.errors.length > 0) {
             result!.errors.forEach(x => {
                 this.setMsgErro(x);
@@ -35,6 +37,7 @@ export class CloseMonthlyHandler extends BaseHandler {
     }
 
     public async openMonth(idModel: number): Promise<Boolean> {
+        this.clear();
         var result = await this.service.delete(idModel);
 
         return true;
