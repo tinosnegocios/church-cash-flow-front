@@ -64,10 +64,10 @@
         <table class="table table-hover table-striped table-sm fs--1 mb-0" id="excel-table">
             <thead>
                 <tr>
-                    <th scope="col">Igreja</th>
-                    <th scope="col" style="width:350px;" data-sort="product">Periodo</th>
-                    <th scope="col" data-sort="time" style="width:100px;">Status</th>
-                    <th scope="col" data-sort="category" style="width:200px;">Opções</th>
+                    <th scope="col" style="width:350px;">Igreja</th>
+                    <th scope="col">Periodo</th>
+                    <th scope="col" data-sort="time">Status</th>
+                    <th scope="col" data-sort="category">Opções</th>
                 </tr>
             </thead>
 
@@ -80,6 +80,11 @@
                     <td>
                         <button class="btn btn-primary" (click)="closeMonth(model.yeahMonth)" [disabled]="model.active">Fechar</button>
                         <button class="btn btn-danger" (click)="openMonth(model.id)" [disabled]="!model.active">Abrir</button>
+                        <button class="btn btn-secondary " [disabled]="!model.active">
+                            <a style="text-decoration: none;" href="{{model.uriPdfFile}}" target=”_blank”>
+                                Ver arquivo
+                            </a>
+                        </button>
                     </td>
                 </tr>
             </tbody>
