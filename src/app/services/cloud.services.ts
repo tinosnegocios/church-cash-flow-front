@@ -61,5 +61,12 @@ export class CloudService {
         return url;
     }
 
+    public getUrlImageMonthWorkStorage(competence:string, churchId:number) : string {
+        var urlBucket = configAplication.getObjCloudConfig().aws.bucketS3.monthWork.url;
+        var extensionImage = configAplication.getObjCloudConfig().aws.bucketS3.monthWork.fileTypePattern;
+        var url = `${urlBucket}/${churchId}.${competence}.${extensionImage}`;
+
+        return url;
+    }
 
 }
