@@ -7,6 +7,7 @@ import { CloseMonthly } from 'src/app/models/churchEntitieModels/CloseMonthly.mo
 import { ResultViewModel } from 'src/app/models/churchEntitieModels/resultViewModel.models';
 import { CloseMonthlyEdit } from 'src/app/models/EditModels/CloseMonthlyEdit.model';
 import { ChurchReadModel } from 'src/app/models/ReadModels/ChurchRead.models';
+import { CloudService } from 'src/app/services/cloud.services';
 
 @Component({
   selector: 'app-close-monthly-register-page',
@@ -82,6 +83,7 @@ export class CloseMonthlyRegisterPageComponent {
   }
 
   protected async loadReport() {
+    var cloudService = new CloudService();
     this.msgErros = [];
     this.closeMonthly$ = [];
 
@@ -99,6 +101,7 @@ export class CloseMonthlyRegisterPageComponent {
       churchMonthly.church = this.churchToSelect.find(x => x[1] === church)![0]
       churchMonthly.yeahMonth = `${index.toString().padStart(2, '0')}/${year}`;
       churchMonthly.active = false;
+      churchMonthly.uriPdfFile = cloudService.getUrlImageMonthWorkStorage(`${year}-${index.toString().padStart(2, '0')}-01`, parseInt(church));
       this.closeMonthly$.push(churchMonthly);
     }
 
@@ -146,5 +149,9 @@ export class CloseMonthlyRegisterPageComponent {
     }
 
     this.busy = false;
+  }
+
+  protected async getFile(){
+
   }
 }

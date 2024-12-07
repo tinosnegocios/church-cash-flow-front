@@ -4,5 +4,6 @@ export class CloseMonthly extends EntitieResultApi {
     public yeahMonth: string = "";
     public church: string = "";
     public churchId: number = 0;
+    public uriPdfFile: string = ""
 }
   
