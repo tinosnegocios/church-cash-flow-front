@@ -15,6 +15,10 @@
               "tithesPath": "tithes",
               "firstFruitsPath": "first-fruits",
               "outflow": "outflow"
+            },
+            "monthWork":{
+              "url": "https://churchmanager-dev.s3.us-east-1.amazonaws.com/month-work",
+              "fileTypePattern": "pdf"
             }
           }
         }

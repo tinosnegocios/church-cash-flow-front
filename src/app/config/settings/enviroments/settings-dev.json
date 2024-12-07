@@ -1,6 +1,6 @@
 {
     "api":{
-        "host":"http://localhost:5000/api"
+        "host":"http://localhost:8181/api"
     },
     "cloudServices": {
         "aws": {
@@ -15,6 +15,10 @@
               "tithesPath": "tithes",
               "firstFruitsPath": "first-fruits",
               "outflow": "outflow"
+            },
+            "monthWork":{
+              "url": "https://churchmanager-uat.s3.us-east-1.amazonaws.com/month-work",
+              "fileTypePattern": "pdf"
             }
           }
         }
