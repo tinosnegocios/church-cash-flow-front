@@ -26,6 +26,12 @@ export class DashboardPageComponent implements OnInit {
   protected modelToken!: ModelToken;
 
   protected busy = false;
+  protected busyBible = false;
+  protected busyMembers = false;
+  protected busyFlow = false;
+  protected busyInput = false;
+  protected busyOuput = false;
+
   protected members!: ResultViewModel['data'];
   protected outflows!: ResultViewModel['data'];
   protected tithes!: ResultViewModel['data'];
@@ -58,12 +64,15 @@ export class DashboardPageComponent implements OnInit {
       this.router.navigate(['/']);
 
     this.busy = true;
+    this.busyBible = true;
+    this.busyMembers = true;
+    this.busyFlow = true;
+    this.busyInput = true;
+    this.busyOuput = true;
 
     await this.dashBoard();
 
     this.loadDashMonth();
-
-    this.busy = false;
   }
 
   public async dashBoard() {
@@ -82,6 +91,7 @@ export class DashboardPageComponent implements OnInit {
     } catch (error) {
       console.log('error:', error);
     }
+    this.busyMembers = false;
 
     //get outflow  
     try {
@@ -94,6 +104,7 @@ export class DashboardPageComponent implements OnInit {
     } catch (error) {
       console.log('error:', error);
     }
+    this.busyOuput = false
 
     //get tithes
     try {
@@ -106,7 +117,6 @@ export class DashboardPageComponent implements OnInit {
     } catch (error) {
       console.log('error:', error);
     }
-
     //get offering
     try {
       const dados = await this.offeringService.getOfferingByMonth();
@@ -118,8 +128,6 @@ export class DashboardPageComponent implements OnInit {
     } catch (error) {
       console.log('error:', error);
     }
-
-
     //get first-fruits
     try {
       const dados = await this.firstFruitsService.getFirstFruitsByMonth();
@@ -131,15 +139,17 @@ export class DashboardPageComponent implements OnInit {
     } catch (error) {
       console.log('error:', error);
     }
+    this.busyInput = false;
 
     //get bible verse
-    this.BibleResultViewModel = await this.bibleService.getVerses({ book: "Genesis", chapter: 1, verses: [1] });
+    this.BibleResultViewModel = await this.bibleService.getRandonVerses();
     if(this.BibleResultViewModel){
       this.verse = `${this.BibleResultViewModel.data.verses[0].text}.
                     ${this.BibleResultViewModel.data.book} 
                     ${this.BibleResultViewModel.data.chapter}:
                     ${this.BibleResultViewModel.data.verses[0].number}`;
     }
+    this.busyBible = false;
   }
 
   public loadDashMonth() {

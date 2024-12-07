@@ -62,201 +62,206 @@
 
     <div class="pb-5">
 
-            <div class="row g-4">
+        <div class="row g-4">
 
-                <!--primeiro grid-->
-                <div class="col-12 col-xxl-6">
-                    <div class="row mb-12">
+            <!--primeiro grid-->
+            <div class="col-12 col-xxl-6">
+                <div class="row mb-12">
 
-                        <!--titulo inicial-->
-                        <div class="col-6">
-                            <h2 class="mb-2">{{modelToken.churchName}}</h2>
-                            <h5 class="text-700 fw-semi-bold">
-                               {{verse}}
-                            </h5>
-                        </div>
-
-                        <!--seleciona o mês-->
-                        <div class="col-6">
-                            <select name="nameDashBoardMonth" class="form-select form-select-sm mt-2"
-                                id="select-gross-revenue-month" [(ngModel)]="dashMonthSelected"
-                                (ngModelChange)="changeDashMonth()">
-                                <option *ngFor="let entry of DashMonth" [value]="entry[1]" id="idDashMonth">
-                                    {{ entry[0] }}
-                                </option>
-                            </select>
-                        </div>
-
-                        <!--exibe novos dados-->
-                        <div class="row align-items-center g-4">
-                            <div class="col-12 col-md-auto">
-                                <div class="d-flex align-items-center"><img
-                                        src="../../../assets/img/icons/illustrations/4l.png" alt="" height="46"
-                                        width="46" />
-                                    <div class="ms-3">
-                                        <h4 class="mb-0">57 new orders</h4>
-                                        <p class="text-800 fs--1 mb-0">Awating processing</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-auto">
-                                <div class="d-flex align-items-center"><img
-                                        src="../../../assets/img/icons/illustrations/3l.png" alt="" height="46"
-                                        width="46" />
-                                    <div class="ms-3">
-                                        <h4 class="mb-0">5 orders</h4>
-                                        <p class="text-800 fs--1 mb-0">On hold</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-md-auto">
-                                <div class="d-flex align-items-center"><img
-                                        src="../../../assets/img/icons/illustrations/2l.png" alt="" height="46"
-                                        width="46" />
-                                    <div class="ms-3">
-                                        <h4 class="mb-0">15 products</h4>
-                                        <p class="text-800 fs--1 mb-0">Out of stock</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <hr class="bg-200 mb-6 mt-4" />
-                    <div class="row flex-between-center mb-4 g-3">
-                        <div class="col-auto">
-                            <h3>caixa</h3>
-                            <p class="text-700 lh-sm mb-0">caixa do período com todas formas de entrada</p>
+                    <!--titulo inicial-->
+                    <div class="col-6">
+                        <h2 class="mb-2">{{modelToken.churchName}}</h2>
+                        <h5 *ngIf="!busyBible" class="text-700 fw-semi-bold">
+                            {{verse}}
+                         </h5>
+                        <div *ngIf="busyBible" class="spinner-grow spinner-grow-sm" role="status">
+                            <span class="sr-only"></span>
                         </div>
                     </div>
-                    <div class="echart-total-sales-chart" style="min-height:320px;width:100%" data-echart-responsive="data-echart-responsive"></div>
+
+                    <!--seleciona o mês-->
+                    <div class="col-6">
+                        <select name="nameDashBoardMonth" class="form-select form-select-sm mt-2"
+                            id="select-gross-revenue-month" [(ngModel)]="dashMonthSelected"
+                            (ngModelChange)="changeDashMonth()">
+                            <option *ngFor="let entry of DashMonth" [value]="entry[1]" id="idDashMonth">
+                                {{ entry[0] }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!--exibe novos dados-->
+                    <div class="row align-items-center g-4">
+                        <div class="col-12 col-md-auto">
+                            <div class="d-flex align-items-center"><img
+                                    src="../../../assets/img/icons/illustrations/4l.png" alt="" height="46"
+                                    width="46" />
+                                <div class="ms-3">
+                                    <h4 class="mb-0">57 new orders</h4>
+                                    <p class="text-800 fs--1 mb-0">Awating processing</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-auto">
+                            <div class="d-flex align-items-center"><img
+                                    src="../../../assets/img/icons/illustrations/3l.png" alt="" height="46"
+                                    width="46" />
+                                <div class="ms-3">
+                                    <h4 class="mb-0">5 orders</h4>
+                                    <p class="text-800 fs--1 mb-0">On hold</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-auto">
+                            <div class="d-flex align-items-center"><img
+                                    src="../../../assets/img/icons/illustrations/2l.png" alt="" height="46"
+                                    width="46" />
+                                <div class="ms-3">
+                                    <h4 class="mb-0">15 products</h4>
+                                    <p class="text-800 fs--1 mb-0">Out of stock</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
 
-                <!--dados em numeros-->
-                <div class="col-12 col-xxl-6">
-                    <div class="row g-3">
-
-                        <!--total de membros-->
-                        <div class="col-12 col-md-6">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h5 class="mb-1">Total de membros</h5>
-                                            <h6 class="text-700">(somente batizados)</h6>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center px-4 py-6">
-                                        <h2 *ngIf="!busy"> {{totalMembers}} </h2>
-                                        <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
-                                            <span class="sr-only"></span>
-                                        </div>
-
-                                    </div>
-                                    <div class="mt-12">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="bullet-item bg-primary me-2"></div>
-                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0"><a href="#">ver relatório
-                                                    completo</a>
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--saldo total em caixa-->
-                        <div class="col-12 col-md-6">
-                            <div class="card h-100">
-                                <div class="card-body d-flex flex-column">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h5 class="mb-2">Saldo total em caixa</h5>
-                                            <h6 class="text-700">(entradas - saidas)</h6>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center px-4 py-6">
-                                        <h2 *ngIf="!busy"
-                                            [ngClass]="( (totalTithes + totalOffering + totalFirstFruits) - (totalOutFlow)) >= 0 ? 'text-primary' : 'text-danger'">
-                                            R$ {{( (totalTithes + totalOffering + totalFirstFruits) -
-                                            (totalOutFlow)).toFixed(2)}}</h2>
-                                            <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
-                                                <span class="sr-only"></span>
-                                            </div>
-                                    </div>
-                                    <div class="mt-12">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="bullet-item bg-primary me-2"></div>
-                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0"><a href="#">ver relatório
-                                                    completo</a>
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--total de entradas-->
-                        <div class="col-12 col-md-6">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h5 class="mb-2">Total de entradas em R$</h5>
-                                            <h6 class="text-700">(primicias, dizimos e ofertas)</h6>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center px-4 py-6">
-                                        <h2 *ngIf="!busy">R$ {{(totalTithes + totalOffering + totalFirstFruits).toFixed(2)}}</h2>
-                                        <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
-                                            <span class="sr-only"></span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-12">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="bullet-item bg-primary me-2"></div>
-                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0"><a href="#">ver relatório
-                                                    completo</a>
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--total de saidas-->
-                        <div class="col-12 col-md-6">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <div>
-                                            <h5 class="mb-2">Total de despesas em R$</h5>
-                                            <h6 class="text-700">(todas as despeas)</h6>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex justify-content-center px-4 py-6">
-                                        <h2 *ngIf="!busy">R$ {{totalOutFlow.toFixed(2)}}</h2>
-                                        <div *ngIf="busy" class="spinner-grow spinner-grow-sm" role="status">
-                                            <span class="sr-only"></span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-12">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="bullet-item bg-primary me-2"></div>
-                                            <h6 class="text-900 fw-semi-bold flex-1 mb-0"><a href="#">ver relatório
-                                                    completo</a>
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                <hr class="bg-200 mb-6 mt-4" />
+                <div class="row flex-between-center mb-4 g-3">
+                    <div class="col-auto">
+                        <h3>caixa</h3>
+                        <p class="text-700 lh-sm mb-0">caixa do período com todas formas de entrada</p>
                     </div>
                 </div>
-
+                <div class="echart-total-sales-chart" style="min-height:320px;width:100%"
+                    data-echart-responsive="data-echart-responsive"></div>
             </div>
+
+            <!--dados em numeros-->
+            <div class="col-12 col-xxl-6">
+                <div class="row g-3">
+
+                    <!--total de membros-->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="mb-1">Total de membros</h5>
+                                        <h6 class="text-700">(somente batizados)</h6>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center px-4 py-6">
+                                    <h2 *ngIf="!busyMembers"> {{totalMembers}} </h2>
+                                    <div *ngIf="busyMembers" class="spinner-grow spinner-grow-sm" role="status">
+                                        <span class="sr-only"></span>
+                                    </div>
+
+                                </div>
+                                <div class="mt-12">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bullet-item bg-primary me-2"></div>
+                                        <h6 class="text-900 fw-semi-bold flex-1 mb-0"><a href="#">ver relatório
+                                                completo</a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--saldo total em caixa-->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body d-flex flex-column">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="mb-2">Saldo total em caixa</h5>
+                                        <h6 class="text-700">(entradas - saidas)</h6>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center px-4 py-6">
+                                    <h2 *ngIf="!busyInput && !busyOuput"
+                                        [ngClass]="( (totalTithes + totalOffering + totalFirstFruits) - (totalOutFlow)) >= 0 ? 'text-primary' : 'text-danger'">
+                                        R$ {{( (totalTithes + totalOffering + totalFirstFruits) -
+                                        (totalOutFlow)).toFixed(2)}}</h2>
+                                    <div *ngIf="busyInput && busyOuput" class="spinner-grow spinner-grow-sm" role="status">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                </div>
+                                <div class="mt-12">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bullet-item bg-primary me-2"></div>
+                                        <h6 class="text-900 fw-semi-bold flex-1 mb-0"><a href="#">ver relatório
+                                                completo</a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--total de entradas-->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="mb-2">Total de entradas em R$</h5>
+                                        <h6 class="text-700">(primicias, dizimos e ofertas)</h6>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center px-4 py-6">
+                                    <h2 *ngIf="!busyInput">R$ {{(totalTithes + totalOffering + totalFirstFruits).toFixed(2)}}
+                                    </h2>
+                                    <div *ngIf="busyInput" class="spinner-grow spinner-grow-sm" role="status">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                </div>
+                                <div class="mt-12">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bullet-item bg-primary me-2"></div>
+                                        <h6 class="text-900 fw-semi-bold flex-1 mb-0"><a href="#">ver relatório
+                                                completo</a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--total de saidas-->
+                    <div class="col-12 col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <h5 class="mb-2">Total de despesas em R$</h5>
+                                        <h6 class="text-700">(todas as despeas)</h6>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center px-4 py-6">
+                                    <h2 *ngIf="!busyOuput">R$ {{totalOutFlow.toFixed(2)}}</h2>
+                                    <div *ngIf="busyOuput" class="spinner-grow spinner-grow-sm" role="status">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                </div>
+                                <div class="mt-12">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <div class="bullet-item bg-primary me-2"></div>
+                                        <h6 class="text-900 fw-semi-bold flex-1 mb-0"><a href="#">ver relatório
+                                                completo</a>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
 
     </div>
 
